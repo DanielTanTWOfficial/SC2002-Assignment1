@@ -1,4 +1,22 @@
-package src.controller;
+package controller;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Scanner;
+
+import model.SerializationUtil;
+import model.Showtime;
+import model.Holiday;
+import model.Movie;
+import model.MovieListing;
+import model.Movie.MovieRating;
+import model.Movie.MovieType;
+import model.Movie.ShowingStatus;
 
 public class ManagementController {
     /**
