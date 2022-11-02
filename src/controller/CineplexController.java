@@ -1,4 +1,4 @@
-package src.controller;
+package controller;
 
 public class CineplexController {
     public static void main(String[] args){

@@ -1,4 +1,4 @@
-package MOBLIMA.src.model;
+package model;
 
 public class CustomerUser extends User {
 	private String name;
