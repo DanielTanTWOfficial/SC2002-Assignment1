@@ -82,4 +82,23 @@ public class SerializationUtil {
 		}
 	}
 	
+	/**
+	 * Utility function to delete serialization file when we need to remove some items and re-serialize
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
+	public static boolean deleteFile(File file) throws IOException {
+	    if (file != null) {
+	        if (file.isDirectory()) {
+	            File[] files = file.listFiles();
+
+	            for (File f: files) {
+	                deleteFile(f);
+	            }
+	        }
+	        return Files.deleteIfExists(file.toPath());
+	    }
+	    return false;
+	}
 }
