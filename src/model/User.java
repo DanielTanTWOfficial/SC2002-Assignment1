@@ -1,4 +1,4 @@
-package MOBLIMA.src.model;
+package model;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
