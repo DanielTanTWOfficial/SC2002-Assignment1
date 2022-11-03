@@ -1,4 +1,4 @@
-package src.model;
+package model;
 
 public class Seat {
     private static final long serialVersionUID = 123450L;

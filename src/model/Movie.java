@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.ArrayList;
 
 /**
@@ -21,6 +22,7 @@ public class Movie implements IMovie, Serializable {
 	private String director;
 	private ArrayList<String> cast;
 	private String synopsis;
+	private Duration duration;
 	private ShowingStatus status;
 	private MovieRating movieRating;
 	private MovieType movieType;
@@ -40,11 +42,12 @@ public class Movie implements IMovie, Serializable {
 	 * @param movieRating
 	 * @param movieType
 	 */
-	public Movie(String title, String director, ArrayList<String> cast, String synopsis, ShowingStatus status, MovieRating movieRating, MovieType movieType) {
+	public Movie(String title, String director, ArrayList<String> cast, String synopsis, Duration duration, ShowingStatus status, MovieRating movieRating, MovieType movieType) {
 		this.title = title;
 		this.director = director;
 		this.cast = cast;
 		this.synopsis = synopsis;
+		this.duration = duration;
 		this.status = status;
 		this.movieRating = movieRating;
 		this.movieType = movieType;
@@ -97,6 +100,13 @@ public class Movie implements IMovie, Serializable {
 	 */
 	public String getSynopsis() {
 		return synopsis;
+	}
+
+	/**
+	 * @return duration
+	 */
+	public Duration getDuration() {
+		return duration;
 	}
 
 	/**

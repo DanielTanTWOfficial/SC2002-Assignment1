@@ -1,6 +1,6 @@
 package model;
 
-import src.model.Movie.ShowingStatus;
+import model.Movie.ShowingStatus;
 
 /**
  * @author d188878

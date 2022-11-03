@@ -24,11 +24,6 @@ public interface IShowtime {
 	 */
 	public void editEnd(LocalTime end);
 	/**
-	 * Allows staff to update the cinema code
-	 * @param code
-	 */
-	public void editCinema(String code);
-	/**
 	 * Allows booking to update the seat status
 	 * @param seat
 	 */
