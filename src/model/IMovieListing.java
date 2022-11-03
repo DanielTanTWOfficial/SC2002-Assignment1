@@ -19,11 +19,4 @@ public interface IMovieListing {
 	 * @param showtime
 	 */
 	public void addShowtime(Showtime showtime);
-	/**
-	 * Allows for comparison of movies based on ticket sales/overall ratings
-	 * @param listing
-	 * @param bySales
-	 * @return
-	 */
-	//public int compareTo(MovieListing listing, boolean bySales);
 }
