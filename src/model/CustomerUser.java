@@ -1,6 +1,7 @@
 package model;
 
 public class CustomerUser extends User {
+	private static final long serialVersionUID = 437816L;
 	private String name;
 	private String mobileNumber;
 	// add array of bookings
