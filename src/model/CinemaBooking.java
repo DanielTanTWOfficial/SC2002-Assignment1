@@ -2,7 +2,7 @@ package src.model;
 
 public class CinemaBooking {
     private static final long serialVersionUID = 123459L;
-    private String cinemaName;
+    private CinemaTypes cinemaName;
 
     private Seat[][] seats;
 
@@ -44,10 +44,15 @@ public class CinemaBooking {
         seats[r][c].assignSeat();
     }
 
-    public void checkSeats(){
+    public void printSeats(){
+        System.out.println("----- Screen -----");
+
         for (int i=0;i<numRow;i++){
+            System.out.print(String.format("%-5d",i+1));
             for (int j=0;j<numCol;j++){
-                System.out.print(seats[i][j].getAssigned()+" ");
+                String symbol="o"; //unassigned seats
+                if (seats[i][j].getAssigned()==1) symbol="x"; //assigned seats
+                System.out.print(symbol+" ");
             }
             System.out.println();
         }
