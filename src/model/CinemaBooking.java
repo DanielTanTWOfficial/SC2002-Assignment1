@@ -12,11 +12,14 @@ public class CinemaBooking {
 
     private int numSeats;
 
+    private int cinemaCode;
+
 
     public CinemaBooking(Cinema cinema) {
         this.cinemaName = cinema.getCinemaName();
         this.numRow=cinema.getNumRow();
         this.numCol= cinema.getNumCol();
+        this.cinemaCode= cinema.getCinemaCode();
 
         //initialise seats array
         seats= new Seat[numRow][numCol];
