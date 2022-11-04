@@ -2,6 +2,7 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -21,7 +22,7 @@ import model.Movie.ShowingStatus;
 public class ManagementController {
     /**
      * Creates a new Movie object
-     * @return
+     * @return int
      */
     public static int createMovie() {
     	String title;
@@ -29,6 +30,7 @@ public class ManagementController {
     	ArrayList<String> cast = new ArrayList<>();
     	int numCast = 0, count, selection = 0;
     	String synopsis;
+		Duration duration;
     	ShowingStatus showingStatus;
     	MovieRating movieRating;
     	MovieType movieType;
@@ -42,6 +44,8 @@ public class ManagementController {
     	director = sc.nextLine();
     	System.out.println("Enter the synopsis: ");
     	synopsis = sc.nextLine();
+		System.out.println("Enter the duration in minutes: ");
+		duration = Duration.ofMinutes(sc.nextLong());
     	
     	while(true) {
 	    	System.out.println("Enter the number of cast members (min. 2): ");
@@ -122,7 +126,7 @@ public class ManagementController {
 			throw new IllegalArgumentException("Unexpected value: " + selection);
 		}
     	
-    	Movie newMovie = new Movie(title, director, cast, synopsis, showingStatus, movieRating, movieType);
+    	Movie newMovie = new Movie(title, director, cast, synopsis, duration, showingStatus, movieRating, movieType);
     	
     	// serialize to file
 		try {
@@ -143,7 +147,7 @@ public class ManagementController {
     /**
      * Creates a new movie listing for the new movie
      * @param movie
-     * @return
+     * @return int
      */
     private static int createMovieListing(Movie movie) {
     	MovieListing newMovieListing = new MovieListing(movie);
@@ -162,7 +166,7 @@ public class ManagementController {
     
     /**
      * Deletes a movie object
-     * @return
+     * @return int
      */
     public static int deleteMovie() {
     	ArrayList<Object> movies = new ArrayList<>();
@@ -233,7 +237,7 @@ public class ManagementController {
     /**
      * Deletes the respective movie listing
      * @param movie
-     * @return
+     * @return int
      */
     public static int deleteMovieListing(Movie movie) {
     	ArrayList<Object> mListings = new ArrayList<>();
@@ -280,7 +284,7 @@ public class ManagementController {
     
     /**
      * Called to update the showing status of movies
-     * @return
+     * @return int
      */
     public static int updateMovieStatus() {
     	ArrayList<Object> movies = new ArrayList<>();
@@ -369,7 +373,7 @@ public class ManagementController {
     
     /**
      * Called to add a new showtime for a movie
-     * @return
+     * @return int
      */
     public static int addShowtime() {
     	ArrayList<Object> showtimes = new ArrayList<>();
@@ -425,7 +429,7 @@ public class ManagementController {
 			cineplexesInfo = SerializationUtil.deserialize("vendorCineplexesInfo.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
-			System.out.println("Unable to read movie listings.");
+			System.out.println("Unable to read cineplexes info.");
 			return 0;
 		}
     	
@@ -484,13 +488,17 @@ public class ManagementController {
     	usrInput = sc.next();
     	start = LocalTime.parse(usrInput, timeFormat);
     	
-    	System.out.println("Enter the showtime end time HH:MM (E.g. 22:30): ");
-    	usrInput = sc.next();
-    	end = LocalTime.parse(usrInput, timeFormat);
+    	end = start.plus(mListing.getMovie().getDuration());
     	
     	// set the showtimeId (1st word of movie title + showtime index in listing)
     	showtimeId = mListing.getMovie().getTitle().split("[ \\t\\n\\,\\?\\;\\.\\:\\!]")[0] + mListing.getShowtimes().size();
     	
+		// check if the showtime will overlap with another showtime at the same Cinema
+		if(checkShowtimeOverlap(newShowtime, mListing)) {
+			System.out.println("The showtime overlaps with another existing showtime!");
+			return 0;
+		}
+
     	// update the movie listing with the added showtime
     	newShowtime = new Showtime(showtimeId, date, start, end, cinemaCode);
     	
@@ -518,10 +526,36 @@ public class ManagementController {
     	
     	return 1;
     }
+
+	
+	/** 
+	 * Called by addShowtime() to check if a showtime overlaps with another at the same cinema
+	 * @param showtime
+	 * @param mListing
+	 * @return boolean
+	 */
+	public static boolean checkShowtimeOverlap(Showtime showtime, MovieListing mListing) {
+		ArrayList<Showtime> showtimes = mListing.getShowtimes();
+		
+		for(int i=0;i<showtimes.size();i++) {
+			// first check if the cinema is the same
+			if(showtime.getCinemaCode() == showtimes.get(i).getCinemaCode()) {
+				// then check if the date is the same
+				if(showtime.getDate() == showtimes.get(i).getDate()) {
+					// check if the showtimes overlap
+					if(showtime.getStart().isBefore(showtimes.get(i).getEnd()) && showtimes.get(i).getStart().isBefore(showtime.getEnd())) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
     
     /**
      * Called to allow staff to edit the showtimes of movies
-     * @return
+     * @return int
      */
     public static int editShowtime() {
     	ArrayList<Object> mListings = new ArrayList<>();
@@ -600,7 +634,6 @@ public class ManagementController {
     	System.out.println("Choose showtime attribute to edit: ");
     	System.out.println("1. Date");
     	System.out.println("2. Start time");
-    	System.out.println("3. End time");
     	selection = sc.nextInt();
     	
     	switch(selection) {
@@ -614,13 +647,13 @@ public class ManagementController {
     		System.out.println("Enter the new start time HH:MM (E.g. 10:30): ");
         	usrInput = sc.next();
         	start = LocalTime.parse(usrInput, timeFormat);
+			end = start.plus(mListing.getMovie().getDuration());
         	showtime.editStart(start);
-        	break;
-    	case 3:
-    		System.out.println("Enter the new end time HH:MM (E.g. 10:30): ");
-        	usrInput = sc.next();
-        	end = LocalTime.parse(usrInput, timeFormat);
-        	showtime.editEnd(end);
+			showtime.editEnd(end);
+			if(checkShowtimeOverlap(showtime, mListing)) {
+				System.out.println("Cannot confirm changes as showtime will overlap with another!");
+				return 0;
+			}
         	break;
         default:
         	System.out.println("You entered an invalid option!");
@@ -652,7 +685,7 @@ public class ManagementController {
     
     /**
      * Called to add holidays into the system
-     * @return
+     * @return int
      */
     public static int addHolidays() {
     	ArrayList<Object> holidayObjects = new ArrayList<>();
@@ -722,4 +755,81 @@ public class ManagementController {
     	
     	return 1;
     }
+
+	
+	/** 
+	 * Called to remove a LocalDate from the Holiday object holidays ArrayList
+	 * @return int
+	 */
+	public static int removeHoliday() {
+		ArrayList<Object> holidayObjects = new ArrayList<>();
+		ArrayList<LocalDate> holidays = new ArrayList<>();
+		Holiday holiday = null;
+		boolean firstTime = true;
+		int selection = 0;
+
+		Scanner sc = new Scanner(System.in);
+
+		// check if a Holiday object already exists to avoid error
+    	File f = new File("holidays.ser");
+    	if(f.isFile()) {
+    		firstTime = false;
+    	}
+		if(firstTime) {
+			System.out.println("No holiday created yet!");
+			return 0;
+		}
+
+		try {
+			holidayObjects = SerializationUtil.deserialize("holidays.ser");
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("Unable to read holidays.");
+			return 0;
+		}
+		holiday = (Holiday)holidayObjects.get(0);
+		holidays = holiday.getHolidays();
+
+		System.out.println("Current holidays: ");
+
+		for(int i=0;i<holidays.size();i++) {
+			System.out.println((i+1) + ". " + holidays.get(i));
+		}
+
+		while(true) {
+    		System.out.println("Which holiday do you want to remove: ");
+    		try {
+	    	    selection = Integer.parseInt(sc.nextLine());
+	    	} catch (NumberFormatException e) {
+	    	    e.printStackTrace();
+	    	    return 0;
+	    	}
+    		if(selection <= holidays.size() && selection > 0) {
+	    		break;
+	    	}
+	    	System.out.println("Invalid option, try again.");
+    	}
+
+		// remove selected LocalTime from the ArrayList
+		holidays.remove(selection-1);
+
+		// re-serialise the updated holiday object
+    	File dfile = new File("holidays.ser");
+    	try {
+			SerializationUtil.deleteFile(dfile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    	// serialize updated movies to file
+    	holiday = (Holiday)holidayObjects.get(0);
+		try {
+			SerializationUtil.serialize(holiday, "holidays.ser");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Holiday update unsuccessful!");
+			return 0;
+		}
+    	return 1;
+	}
 }
