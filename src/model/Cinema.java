@@ -13,8 +13,8 @@ public class Cinema implements Serializable {
     private int numCol;
     private int cinemaCode;
 
-    public Cinema(String cinemaName, int numRow, int numCol, String cinemaDetails, int cinemaCode) {
-        this.cinemaName = cinemaName;
+    public Cinema(CinemaTypes cinemaType, int numRow, int numCol, String cinemaDetails, int cinemaCode) {
+        this.cinemaType = cinemaType;
         this.numCol= numCol;
         this.numRow = numRow;
         this.cinemaDetails=cinemaDetails;
@@ -23,7 +23,7 @@ public class Cinema implements Serializable {
     }
 
     public String getCinemaTypes() {
-        return cinemaName;
+        return cinemaType;
     }
 
     public int getNumSeats() {
