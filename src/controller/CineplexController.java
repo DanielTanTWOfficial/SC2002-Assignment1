@@ -1,7 +1,7 @@
 package controller;
 
 public class CineplexController {
-    public static void main(String[] args){
+    public static void cineplexController(String[] args){
 
         printCineplexes();
         addCineplexes();
@@ -19,19 +19,19 @@ public class CineplexController {
     /**
      * Creates the cineplexes and cinemas
      */
-    public static void addCineplexes(){
+    public static void addCathayCineplexes(){
         //-----creating cineplexes and cinemas
         Vendor thisVendor = new Vendor("Cathay Cineplexes");
 
         Cineplex dummyCineplex;
         Cinema dummyCinema;
 
-        dummyCineplex = new Cineplex("Jurong East"); //creating new cineplex
+        dummyCineplex = new Cineplex("Cineleisure Orchard"); //creating new cineplex
         thisVendor.addNewCineplex(dummyCineplex);
         //ading cinemas to cineplex
-        dummyCinema = new Cinema("Gold Class",10,10,"Gold class is so cool wow ",1002);
+        dummyCinema = new Cinema();
         dummyCineplex.addNewCinema(dummyCinema);
-        dummyCinema = new Cinema("Silver Class",20,30,"Silver class is cool but not as cool as gold class!!",8927);
+        dummyCinema = new Cinema(CinemaTypes.);
         dummyCineplex.addNewCinema(dummyCinema);
         dummyCinema = new Cinema("Bronze Class",40,50,"Bronze class is for noobs",9839);
         dummyCineplex.addNewCinema(dummyCinema);
