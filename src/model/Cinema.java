@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class Cinema implements Serializable {
     @Serial
     private static final long serialVersionUID = 123457L;
-    private String cinemaName;
+    private CinemaTypes cinemaType;
     private String cinemaDetails;
     private int numSeats;
     private int numRow;
@@ -22,7 +22,7 @@ public class Cinema implements Serializable {
         this.cinemaCode=cinemaCode;
     }
 
-    public String getCinemaName() {
+    public String getCinemaTypes() {
         return cinemaName;
     }
 
