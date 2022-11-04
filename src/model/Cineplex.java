@@ -34,13 +34,33 @@ public class Cineplex implements Serializable {
     }
 
     public void printCinemas(){
-        System.out.println("Cinemas at "+this.location+":");
-        for (int i=0;i<numCinemas;i++){
-            System.out.println(this.cinemas[i].getCinemaName());
-            System.out.println("Number of seats: "+this.cinemas[i].getNumSeats());
-            System.out.println("Description: "+this.cinemas[i].getCinemaDetails());
-            System.out.println();
+        System.out.println("Cinemas at "+this.location+": \n");
+        int[] cinemasPrinted = new int[2];
+
+        //initialising values in array
+        for (int i=0;i<2;i++){
+            cinemasPrinted[i]=0; //0 for not printed, 1 for printed
         }
+
+        //print cinemas
+        for (int i=0;i<numCinemas;i++){
+            if (cinemasPrinted[this.cinemas[i].getCinemaName().ordinal()]==0) {
+                System.out.println(cinemaTypestoString(this.cinemas[i].getCinemaName()));
+                System.out.println("Number of seats: " + this.cinemas[i].getNumSeats());
+                System.out.println("Description: " + this.cinemas[i].getCinemaDetails());
+                System.out.println();
+
+                cinemasPrinted[this.cinemas[i].getCinemaName().ordinal()]=1;
+            }
+        }
+    }
+
+    private String cinemaTypestoString(CinemaTypes cinemaTypes){
+        switch (cinemaTypes){
+            case STANDARD: return "Standard DOLBY ATMOS cinema";
+            case PLATINUM: return "Platinum Movie Suites";
+        }
+        return "";
     }
 
 }
