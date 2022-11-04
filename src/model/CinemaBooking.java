@@ -1,4 +1,4 @@
-package src.model;
+package model;
 
 public class CinemaBooking {
     private static final long serialVersionUID = 123459L;

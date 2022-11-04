@@ -8,6 +8,7 @@ import java.security.MessageDigest;
 // 
 
 public class User {
+	private static final long serialVersionUID = 943875L;
 	private String email;
 	private String passwordHashed;
 	private int role; 
@@ -42,7 +43,7 @@ public class User {
 	}
     	
 	public String PasswordSHA256(String password, String salt){
-		String generatedPassword = null;
+		String hashedPassword = null;
 	    try {
 	        MessageDigest md = MessageDigest.getInstance("SHA-512");
 	        md.update(salt.getBytes(StandardCharsets.UTF_8));
@@ -51,11 +52,11 @@ public class User {
 	        for(int i=0; i< bytes.length ;i++){
 	            sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
 	        }
-	        generatedPassword = sb.toString();
+	        hashedPassword = sb.toString();
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-	    return generatedPassword;
+	    return hashedPassword;
 	}
 
     // should we show the hashed password?

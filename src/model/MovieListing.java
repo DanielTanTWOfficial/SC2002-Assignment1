@@ -52,13 +52,17 @@ public class MovieListing implements IMovieListing, Serializable, Comparable<Mov
 		}
 		System.out.println("\nSynopsis: \n");
 		System.out.println(movie.getSynopsis());
+		System.out.println("Duration: " + movie.getDuration().toMinutes() + " mins");
 		System.out.println("Content Rating: " + movie.getMovieRating());
 		System.out.println("Movie Type: " + movie.getMovieType());
 		System.out.println("Showing Status: " + movie.getStatus());
 		System.out.println("Ticket Sales: " + this.ticketSales);
 		System.out.println("Reviewer Ratings:");
 		System.out.println("Overall Rating: " + this.overallRating);
-		// TODO: add code to print reviews
+		// print reviews
+		for(int i=0;i<reviews.size();i++) {
+			reviews.get(i).printReview();
+		}
 	}
 
 	/**
@@ -67,6 +71,10 @@ public class MovieListing implements IMovieListing, Serializable, Comparable<Mov
 	@Override
 	public void addReview(Review review) {
 		this.reviews.add(review);
+		// call updateOverallRating() only if there is more than 1 individual rating
+		if(this.reviews.size() > 1) {
+			updateOverallRating();
+		}
 	}
 
 	/**
@@ -131,6 +139,13 @@ public class MovieListing implements IMovieListing, Serializable, Comparable<Mov
 	}
 
 	/**
+	 * @param ticketSales
+	 */
+	public void setTicketSales(double ticketSales) {
+		this.ticketSales = ticketSales;
+	}
+
+	/**
 	 * @return reviews
 	 */
 	public ArrayList<Review> getReviews() {
@@ -157,7 +172,13 @@ public class MovieListing implements IMovieListing, Serializable, Comparable<Mov
 	 * and the number of reviews is 2 or more
 	 */
 	private void updateOverallRating() {
-		// TODO
+		double sum = 0;
+		// sum up total ratings
+		for(int i=0;i<this.reviews.size();i++) {
+			sum += this.reviews.get(i).getRating();
+		}
+		// divide total ratings by no. of reviews
+		this.overallRating = sum / this.reviews.size();
 	}
 
 }
