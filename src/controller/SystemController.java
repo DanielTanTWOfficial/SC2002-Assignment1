@@ -127,19 +127,8 @@ public class SystemController {
 			System.out.println((i+1) + ". " + holidays.get(i));
 		}
 
-		while(true) {
-    		System.out.println("Which holiday do you want to remove: ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-    		if(selection <= holidays.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
+		System.out.println("Which holiday do you want to remove: ");
+		selection = InputController.getIntRange(1, holidays.size());
 
 		// remove selected LocalTime from the ArrayList
 		holidays.remove(selection-1);
@@ -206,10 +195,7 @@ public class SystemController {
 	 * @return int
 	 */
 	public static int configureFilter() {
-		String filterVal;
-		int selection = 0;
-
-		Scanner sc = new Scanner(System.in);
+		String filterVal = "";
 
 		System.out.println("=============== RANKING CONTROL =============== ");
 		System.out.println("Toggle the filters available to rank the movie listings: ");
@@ -218,28 +204,20 @@ public class SystemController {
 		System.out.println("2. Filter by overall rating");
 		System.out.println("3. Filter by either ticket sales or overall rating");
 		
-		while(true) {
-    		System.out.println("Enter the filter option to set: ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-    		if(selection <= 3 && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
-
-		if(selection == 1) {
+		System.out.println("Enter the filter option to set: ");
+		switch(InputController.getIntRange(1, 3)) {
+		case 1:
 			filterVal = "sales";
-		}
-		else if(selection == 2) {
+			break;
+		case 2:
 			filterVal = "ratings";
-		}
-		else {
+			break;
+		case 3:
 			filterVal = "any";
+			break;
+		default:
+			System.out.println("Invalid option, try again.");
+			break;
 		}
 
 		// write the filter value to a text file for reference

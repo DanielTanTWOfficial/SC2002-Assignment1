@@ -103,11 +103,7 @@ public class ManagementController {
     	
     	while(true) {
 	    	System.out.println("Enter the number of cast members (min. 2): ");
-	    	try {
-	    	    numCast = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	}
+	    	numCast = InputController.getPositiveInt();
 	    	if(numCast >= 2) {
 	    		break;
 	    	}
@@ -125,9 +121,8 @@ public class ManagementController {
     		count++;
     	}
     	System.out.println("Select the showing status: ");
-    	selection = sc.nextInt();
     	
-    	switch (selection) {
+    	switch (InputController.getIntRange(1, 3)) {
 		case 1: showingStatus = ShowingStatus.values()[0];
 				break;
 		case 2: showingStatus = ShowingStatus.values()[1];
@@ -145,7 +140,7 @@ public class ManagementController {
     		count++;
     	}
     	System.out.println("Select the movie rating: ");
-    	selection = sc.nextInt();
+    	selection = InputController.getIntRange(1, 4);
     	
     	switch (selection) {
 		case 1: movieRating = MovieRating.values()[0];
@@ -166,9 +161,8 @@ public class ManagementController {
     		count++;
     	}
     	System.out.println("Select the movie type: ");
-    	selection = sc.nextInt();
     	
-    	switch (selection) {
+    	switch (InputController.getIntRange(1, 4)) {
 		case 1: movieType = MovieType.values()[0];
 				break;
 		case 2: movieType = MovieType.values()[1];
@@ -218,8 +212,6 @@ public class ManagementController {
     	MovieListing mListing = null;
     	int selection = 0;
     	
-    	Scanner sc = new Scanner(System.in);
-    	
     	System.out.println("=============== MOVIE DELETION =============== ");
     	System.out.println("Available movies: ");
     	
@@ -234,18 +226,8 @@ public class ManagementController {
     		System.out.println((i+1) + ". " + mListing.getMovie().getTitle());
     	}
     	
-    	while(true) {
-	    	System.out.println("Which movie do you want to delete? ");
-	    	try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	}
-	    	if(selection <= mListings.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
+		System.out.println("Which movie do you want to delete? ");
+		selection = InputController.getIntRange(1, mListings.size());
     	
     	mListing = (MovieListing)mListings.get(selection-1);
     	
@@ -289,8 +271,6 @@ public class ManagementController {
     	int count, selection = 0;
     	ShowingStatus showingStatus;
     	
-    	Scanner sc = new Scanner(System.in);
-    	
     	System.out.println("=============== MOVIE STATUS UPDATE =============== ");
     	System.out.println("Available movies: ");
     	
@@ -307,19 +287,8 @@ public class ManagementController {
     		System.out.println((i+1) + ". " + mListing.getMovie().getTitle() + ": " + mListing.getMovie().getStatus());
     	}
     	
-    	while(true) {
-    		System.out.println("Which movie do you want to update the status for? ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-	    	if(selection <= mListings.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
+		System.out.println("Which movie do you want to update the status for? ");
+		selection = InputController.getIntRange(1, mListings.size());
     	
     	mListing = (MovieListing)mListings.get(selection-1);
     	
@@ -330,7 +299,7 @@ public class ManagementController {
     		count++;
     	}
     	System.out.println("Select the showing status: ");
-    	selection = sc.nextInt();
+    	selection = InputController.getIntRange(1, 3);
     	
     	switch (selection) {
 		case 1: showingStatus = ShowingStatus.values()[0];
@@ -407,20 +376,9 @@ public class ManagementController {
     		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
     	}
     	
-    	while(true) {
-    		System.out.println("Enter the movie to add the showtime for: ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-    		if(selection <= mListings.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
-    	
+		System.out.println("Enter the movie to add the showtime for: ");
+		selection = InputController.getIntRange(1, mListings.size());
+	
     	mListing = (MovieListing)mListings.get(selection-1);
     	
     	try {
@@ -442,19 +400,8 @@ public class ManagementController {
     		System.out.println((1+1) + ". " + cineplexes.get(i).getLocation());
     	}
     	
-    	while(true) {
-    		System.out.println("Enter the cineplex for the showtime: ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-    		if(selection <= cineplexes.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
+		System.out.println("Enter the cineplex for the showtime: ");
+		selection = InputController.getIntRange(1, cineplexes.size());
     	
     	System.out.println("Available cinemas: ");
     	
@@ -464,19 +411,8 @@ public class ManagementController {
     		System.out.println((i+1) + ". " + cinemas.get(i).getCinemaCode());
     	}
     	
-    	while(true) {
-    		System.out.println("Select the cinema to add the showtime for: ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-    		if(selection <= cinemas.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
+		System.out.println("Select the cinema to add the showtime for: ");
+		selection = InputController.getIntRange(1, cinemas.size());
     	
     	cinema = cinemas.get(selection-1);
     	
@@ -590,19 +526,8 @@ public class ManagementController {
     		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
     	}
     	
-    	while(true) {
-    		System.out.println("Enter the movie to edit the showtime for: ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-    		if(selection <= mListings.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
+		System.out.println("Enter the movie to edit the showtime for: ");
+		selection = InputController.getIntRange(1, mListings.size());
     	
     	mListing = (MovieListing)mListings.get(selection-1);
     	
@@ -615,19 +540,8 @@ public class ManagementController {
     		showtime.printShowtime();
     	}
     	
-    	while(true) {
-    		System.out.println("Enter the showtime to edit: ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-    		if(selection <= showtimes.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
+		System.out.println("Enter the showtime to edit: ");
+		selection = InputController.getIntRange(1, showtimes.size());
     	
     	showtime = (Showtime)showtimes.get(selection-1);
     	
@@ -635,9 +549,8 @@ public class ManagementController {
     	System.out.println("Choose showtime attribute to edit: ");
     	System.out.println("1. Date");
     	System.out.println("2. Start time");
-    	selection = sc.nextInt();
     	
-    	switch(selection) {
+    	switch(InputController.getIntRange(1, 2)) {
     	case 1:
     		System.out.println("Enter the new date YYYY/MM/DD (E.g. 2022/10/03): ");
     		usrInput = sc.next();
@@ -712,19 +625,8 @@ public class ManagementController {
     		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
     	}
     	
-    	while(true) {
-    		System.out.println("Enter the movie to remove the showtime for: ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-    		if(selection <= mListings.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
+		System.out.println("Enter the movie to remove the showtime for: ");
+		selection = InputController.getIntRange(1, mListings.size());
     	
     	mListing = (MovieListing)mListings.get(selection-1);
     	
@@ -737,19 +639,8 @@ public class ManagementController {
     		showtime.printShowtime();
     	}
     	
-    	while(true) {
-    		System.out.println("Enter the showtime to remove: ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-    		if(selection <= showtimes.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
+		System.out.println("Enter the showtime to remove: ");
+		selection = InputController.getIntRange(1, showtimes.size());
     	
     	showtime = (Showtime)showtimes.remove(selection-1);
 
