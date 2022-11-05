@@ -53,24 +53,24 @@ public class moblima {
             System.out.println("=============== MOBLIMA ADMIN =============== ");
             System.out.println("1. Create/Update/Remove movie listing");
             System.out.println("2. Create/Update/Remove movie showtimes");
-            System.out.println("3. Create/Update/Remove movies shown");
-            System.out.println("4. Search/List movies");
+            System.out.println("3. Search/List movies");
+            System.out.println("4. List Top 5 movies");
             System.out.println("5. Configure system settings");
             System.out.println("6. Log out");
             System.out.println("============================================= ");
             System.out.print("Select action: ");
             switch(InputController.getIntRange(1, 6)) {
                 case 1:
-                    System.out.println("");
+                    ManagementController.movieActions();
                     break;
                 case 2:
 
                     break;
                 case 3:
-
+                    CustomerController.displayAllMovieListings();
                     break;
                 case 4:
-
+                    CustomerController.displayTopMovieListings();
                     break;
                 case 5:
                     systemSettings();
@@ -170,7 +170,7 @@ public class moblima {
                     CustomerController.displaySpecificListing();
                     break;
                 case 3:
-
+                    CustomerController.checkAvailableSeats();
                     break;
                 case 4:
 

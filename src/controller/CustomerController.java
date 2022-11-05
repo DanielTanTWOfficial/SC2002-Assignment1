@@ -5,12 +5,18 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+import model.Cinema;
+import model.Cineplex;
 import model.MovieListing;
 import model.SerializationUtil;
+import model.Showtime;
+import model.Vendor;
 
 public class CustomerController {
     /**
@@ -35,6 +41,8 @@ public class CustomerController {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		System.out.println("=============== ALL MOVIES =============== ");
 
 		// if filter value is set by admin, user cannot choose, otherwise they can choose
 		if(filterVal == "ratings") {
@@ -95,6 +103,8 @@ public class CustomerController {
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+
+		System.out.println("=============== TOP MOVIES =============== ");
     	
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
@@ -140,5 +150,156 @@ public class CustomerController {
 
 		mListing.printInfo(true);
 
+	}
+
+	/**
+     * Called to print seating chart for a particular showtime
+	 * @return int
+     */
+	public static int checkAvailableSeats() {
+		ArrayList<Object> cineplexesInfo = new ArrayList<>();
+		ArrayList<Cineplex> cineplexes = new ArrayList<>();
+    	ArrayList<Cinema> cinemas = new ArrayList<>();
+		ArrayList<Object> mListings = new ArrayList<>();
+		ArrayList<Showtime> showtimes = new ArrayList<>();
+		ArrayList<Showtime> matchingShowtimes = new ArrayList<>();
+		Vendor vendor = null;
+		MovieListing mListing = null;
+		Showtime showtime = null;
+		int cinemaCode;
+		int selection = 0;
+		String usrInput;
+		LocalDate filterDate;
+
+		// dates will be formatted into YYYY-MM-DD format
+    	DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("=============== SEAT AVAILABILITY =============== ");
+		System.out.println("Available cineplexes: ");
+    	try {
+			cineplexesInfo = SerializationUtil.deserialize("VendorCineplexesInfo.ser");
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("Unable to read cineplexes info.");
+			return 0;
+		}
+    	
+    	System.out.println("Available cineplexes: ");
+    	
+		vendor = (Vendor)cineplexesInfo.get(0);
+
+    	// get list of cineplexes to display to user
+    	cineplexes = vendor.getCineplexes();
+    	
+    	for(int i=0;i<cineplexes.size();i++) {
+    		System.out.println((1+1) + ". " + cineplexes.get(i).getLocation());
+    	}
+    	
+    	while(true) {
+    		System.out.println("Enter the cineplex to view the showtimes: ");
+    		try {
+	    	    selection = Integer.parseInt(sc.nextLine());
+	    	} catch (NumberFormatException e) {
+	    	    e.printStackTrace();
+	    	    return 0;
+	    	}
+    		if(selection <= cineplexes.size() && selection > 0) {
+	    		break;
+	    	}
+	    	System.out.println("Invalid option, try again.");
+    	}
+    	
+    	System.out.println("Available cinemas: ");
+    	
+    	cinemas = cineplexes.get(selection-1).getCinemas();
+    	
+    	for(int i=0;i<cinemas.size();i++) {
+    		System.out.println((i+1) + ". " + cinemas.get(i).getCinemaCode());
+    	}
+    	
+    	while(true) {
+    		System.out.println("Select the cinema to view the showtimes: ");
+    		try {
+	    	    selection = Integer.parseInt(sc.nextLine());
+	    	} catch (NumberFormatException e) {
+	    	    e.printStackTrace();
+	    	    return 0;
+	    	}
+    		if(selection <= cinemas.size() && selection > 0) {
+	    		break;
+	    	}
+	    	System.out.println("Invalid option, try again.");
+    	}
+    	
+    	cinemaCode = cinemas.get(selection-1).getCinemaCode();
+
+    	System.out.println("Available movies to check showtimes for: ");
+    	try {
+			mListings = SerializationUtil.deserialize("movieListings.ser");
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("Unable to read movie listings.");
+			return 0;
+		}
+    	
+    	for(int i=0;i<mListings.size();i++) {
+    		mListing = (MovieListing)mListings.get(i);
+    		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
+    	}
+    	
+    	while(true) {
+    		System.out.println("Which movie do you want to view the showtimes for: ");
+    		try {
+	    	    selection = Integer.parseInt(sc.nextLine());
+	    	} catch (NumberFormatException e) {
+	    	    e.printStackTrace();
+	    	    return 0;
+	    	}
+    		if(selection <= mListings.size() && selection > 0) {
+	    		break;
+	    	}
+	    	System.out.println("Invalid option, try again.");
+    	}
+    	
+    	mListing = (MovieListing)mListings.get(selection-1);
+
+		showtimes = mListing.getShowtimes();
+
+    	System.out.println("Enter the date to view showtimes for YYYY/MM/DD (E.g. 2022/10/03): ");
+		usrInput = sc.next();
+    	filterDate = LocalDate.parse(usrInput, dateFormat);
+
+		// filter out showtimes available for the chosen cinema only
+		for(int i=0;i<showtimes.size();i++) {
+			if(showtimes.get(i).getCinemaCode() == cinemaCode && showtimes.get(i).getDate().isEqual(filterDate)) {
+				matchingShowtimes.add(showtimes.get(i));
+			}
+		}
+
+		for(int i=0;i<matchingShowtimes.size();i++) {
+			System.out.println((i+1) + ". Date: " + matchingShowtimes.get(i).getDate() + " Time: " + matchingShowtimes.get(i).getStart());
+		}
+
+		while(true) {
+    		System.out.println("Which showtime do you want to check seat availability of: ");
+    		try {
+	    	    selection = Integer.parseInt(sc.nextLine());
+	    	} catch (NumberFormatException e) {
+	    	    e.printStackTrace();
+	    	    return 0;
+	    	}
+    		if(selection <= matchingShowtimes.size() && selection > 0) {
+	    		break;
+	    	}
+	    	System.out.println("Invalid option, try again.");
+    	}
+
+		showtime = matchingShowtimes.get(selection-1);
+
+		// print the seats
+		showtime.getCinemaBooking().printSeats();
+
+		return 1;
 	}
 }

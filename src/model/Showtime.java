@@ -36,13 +36,13 @@ public class Showtime implements IShowtime, Serializable {
 	 * @param end
 	 * @param code
 	 */
-	public Showtime(String showtimeId, LocalDate date, LocalTime start, LocalTime end, int code) {
+	public Showtime(String showtimeId, LocalDate date, LocalTime start, LocalTime end, Cinema cinema) {
 		this.showtimeId = showtimeId;
 		this.date = date;
 		this.start = start;
 		this.end = end;
-		this.cinemaCode = code;
-		this.cinemaBooking = new CinemaBooking();
+		this.cinemaCode = cinema.getCinemaCode();
+		this.cinemaBooking = new CinemaBooking(cinema);
 		System.out.println("Showtime created!");
 	}
 	
