@@ -11,7 +11,8 @@ import model.MovieListing;
 import java.util.Scanner;
 
 
-public class ReviewController{
+
+public class ReviewController{ //this is the reviewcontroller class
 
     
     public static void submitReview(Review review){ //this method is to submit a review from the movie listings listed.
@@ -32,7 +33,7 @@ public class ReviewController{
             System.out.println("Movie #" +(i+1) + ": " + mListing.getMovie().getTitle());
         }
 
-        int movienumber = sc.nextInt();
+        int movienumber = sc.nextInt() - 1; //edit here to minus the movienumber by 1 because print value increase by 1
         MovieListing movieselected = (MovieListing)mListings.get(movienumber); //the exact movie that is being entered the review
 
         //checking the reviews file
