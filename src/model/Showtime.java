@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import model.CinemaBooking;
 
 /**
  * @author d188878
@@ -19,7 +20,7 @@ public class Showtime implements IShowtime, Serializable {
 	private LocalDate date;
 	private LocalTime start;
 	private LocalTime end;
-	private String cinemaCode;
+	private int cinemaCode;
 	private CinemaBooking cinemaBooking;
 	
 	/**
@@ -35,13 +36,13 @@ public class Showtime implements IShowtime, Serializable {
 	 * @param end
 	 * @param code
 	 */
-	public Showtime(String showtimeId, LocalDate date, LocalTime start, LocalTime end, String code) {
+	public Showtime(String showtimeId, LocalDate date, LocalTime start, LocalTime end, Cinema cinema) {
 		this.showtimeId = showtimeId;
 		this.date = date;
 		this.start = start;
 		this.end = end;
-		this.cinemaCode = code;
-		this.cinemaBooking = new CinemaBooking();
+		this.cinemaCode = cinema.getCinemaCode();
+		this.cinemaBooking = new CinemaBooking(cinema);
 		System.out.println("Showtime created!");
 	}
 	
@@ -123,7 +124,7 @@ public class Showtime implements IShowtime, Serializable {
 	/**
 	 * @return cinemaCode
 	 */
-	public String getCinemaCode() {
+	public int getCinemaCode() {
 		return cinemaCode;
 	}
 	

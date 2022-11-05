@@ -7,19 +7,73 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 
 import model.SerializationUtil;
 import model.Showtime;
-import model.Holiday;
+import model.Vendor;
 import model.Movie;
 import model.MovieListing;
+import model.Review;
 import model.Movie.MovieRating;
 import model.Movie.MovieType;
 import model.Movie.ShowingStatus;
+import model.Cineplex;
+import model.Cinema;
 
 public class ManagementController {
+	/**
+     * Provides admin options to choose action to take for movie management
+     */
+	public static void movieActions() {
+		System.out.println("=============== MOVIE CONTROL =============== ");
+		System.out.println("1. Create a new movie listing");
+		System.out.println("2. Update a movie status");
+		System.out.println("3. Remove a movie listing");
+		System.out.println("============================================= ");
+        System.out.print("Select action: ");
+		switch(InputController.getIntRange(1, 3)) {
+		case 1:
+			createMovie();
+			break;
+		case 2:
+			updateMovieStatus();
+			break;
+		case 3:
+			deleteMovie();
+			break;
+		default:
+			System.out.println("Invalid option");
+			break;
+		}
+	}
+
+	/**
+     * Provides admin options to choose action to take for showtime management
+     */
+	public static void showtimeActions() {
+		System.out.println("=============== SHOWTIME CONTROL =============== ");
+		System.out.println("1. Create a new movie showtime");
+		System.out.println("2. Update a movie showtime");
+		System.out.println("3. Remove a movie showtime");
+		System.out.println("============================================= ");
+        System.out.print("Select action: ");
+		switch(InputController.getIntRange(1, 3)) {
+		case 1:
+			addShowtime();
+			break;
+		case 2:
+			editShowtime();
+			break;
+		case 3:
+			removeShowtime();
+			break;
+		default:
+			System.out.println("Invalid option");
+			break;
+		}
+	}
+
     /**
      * Creates a new Movie object
      * @return int
@@ -37,7 +91,7 @@ public class ManagementController {
     	
     	Scanner sc = new Scanner(System.in);
     	
-    	System.out.println("Creating a new movie: ");
+    	System.out.println("=============== MOVIE CREATION =============== ");
     	System.out.println("Enter the movie title: ");
     	title = sc.nextLine();
     	System.out.println("Enter the director: ");
@@ -127,15 +181,6 @@ public class ManagementController {
 		}
     	
     	Movie newMovie = new Movie(title, director, cast, synopsis, duration, showingStatus, movieRating, movieType);
-    	
-    	// serialize to file
-		try {
-			SerializationUtil.serialize(newMovie, "movies.ser");
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Movie save unsuccessful!");
-			return 0;
-		}
 		
 		if(createMovieListing(newMovie) == 1) {
 			return 1;
@@ -169,24 +214,24 @@ public class ManagementController {
      * @return int
      */
     public static int deleteMovie() {
-    	ArrayList<Object> movies = new ArrayList<>();
-    	Movie movie = null;
+    	ArrayList<Object> mListings = new ArrayList<>();
+    	MovieListing mListing = null;
     	int selection = 0;
     	
     	Scanner sc = new Scanner(System.in);
     	
-    	System.out.println("Deleting movie:");
+    	System.out.println("=============== MOVIE DELETION =============== ");
     	System.out.println("Available movies: ");
     	
     	try {
-			movies = SerializationUtil.deserialize("movies.ser");
+			mListings = SerializationUtil.deserialize("movieListings.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
     	
-    	for(int i=0;i<movies.size();i++) {
-    		movie = (Movie)movies.get(i);
-    		System.out.println((i+1) + ". " + movie.getTitle());
+    	for(int i=0;i<mListings.size();i++) {
+    		mListing = (MovieListing)mListings.get(i);
+    		System.out.println((i+1) + ". " + mListing.getMovie().getTitle());
     	}
     	
     	while(true) {
@@ -196,70 +241,21 @@ public class ManagementController {
 	    	} catch (NumberFormatException e) {
 	    	    e.printStackTrace();
 	    	}
-	    	if(selection <= movies.size() && selection > 0) {
+	    	if(selection <= mListings.size() && selection > 0) {
 	    		break;
 	    	}
 	    	System.out.println("Invalid option, try again.");
     	}
     	
-    	movie = (Movie)movies.get(selection-1);
+    	mListing = (MovieListing)mListings.get(selection-1);
     	
     	// set the showingStatus to END_OF_SHOWING
-    	movie.deleteMovie();
+    	mListing.getMovie().deleteMovie();
     	
-    	// remove movie listing before deleting movie completely
-    	deleteMovieListing(movie);
+    	// remove movie listing
+    	mListings.remove(selection-1);
     	
     	// delete movie file to be overwritten
-    	File dfile = new File("movies.ser");
-    	try {
-			SerializationUtil.deleteFile(dfile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    	
-    	// save remaining movie objects to file
-    	movies.remove(selection);
-    	for(int i=0;i<movies.size();i++) {
-    		// serialize to file
-    		try {
-    			SerializationUtil.serialize(movie, "movies.ser");
-    		} catch (IOException e) {
-    			e.printStackTrace();
-    			System.out.println("Movie save unsuccessful!");
-    			return 0;
-    		}
-    	}
-    	
-    	return 0;
-    }
-    
-    /**
-     * Deletes the respective movie listing
-     * @param movie
-     * @return int
-     */
-    public static int deleteMovieListing(Movie movie) {
-    	ArrayList<Object> mListings = new ArrayList<>();
-    	ArrayList<Showtime> showtimes = new ArrayList<>();
-    	ArrayList<Review> reviews = new ArrayList<>();
-    	MovieListing mListing = null;
-    	
-    	try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-    	
-    	for(int i=0;i<mListings.size();i++) {
-    		mListing = (MovieListing) mListings.get(i);
-    		if(mListing.getMovie().getTitle() == movie.getTitle()) {
-    			// remove movie listing from ArrayList if it matches given movie
-    			mListings.remove(i);
-    			break;
-    		}
-    	}
-    	
     	File dfile = new File("movieListings.ser");
     	try {
 			SerializationUtil.deleteFile(dfile);
@@ -267,9 +263,10 @@ public class ManagementController {
 			e.printStackTrace();
 		}
     	
-    	// serialize remaining movie listings to file
+    	// save remaining movie objects to file
     	for(int i=0;i<mListings.size();i++) {
-    		mListing = (MovieListing)mListings.get(i);
+			mListing = (MovieListing)mListings.get(i);
+    		// serialize to file
     		try {
     			SerializationUtil.serialize(mListing, "movieListings.ser");
     		} catch (IOException e) {
@@ -279,7 +276,7 @@ public class ManagementController {
     		}
     	}
     	
-    	return 1;
+    	return 0;
     }
     
     /**
@@ -287,27 +284,27 @@ public class ManagementController {
      * @return int
      */
     public static int updateMovieStatus() {
-    	ArrayList<Object> movies = new ArrayList<>();
-    	Movie movie = null;
+    	ArrayList<Object> mListings = new ArrayList<>();
+    	MovieListing mListing = null;
     	int count, selection = 0;
     	ShowingStatus showingStatus;
     	
     	Scanner sc = new Scanner(System.in);
     	
-    	System.out.println("Updating movie status: ");
+    	System.out.println("=============== MOVIE STATUS UPDATE =============== ");
     	System.out.println("Available movies: ");
     	
     	try {
-			movies = SerializationUtil.deserialize("movies.ser");
+			mListings = SerializationUtil.deserialize("movieListings.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
-			System.out.println("Unable to read movies.");
+			System.out.println("Unable to read movie listings.");
 			return 0;
 		}
     	
-    	for(int i=0;i<movies.size();i++) {
-    		movie = (Movie)movies.get(i);
-    		System.out.println((i+1) + ". " + movie.getTitle() + ": " + movie.getStatus());
+    	for(int i=0;i<mListings.size();i++) {
+    		mListing = (MovieListing)mListings.get(i);
+    		System.out.println((i+1) + ". " + mListing.getMovie().getTitle() + ": " + mListing.getMovie().getStatus());
     	}
     	
     	while(true) {
@@ -318,13 +315,13 @@ public class ManagementController {
 	    	    e.printStackTrace();
 	    	    return 0;
 	    	}
-	    	if(selection <= movies.size() && selection > 0) {
+	    	if(selection <= mListings.size() && selection > 0) {
 	    		break;
 	    	}
 	    	System.out.println("Invalid option, try again.");
     	}
     	
-    	movie = (Movie)movies.get(selection-1);
+    	mListing = (MovieListing)mListings.get(selection-1);
     	
     	System.out.println("Available status options: ");
     	count = 1;
@@ -347,9 +344,9 @@ public class ManagementController {
 		}
     	
     	// call to edit movie showing status
-    	movie.editStatus(showingStatus);
+    	mListing.getMovie().editStatus(showingStatus);
     	
-    	File dfile = new File("movies.ser");
+    	File dfile = new File("movieListings.ser");
     	try {
 			SerializationUtil.deleteFile(dfile);
 		} catch (IOException e) {
@@ -357,10 +354,10 @@ public class ManagementController {
 		}
     	
     	// serialize updated movies to file
-    	for(int i=0;i<movies.size();i++) {
-    		movie = (Movie)movies.get(i);
+    	for(int i=0;i<mListings.size();i++) {
+    		mListing = (MovieListing)mListings.get(i);
     		try {
-    			SerializationUtil.serialize(movie, "movies.ser");
+    			SerializationUtil.serialize(mListing, "movieListings.ser");
     		} catch (IOException e) {
     			e.printStackTrace();
     			System.out.println("Movie update unsuccessful!");
@@ -376,14 +373,15 @@ public class ManagementController {
      * @return int
      */
     public static int addShowtime() {
-    	ArrayList<Object> showtimes = new ArrayList<>();
     	ArrayList<Object> mListings = new ArrayList<>();
     	ArrayList<Object> cineplexesInfo = new ArrayList<>();
     	ArrayList<Cineplex> cineplexes = new ArrayList<>();
     	ArrayList<Cinema> cinemas = new ArrayList<>();
+		Vendor vendor = null;
+		Cinema cinema = null;
     	MovieListing mListing = null;
     	int selection = 0;
-    	String showtimeId, cinemaCode, usrInput;
+    	String showtimeId,  usrInput;
     	LocalDate date;
     	LocalTime start, end;
     	Showtime newShowtime;
@@ -394,7 +392,7 @@ public class ManagementController {
     	DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
     	Scanner sc = new Scanner(System.in);
     	
-    	System.out.println("Adding a new showtime: ");
+    	System.out.println("=============== SHOWTIME CREATION =============== ");
     	System.out.println("Available movies to add showtimes for: ");
     	try {
 			mListings = SerializationUtil.deserialize("movieListings.ser");
@@ -426,7 +424,7 @@ public class ManagementController {
     	mListing = (MovieListing)mListings.get(selection-1);
     	
     	try {
-			cineplexesInfo = SerializationUtil.deserialize("vendorCineplexesInfo.ser");
+			cineplexesInfo = SerializationUtil.deserialize("VendorCineplexesInfo.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read cineplexes info.");
@@ -435,8 +433,10 @@ public class ManagementController {
     	
     	System.out.println("Available cineplexes: ");
     	
+		vendor = (Vendor)cineplexesInfo.get(0);
+
     	// get list of cineplexes to display to user
-    	cineplexes = cineplexesInfo.get(0).getCineplexes();
+    	cineplexes = vendor.getCineplexes();
     	
     	for(int i=0;i<cineplexes.size();i++) {
     		System.out.println((1+1) + ". " + cineplexes.get(i).getLocation());
@@ -478,7 +478,7 @@ public class ManagementController {
 	    	System.out.println("Invalid option, try again.");
     	}
     	
-    	cinemaCode = cinemas.get(selection-1).getCinemaCode();
+    	cinema = cinemas.get(selection-1);
     	
     	System.out.println("Enter the showtime date YYYY/MM/DD (E.g. 2022/10/02): ");
     	usrInput = sc.next();
@@ -492,16 +492,17 @@ public class ManagementController {
     	
     	// set the showtimeId (1st word of movie title + showtime index in listing)
     	showtimeId = mListing.getMovie().getTitle().split("[ \\t\\n\\,\\?\\;\\.\\:\\!]")[0] + mListing.getShowtimes().size();
-    	
+
+    	// create the new showtime object
+    	newShowtime = new Showtime(showtimeId, date, start, end, cinema);
+
 		// check if the showtime will overlap with another showtime at the same Cinema
 		if(checkShowtimeOverlap(newShowtime, mListing)) {
 			System.out.println("The showtime overlaps with another existing showtime!");
 			return 0;
 		}
-
-    	// update the movie listing with the added showtime
-    	newShowtime = new Showtime(showtimeId, date, start, end, cinemaCode);
     	
+		// add the new showtime object to the movie listing showtime ArrayList
     	mListing.addShowtime(newShowtime);
     	
     	// save new movie listings to file
@@ -541,7 +542,7 @@ public class ManagementController {
 			// first check if the cinema is the same
 			if(showtime.getCinemaCode() == showtimes.get(i).getCinemaCode()) {
 				// then check if the date is the same
-				if(showtime.getDate() == showtimes.get(i).getDate()) {
+				if(showtime.getDate().isEqual(showtimes.get(i).getDate())) {
 					// check if the showtimes overlap
 					if(showtime.getStart().isBefore(showtimes.get(i).getEnd()) && showtimes.get(i).getStart().isBefore(showtime.getEnd())) {
 						return true;
@@ -574,7 +575,7 @@ public class ManagementController {
     	DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
     	
     	// let user choose movie listing to edit showtimes for
-    	System.out.println("Editing showtimes: ");
+    	System.out.println("=============== SHOWTIME UPDATE =============== ");
     	System.out.println("Available movies to edit showtimes for: ");
     	try {
 			mListings = SerializationUtil.deserialize("movieListings.ser");
@@ -683,155 +684,95 @@ public class ManagementController {
     	return 1;
     }
 
-	// maybe we should split the holidays into another controller
-
-    /**
-     * Called to add holidays into the system
+	/**
+     * Called to remove showtimes
      * @return int
      */
-    public static int addHolidays() {
-    	ArrayList<Object> holidayObjects = new ArrayList<>();
-    	ArrayList<LocalDate> holidays = new ArrayList<>();
-    	Holiday holiday = null;
-    	LocalDate holidayDate;
-    	String usrInput;
-    	char selection;
-    	boolean firstTime = true;
-    	
-    	// check if a Holiday object already exists to avoid duplicate creation
-    	File f = new File("holidays.ser");
-    	if(f.isFile()) {
-    		firstTime = false;
-    	}
-    	
-    	if(firstTime) {
-    		holiday = new Holiday();
-    	}
-    	else {
-    		try {
-    			holidayObjects = SerializationUtil.deserialize("holidays.ser");
-    		} catch (IOException | ClassNotFoundException e) {
-    			e.printStackTrace();
-    			System.out.println("Unable to read movie listings.");
-    			return 0;
-    		}
-    		holiday = (Holiday)holidayObjects.get(0);
-    	}
-    	
-    	holidays = holiday.getHolidays();
-    	
-    	// dates will be formatted into YYYY-MM-DD format
-    	DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-    	Scanner sc = new Scanner(System.in);
-    	
-    	System.out.println("Adding holidays: ");
-    	while(true) {
-    		System.out.println("Enter the holiday date YYYY/MM/DD (E.g. 2022/10/03): ");
-    		usrInput = sc.next();
-    		holidayDate = LocalDate.parse(usrInput, dateFormat);
-    		holidays.add(holidayDate);
-    		System.out.println("Add another date (Y/N)? ");
-    		selection = sc.next().charAt(0);
-    		if(selection == 'N') {
-    			break;
-    		}
-    	}
-    	
-    	// re-serialise the updated holiday object
-    	File dfile = new File("holidays.ser");
-    	try {
-			SerializationUtil.deleteFile(dfile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    	
-    	// serialize updated movies to file
-    	holiday = (Holiday)holidayObjects.get(0);
-		try {
-			SerializationUtil.serialize(holiday, "holidays.ser");
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Holiday update unsuccessful!");
-			return 0;
-		}
-    	
-    	return 1;
-    }
-
-	
-	/** 
-	 * Called to remove a LocalDate from the Holiday object holidays ArrayList
-	 * @return int
-	 */
-	public static int removeHoliday() {
-		ArrayList<Object> holidayObjects = new ArrayList<>();
-		ArrayList<LocalDate> holidays = new ArrayList<>();
-		Holiday holiday = null;
-		boolean firstTime = true;
-		int selection = 0;
+	public static int removeShowtime() {
+		ArrayList<Object> mListings = new ArrayList<>();
+    	ArrayList<Showtime> showtimes = new ArrayList<>();
+    	MovieListing mListing = null;
+    	Showtime showtime = null;
+    	int selection = 0;
 
 		Scanner sc = new Scanner(System.in);
 
-		// check if a Holiday object already exists to avoid error
-    	File f = new File("holidays.ser");
-    	if(f.isFile()) {
-    		firstTime = false;
-    	}
-		if(firstTime) {
-			System.out.println("No holiday created yet!");
-			return 0;
-		}
-
-		try {
-			holidayObjects = SerializationUtil.deserialize("holidays.ser");
+		System.out.println("=============== REMOVE SHOWTIME =============== ");
+		System.out.println("Available movies to remove the showtime for: ");
+    	try {
+			mListings = SerializationUtil.deserialize("movieListings.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
-			System.out.println("Unable to read holidays.");
+			System.out.println("Unable to read movie listings.");
 			return 0;
 		}
-		holiday = (Holiday)holidayObjects.get(0);
-		holidays = holiday.getHolidays();
-
-		System.out.println("Current holidays: ");
-
-		for(int i=0;i<holidays.size();i++) {
-			System.out.println((i+1) + ". " + holidays.get(i));
-		}
-
-		while(true) {
-    		System.out.println("Which holiday do you want to remove: ");
+    	
+    	for(int i=0;i<mListings.size();i++) {
+    		mListing = (MovieListing)mListings.get(i);
+    		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
+    	}
+    	
+    	while(true) {
+    		System.out.println("Enter the movie to remove the showtime for: ");
     		try {
 	    	    selection = Integer.parseInt(sc.nextLine());
 	    	} catch (NumberFormatException e) {
 	    	    e.printStackTrace();
 	    	    return 0;
 	    	}
-    		if(selection <= holidays.size() && selection > 0) {
+    		if(selection <= mListings.size() && selection > 0) {
 	    		break;
 	    	}
 	    	System.out.println("Invalid option, try again.");
     	}
+    	
+    	mListing = (MovieListing)mListings.get(selection-1);
+    	
+    	// list existing showtimes for the selected movie listing
+    	System.out.println("Available showtimes: ");
+    	showtimes = mListing.getShowtimes();
+    	for(int i=0;i<showtimes.size();i++) {
+    		showtime = (Showtime)showtimes.get(i);
+    		System.out.println((i+1) + ". ");
+    		showtime.printShowtime();
+    	}
+    	
+    	while(true) {
+    		System.out.println("Enter the showtime to remove: ");
+    		try {
+	    	    selection = Integer.parseInt(sc.nextLine());
+	    	} catch (NumberFormatException e) {
+	    	    e.printStackTrace();
+	    	    return 0;
+	    	}
+    		if(selection <= showtimes.size() && selection > 0) {
+	    		break;
+	    	}
+	    	System.out.println("Invalid option, try again.");
+    	}
+    	
+    	showtime = (Showtime)showtimes.remove(selection-1);
 
-		// remove selected LocalTime from the ArrayList
-		holidays.remove(selection-1);
-
-		// re-serialise the updated holiday object
-    	File dfile = new File("holidays.ser");
+		// re-serialise the updated MovieListing object
+    	File dfile = new File("movieListings.ser");
     	try {
 			SerializationUtil.deleteFile(dfile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
     	
-    	// serialize updated movies to file
-    	holiday = (Holiday)holidayObjects.get(0);
-		try {
-			SerializationUtil.serialize(holiday, "holidays.ser");
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Holiday update unsuccessful!");
-			return 0;
-		}
+    	// serialize updated movie listings to file
+    	for(int i=0;i<mListings.size();i++) {
+    		mListing = (MovieListing)mListings.get(i);
+    		try {
+    			SerializationUtil.serialize(mListing, "movieListings.ser");
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    			System.out.println("MovieListing update unsuccessful!");
+    			return 0;
+    		}
+    	}
+
     	return 1;
 	}
 }

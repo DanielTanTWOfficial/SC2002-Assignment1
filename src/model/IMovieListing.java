@@ -7,8 +7,9 @@ package model;
 public interface IMovieListing {
 	/**
 	 * Prints a pretty display of movie info
+	 * @param withReviews is true when displaying a single movie listing to include given reviews
 	 */
-	public void printInfo();
+	public void printInfo(boolean withReviews);
 	/**
 	 * Allows new viewer reviews to be added
 	 * @param review

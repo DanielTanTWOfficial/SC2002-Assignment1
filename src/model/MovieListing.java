@@ -41,27 +41,30 @@ public class MovieListing implements IMovieListing, Serializable, Comparable<Mov
 	
 	/**
 	 * Prints a pretty display of movie info
+	 * @param withReviews is true when displaying a single movie listing to include given reviews
 	 */
 	@Override
-	public void printInfo() {
+	public void printInfo(boolean withReviews) {
 		System.out.println("Movie: " + movie.getTitle());
 		System.out.println("Director: " + movie.getDirector());
 		System.out.print("Cast: ");
 		for(int i=0;i<movie.getCast().size();i++) {
 			System.out.print(movie.getCast().get(i) + " ");
 		}
-		System.out.println("\nSynopsis: \n");
-		System.out.println(movie.getSynopsis());
 		System.out.println("Duration: " + movie.getDuration().toMinutes() + " mins");
 		System.out.println("Content Rating: " + movie.getMovieRating());
 		System.out.println("Movie Type: " + movie.getMovieType());
 		System.out.println("Showing Status: " + movie.getStatus());
 		System.out.println("Ticket Sales: " + this.ticketSales);
-		System.out.println("Reviewer Ratings:");
 		System.out.println("Overall Rating: " + this.overallRating);
-		// print reviews
-		for(int i=0;i<reviews.size();i++) {
-			reviews.get(i).printReview();
+		if(withReviews) {
+			System.out.println("\nSynopsis: \n");
+			System.out.println(movie.getSynopsis());
+			System.out.println("Reviewer Ratings:");
+			// print reviews
+			for(int i=0;i<reviews.size();i++) {
+				reviews.get(i).printReview();
+			}
 		}
 	}
 

@@ -4,8 +4,10 @@ import java.util.Objects;
 import controller.AdminController;
 import controller.CineplexController;
 import controller.CinemaController;
+import controller.CustomerController;
 import controller.InputController;
 import controller.ManagementController;
+import controller.SystemController;
 import model.Vendor;
 import model.Cinema.CinemaClass;
 import model.Cineplex;
@@ -89,24 +91,24 @@ public class moblima {
             System.out.println("=============== MOBLIMA ADMIN =============== ");
             System.out.println("1. Create/Update/Remove movie listing");
             System.out.println("2. Create/Update/Remove movie showtimes");
-            System.out.println("3. Create/Update/Remove movies shown");
-            System.out.println("4. Search/List movies");
+            System.out.println("3. Search/List movies");
+            System.out.println("4. List Top 5 movies");
             System.out.println("5. Configure system settings");
             System.out.println("6. Log out");
             System.out.println("============================================= ");
             System.out.print("Select action: ");
             switch(InputController.getIntRange(1, 6)) {
                 case 1:
-
+                    ManagementController.movieActions();
                     break;
                 case 2:
 
                     break;
                 case 3:
-
+                    CustomerController.displayAllMovieListings();
                     break;
                 case 4:
-
+                    CustomerController.displayTopMovieListings();
                     break;
                 case 5:
                     systemSettings();
@@ -137,18 +139,19 @@ public class moblima {
             System.out.println("5. Change email");
             System.out.println("6. Change password");
             System.out.println("7. Create admin account"); // only allow another admin to create admin accounts
-            System.out.println("8. Exit");
+            System.out.println("8. Manage movie ranking filter settings");
+            System.out.println("9. Exit");
             System.out.println("============================================= ");
             System.out.print("Select action: ");
-            switch(InputController.getIntRange(1, 8)) {
+            switch(InputController.getIntRange(1, 9)) {
                 case 1:
-                    
+                    SystemController.listHolidays();
                     break;
                 case 2:
-                    ManagementController.addHolidays();
+                    SystemController.addHolidays();
                     break;
                 case 3:
-                    ManagementController.removeHoliday();
+                    SystemController.removeHoliday();
                     break;
                 case 4:
 
@@ -165,6 +168,8 @@ public class moblima {
                     // AccountController.changePassword();
                     break;
                 case 8:
+                    SystemController.configureFilter();
+                case 9:
                     exit = true;
                     System.out.println("Exiting...");
                     break;
@@ -197,13 +202,13 @@ public class moblima {
             System.out.print("Select action: ");
             switch(InputController.getIntRange(1, 8)) {
                 case 1:
-
+                    CustomerController.displayAllMovieListings();
                     break;
                 case 2:
-
+                    CustomerController.displaySpecificListing();
                     break;
                 case 3:
-
+                    CustomerController.checkAvailableSeats();
                     break;
                 case 4:
 
@@ -212,7 +217,7 @@ public class moblima {
 
                     break;
                 case 6:
-
+                    CustomerController.displayTopMovieListings();
                     break;
                 case 7:
 
