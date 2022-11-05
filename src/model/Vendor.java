@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Vendor implements IVendor, Serializable {
     @Serial
@@ -30,6 +31,10 @@ public class Vendor implements IVendor, Serializable {
         return numCineplexes;
     }
 
+    public ArrayList<Cineplex> getCineplexes() {
+        return cineplexes;
+    }
+
     public void addNewCineplex(Cineplex newCineplex){
         this.cineplexes.add(newCineplex);
         this.numCineplexes++;
@@ -42,6 +47,11 @@ public class Vendor implements IVendor, Serializable {
         }
     }
 
+    /**
+     * Returns the cineplex according to it's index in the Vendor's cineplexes list
+     * @param i
+     * @return
+     */
     public Cineplex getCineplex(int i){
         return this.cineplexes.get(i);
     }

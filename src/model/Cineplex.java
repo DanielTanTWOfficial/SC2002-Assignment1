@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Cineplex implements Serializable {
     @Serial
@@ -14,7 +15,7 @@ public class Cineplex implements Serializable {
 
     public Cineplex(String location) {
         this.location = location;
-        this.cinemas = new ArrayList<Cinema>();
+        this.cinemas = new ArrayList<>();
         this.numCinemas=0;
     }
 
@@ -28,6 +29,10 @@ public class Cineplex implements Serializable {
 
     public int getNumCinemas() {
         return this.numCinemas;
+    }
+
+    public ArrayList<Cinema> getCinemas() {
+        return cinemas;
     }
 
     public void addNewCinema(Cinema newCinema){
@@ -47,7 +52,26 @@ public class Cineplex implements Serializable {
             System.out.println("Cinema Code: " + currentCinema.getCinemaCode());
             System.out.println("Number of seats: " + currentCinema.getNumSeats());
             System.out.println();
+        System.out.println("Cinemas at "+this.location+": \n");
         }
+
+        // int[] cinemasPrinted = new int[2];
+        // //initialising values in array
+        // for (int i=0;i<CinemaTypes.values().length;i++){
+        //     cinemasPrinted[i]=0;//0 for not printed, 1 for printed
+        // }
+
+        // //print cinemas
+        // for (int i=0;i<numCinemas;i++){
+        //     if (cinemasPrinted[this.cinemas.get(i).getCinemaName().ordinal()]==0) {
+        //         System.out.println(cinemaTypestoString(this.cinemas.get(i).getCinemaName()));
+        //         System.out.println("Number of seats: " + this.cinemas.get(i).getNumSeats());
+        //         System.out.println("Description: " + this.cinemas.get(i).getCinemaDetails());
+        //         System.out.println();
+
+        //         cinemasPrinted[this.cinemas.get(i).getCinemaName().ordinal()]=1;
+        //     }
+        // }
     }
 
     public Cinema getCinema(int i) {
