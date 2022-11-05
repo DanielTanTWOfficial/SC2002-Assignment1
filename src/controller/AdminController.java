@@ -5,15 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import controller.InputController;
-
 import model.SerializationUtil;
 import model.User;
 import model.AdminUser;
 import model.CustomerUser;
 
 
-public class AccountController {
+public class AdminController {
     
     // admins can create and delete its own and other admin accounts
     
