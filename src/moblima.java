@@ -7,6 +7,7 @@ import controller.CinemaController;
 import controller.CustomerController;
 import controller.InputController;
 import controller.ManagementController;
+import controller.SystemController;
 import model.Vendor;
 import model.Cinema.CinemaClass;
 import model.Cineplex;
@@ -144,13 +145,13 @@ public class moblima {
             System.out.print("Select action: ");
             switch(InputController.getIntRange(1, 9)) {
                 case 1:
-                    ManagementController.listHolidays();
+                    SystemController.listHolidays();
                     break;
                 case 2:
-                    ManagementController.addHolidays();
+                    SystemController.addHolidays();
                     break;
                 case 3:
-                    ManagementController.removeHoliday();
+                    SystemController.removeHoliday();
                     break;
                 case 4:
 
@@ -167,7 +168,7 @@ public class moblima {
                     // AccountController.changePassword();
                     break;
                 case 8:
-                    ManagementController.configureFilter();
+                    SystemController.configureFilter();
                 case 9:
                     exit = true;
                     System.out.println("Exiting...");
