@@ -102,7 +102,7 @@ public class moblima {
                     ManagementController.movieActions();
                     break;
                 case 2:
-
+                    ManagementController.showtimeActions();
                     break;
                 case 3:
                     CustomerController.displayAllMovieListings();
