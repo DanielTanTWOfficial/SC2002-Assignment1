@@ -6,32 +6,41 @@ import java.io.Serializable;
 public class Cinema implements Serializable {
     @Serial
     private static final long serialVersionUID = 123457L;
-    private CinemaTypes cinemaType;
-    private String cinemaDetails;
-    private int numSeats;
+    public enum CinemaClass {STANDARD, PLATINUM};
+    private CinemaClass cinemaClass;
+    private int cinemaCode;
     private int numRow;
     private int numCol;
-    private int cinemaCode;
+    private int numSeats;
+    private Seat[] seats;
 
-    public Cinema(CinemaTypes cinemaType, int numRow, int numCol, String cinemaDetails, int cinemaCode) {
-        this.cinemaType = cinemaType;
+    public Cinema(CinemaClass cinemaClass, int cinemaCode, int numRow, int numCol) {
+        this.cinemaClass = cinemaClass;
+        this.cinemaCode=cinemaCode;
         this.numCol= numCol;
         this.numRow = numRow;
-        this.cinemaDetails=cinemaDetails;
         this.numSeats=numCol*numRow;
-        this.cinemaCode=cinemaCode;
+        this.seats = new Seat[numSeats];
     }
 
-    public String getCinemaTypes() {
-        return cinemaType;
+    public CinemaClass getCinemaClass() {
+        return cinemaClass;
+    }
+
+    public String cinemaTypestoString(CinemaClass cinemaClass){
+        switch (cinemaClass){
+            case STANDARD: return "Standard DOLBY ATMOS cinema";
+            case PLATINUM: return "Platinum Movie Suites";
+        }
+        return "";
+    }
+
+    public int getCinemaCode() {
+        return cinemaCode;
     }
 
     public int getNumSeats() {
         return numSeats;
-    }
-
-    public String getCinemaDetails() {
-        return cinemaDetails;
     }
 
     public int getNumRow() {
@@ -42,8 +51,22 @@ public class Cinema implements Serializable {
         return numCol;
     }
 
-    public int getCinemaCode() {
-        return cinemaCode;
+    public Seat getSeat(int seatID) {
+        return this.seats[seatID];
+    }
+
+    public int getNumOccupiedSeats() {
+        int occupied = 0;
+        for (int i = 0; i < numSeats; i++) {
+            if (this.seats[i].getAssigned()) {
+                occupied += 1;
+            }
+        }
+        return occupied;
+    }
+
+    public int getNumNotOccupiedSeats() {
+        return this.numSeats - getNumOccupiedSeats();
     }
 }
 
