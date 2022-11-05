@@ -1,7 +1,15 @@
-import controller.AccountController;
+import java.util.ArrayList;
+import java.util.Objects;
+
+import controller.AdminController;
+import controller.CineplexController;
+import controller.CinemaController;
 import controller.InputController;
 import controller.ManagementController;
-
+import model.Vendor;
+import model.Cinema.CinemaClass;
+import model.Cineplex;
+import model.Cinema;
 public class moblima {
     public void main() {
         initialiseInfra();
@@ -32,9 +40,38 @@ public class moblima {
 		}
     }
 
+    // Create Cineplexes and Cinemas
+    // NOTE: at least 3 Cineplexes with * Cinemas and more than 5 movies
+    // This is not under any of the modules as admins cannot add cineplexes or cinemas so we have to do this manually
     public void initialiseInfra() {
-        // Create Cineplexes and Cinemas from ser files
-        // NOTE: at least 3 Cineplexes
+        Vendor cathay = new Vendor("Cathay Cineplexes");
+
+        ArrayList<Cineplex> cineplexes = new ArrayList<>();
+        Cineplex orchard = new Cineplex("Cineleisure Orchard");
+        Cineplex westmall = new Cineplex("West Mall");
+        Cineplex jem = new Cineplex("Jem");
+        cineplexes.add(orchard);
+        cineplexes.add(westmall);
+        cineplexes.add(jem);
+        CineplexController.addCineplexes(cathay, cineplexes);
+
+        ArrayList<Cinema> cinemasOrchard = new ArrayList<>();
+        cinemasOrchard.add(new Cinema(CinemaClass.STANDARD, 101, 11, 22));
+        cinemasOrchard.add(new Cinema(CinemaClass.STANDARD, 102, 11, 22));
+        cinemasOrchard.add(new Cinema(CinemaClass.PLATINUM, 103, 10, 20));
+        CinemaController.addCinemas(orchard, cinemasOrchard);
+        
+        ArrayList<Cinema> cinemasWestmall = new ArrayList<>();
+        cinemasWestmall.add(new Cinema(CinemaClass.STANDARD, 201, 11, 22));
+        cinemasWestmall.add(new Cinema(CinemaClass.STANDARD, 202, 11, 22));
+        cinemasWestmall.add(new Cinema(CinemaClass.PLATINUM, 203, 10, 20));
+        CinemaController.addCinemas(westmall, cinemasWestmall);
+
+        ArrayList<Cinema> cinemasJem = new ArrayList<>();
+        cinemasJem.add(new Cinema(CinemaClass.STANDARD, 101, 11, 22));
+        cinemasJem.add(new Cinema(CinemaClass.STANDARD, 102, 11, 22));
+        cinemasJem.add(new Cinema(CinemaClass.PLATINUM, 103, 10, 20));
+        CinemaController.addCinemas(jem, cinemasJem);
     }
 
     /*
@@ -46,7 +83,7 @@ public class moblima {
         3b. Register new admin accounts
     */
     public void adminModule() {
-        boolean loggedIn = AccountController.login();
+        boolean loggedIn = AdminController.login();
 
         while (loggedIn) {
             System.out.println("=============== MOBLIMA ADMIN =============== ");
@@ -117,7 +154,7 @@ public class moblima {
 
                     break;
                 case 5:
-                    AccountController.createAdminAccount();
+                    AdminController.createAdminAccount();
                     break;
                 case 6:
                     // In progress

@@ -682,7 +682,9 @@ public class ManagementController {
     	
     	return 1;
     }
-    
+
+	// maybe we should split the holidays into another controller
+
     /**
      * Called to add holidays into the system
      * @return int

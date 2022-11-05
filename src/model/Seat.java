@@ -2,22 +2,24 @@ package model;
 
 public class Seat {
     private static final long serialVersionUID = 123450L;
-    private int assigned; //1 - taken, 0 - vacant
+    private boolean assigned; // true - taken, false - vacant
+    // optional feature: seatType for couple seats, XL seats, etc...
 
     public Seat(){
-        assigned=0;
+        assigned = false;
     }
 
-    public int getAssigned() {
+    public boolean getAssigned() {
         return assigned;
     }
 
     public void assignSeat(){
-        if (assigned==1){
+        if (assigned){
             System.out.println("Seat has been taken!");
         }
         else{
-            assigned=1;
+            assigned = true;
+            System.out.println("Seat assigned successfully!");
         }
     }
 }
