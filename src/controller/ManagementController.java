@@ -1,7 +1,9 @@
 package controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,6 +17,7 @@ import model.Showtime;
 import model.Holiday;
 import model.Movie;
 import model.MovieListing;
+import model.Review;
 import model.Movie.MovieRating;
 import model.Movie.MovieType;
 import model.Movie.ShowingStatus;
@@ -831,5 +834,59 @@ public class ManagementController {
 			return 0;
 		}
     	return 1;
+	}
+
+	
+	/** 
+	 * Allows admins to set whether movie listings should be ranked by ticket sales/overall ratings/any
+	 * @return int
+	 */
+	public static int configureFilter() {
+		String filterVal;
+		int selection = 0;
+
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("Toggle the filters available to rank the movie listings: ");
+		System.out.println("Available filters: ");
+		System.out.println("1. Filter by ticket sales");
+		System.out.println("2. Filter by overall rating");
+		System.out.println("3. Filter by either ticket sales or overall rating");
+		
+		while(true) {
+    		System.out.println("Enter the filter option to set: ");
+    		try {
+	    	    selection = Integer.parseInt(sc.nextLine());
+	    	} catch (NumberFormatException e) {
+	    	    e.printStackTrace();
+	    	    return 0;
+	    	}
+    		if(selection <= 3 && selection > 0) {
+	    		break;
+	    	}
+	    	System.out.println("Invalid option, try again.");
+    	}
+
+		if(selection == 1) {
+			filterVal = "sales";
+		}
+		else if(selection == 2) {
+			filterVal = "ratings";
+		}
+		else {
+			filterVal = "any";
+		}
+
+		// write the filter value to a text file for reference
+		try (PrintWriter out = new PrintWriter("filter.txt")) {
+		    out.println(filterVal);
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("Error saving filter to file!");
+			return 0;
+		}
+
+		return 1;
 	}
 }
