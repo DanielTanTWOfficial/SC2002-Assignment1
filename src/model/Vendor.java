@@ -13,7 +13,7 @@ public class Vendor implements IVendor, Serializable {
     public Vendor(String vendorName) {
         this.vendorName = vendorName;
         this.cineplexes= new Cineplex[999];
-        this.numCineplexes=0;
+        this.numCineplexes = 0;
     }
 
     public String getVendorName() {

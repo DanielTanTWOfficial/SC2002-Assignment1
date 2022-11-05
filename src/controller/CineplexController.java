@@ -1,25 +1,35 @@
 package controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Objects;
+
+import model.Vendor;
+import model.Cineplex;
+import model.Cinema;
+import model.CinemaBooking;
+
 public class CineplexController {
-    public static void cineplexController(String[] args){
+    // public static void cineplexController(){
 
-        printCineplexes();
-        addCineplexes();
+    //     printCineplexes();
+    //     addCineplex();
 
-        //delete serialization file
-        File dfile = new File("VendorCineplexesInfo.ser");
-        try {
-            SerializationUtil.deleteFile(dfile);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+    //     //delete serialization file
+    //     File dfile = new File("VendorCineplexesInfo.ser");
+    //     try {
+    //         SerializationUtil.deleteFile(dfile);
+    //     }catch(IOException e){
+    //         e.printStackTrace();
+    //     }
 
-    }
+    // }
 
     /**
      * Creates the cineplexes and cinemas
      */
-    public static void addCathayCineplexes(){
+    public static void addCineplex(Vendor vendor, String cineplexName){
         //-----creating cineplexes and cinemas
         Vendor thisVendor = new Vendor("Cathay Cineplexes");
 
@@ -31,7 +41,7 @@ public class CineplexController {
         //ading cinemas to cineplex
         dummyCinema = new Cinema();
         dummyCineplex.addNewCinema(dummyCinema);
-        dummyCinema = new Cinema(CinemaTypes.);
+        dummyCinema = new Cinema(CinemaTypes);
         dummyCineplex.addNewCinema(dummyCinema);
         dummyCinema = new Cinema("Bronze Class",40,50,"Bronze class is for noobs",9839);
         dummyCineplex.addNewCinema(dummyCinema);

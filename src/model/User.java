@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
@@ -7,7 +8,7 @@ import java.security.MessageDigest;
 // Conencted to Modules == Controllers
 // 
 
-public class User {
+public class User implements Serializable {
 	private static final long serialVersionUID = 943875L;
 	private String email;
 	private String passwordHashed;

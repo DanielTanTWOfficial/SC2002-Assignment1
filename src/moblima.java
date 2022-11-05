@@ -1,7 +1,12 @@
 import controller.AccountController;
+import controller.CineplexController;
+import controller.CinemaController;
 import controller.InputController;
 import controller.ManagementController;
 
+import model.Vendor;
+import model.Cineplex;
+import model.Cinema;
 public class moblima {
     public void main() {
         initialiseInfra();
@@ -32,9 +37,22 @@ public class moblima {
 		}
     }
 
+    // Create Cineplexes and Cinemas
+    // NOTE: at least 1 Cineplex with 3 Cinemas and more than 5 movies
+    // This is not under any of the modules as admins cannot add cineplexes or cinemas
+    // so we have to do this manually
     public void initialiseInfra() {
-        // Create Cineplexes and Cinemas from ser files
-        // NOTE: at least 3 Cineplexes
+       Vendor cathay = new Vendor("Cathay Cineplexes");
+
+       CineplexController.addCineplex(cathay, "Cineleisure Orchard");
+       CinemaController.addCinema("Cineleisure Orchard", "A");
+       CinemaController.addCinema("Cineleisure Orchard", "Bronze Class", 40, 50, "Bronze class is for noobs", 9839);
+       CinemaController.addCinema("Cineleisure Orchard", "B");
+       CinemaController.addCinema("Cineleisure Orchard", "C");
+       CineplexController.addCineplex(cathay, "Jem");
+       CinemaController.addCinema("Jem", "D");
+       CinemaController.addCinema("Jem", "E");
+       CinemaController.addCinema("Jem", "F");
     }
 
     /*
