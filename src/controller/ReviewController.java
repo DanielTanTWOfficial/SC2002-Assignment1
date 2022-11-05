@@ -11,7 +11,8 @@ import model.MovieListing;
 import java.util.Scanner;
 
 
-public class ReviewController{
+
+public class ReviewController{ //this is the reviewcontroller class
 
     
     public static void submitReview(Review review){ //this method is to submit a review from the movie listings listed.
