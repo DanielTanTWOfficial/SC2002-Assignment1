@@ -32,7 +32,7 @@ public class ReviewController{
             System.out.println("Movie #" +(i+1) + ": " + mListing.getMovie().getTitle());
         }
 
-        int movienumber = sc.nextInt();
+        int movienumber = sc.nextInt() - 1;//this is to calculate the correct movie title being selected in the movie listings
         MovieListing movieselected = (MovieListing)mListings.get(movienumber); //the exact movie that is being entered the review
 
         //checking the reviews file
