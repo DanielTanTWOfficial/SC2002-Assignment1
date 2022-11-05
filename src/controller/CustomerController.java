@@ -79,7 +79,7 @@ public class CustomerController {
     	for(int i=0;i<5;i++) {
     		System.out.print((i+1) + ". ");
     		mListing = castedListings.get(i);
-    		mListing.printInfo();
+    		mListing.printInfo(false);
     	}
     }
     
@@ -98,7 +98,47 @@ public class CustomerController {
     	
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
-    		mListing.printInfo();
+    		mListing.printInfo(false);
     	}
     }
+
+	/**
+     * Called to print details of a specific movie listing
+     */
+	public static void displaySpecificListing() {
+		ArrayList<Object> mListings = new ArrayList<>();
+    	MovieListing mListing = null;
+		int selection = 0;
+
+		Scanner sc = new Scanner(System.in);
+
+		try {
+			mListings = SerializationUtil.deserialize("movieListings.ser");
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+    	
+    	for(int i=0;i<mListings.size();i++) {
+    		mListing = (MovieListing)mListings.get(i);
+    		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
+    	}
+
+		while(true) {
+			System.out.println("Which movie do you want to view details of? ");
+			try {
+				selection = Integer.parseInt(sc.nextLine());
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+			if(selection <= mListings.size() && selection > 0) {
+				break;
+			}
+			System.out.println("Invalid option, try again.");
+		}
+
+		mListing = (MovieListing)mListings.get(selection-1);
+
+		mListing.printInfo(true);
+
+	}
 }

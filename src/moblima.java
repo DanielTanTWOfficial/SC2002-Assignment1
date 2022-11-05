@@ -1,4 +1,5 @@
 import controller.AccountController;
+import controller.CustomerController;
 import controller.InputController;
 import controller.ManagementController;
 
@@ -60,7 +61,7 @@ public class moblima {
             System.out.print("Select action: ");
             switch(InputController.getIntRange(1, 6)) {
                 case 1:
-
+                    System.out.println("");
                     break;
                 case 2:
 
@@ -100,12 +101,13 @@ public class moblima {
             System.out.println("5. Change email");
             System.out.println("6. Change password");
             System.out.println("7. Create admin account"); // only allow another admin to create admin accounts
-            System.out.println("8. Exit");
+            System.out.println("8. Manage movie ranking filter settings");
+            System.out.println("9. Exit");
             System.out.println("============================================= ");
             System.out.print("Select action: ");
-            switch(InputController.getIntRange(1, 8)) {
+            switch(InputController.getIntRange(1, 9)) {
                 case 1:
-                    
+                    ManagementController.listHolidays();
                     break;
                 case 2:
                     ManagementController.addHolidays();
@@ -128,6 +130,8 @@ public class moblima {
                     // AccountController.changePassword();
                     break;
                 case 8:
+                    ManagementController.configureFilter();
+                case 9:
                     exit = true;
                     System.out.println("Exiting...");
                     break;
@@ -160,10 +164,10 @@ public class moblima {
             System.out.print("Select action: ");
             switch(InputController.getIntRange(1, 8)) {
                 case 1:
-
+                    CustomerController.displayAllMovieListings();
                     break;
                 case 2:
-
+                    CustomerController.displaySpecificListing();
                     break;
                 case 3:
 
@@ -175,7 +179,7 @@ public class moblima {
 
                     break;
                 case 6:
-
+                    CustomerController.displayTopMovieListings();
                     break;
                 case 7:
 
