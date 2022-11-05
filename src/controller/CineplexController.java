@@ -39,23 +39,32 @@ public class CineplexController {
         dummyCineplex = new Cineplex("Cineleisure Orchard"); //creating new cineplex
         thisVendor.addNewCineplex(dummyCineplex);
         //ading cinemas to cineplex
-        dummyCinema = new Cinema();
+        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",101);
         dummyCineplex.addNewCinema(dummyCinema);
-        dummyCinema = new Cinema(CinemaTypes);
+        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",102);
         dummyCineplex.addNewCinema(dummyCinema);
-        dummyCinema = new Cinema("Bronze Class",40,50,"Bronze class is for noobs",9839);
+        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",103);
         dummyCineplex.addNewCinema(dummyCinema);
 
-        dummyCineplex = new Cineplex("Vivocity"); //creating new cineplex
+        dummyCineplex = new Cineplex("West Mall"); //creating new cineplex
         thisVendor.addNewCineplex(dummyCineplex);
         //ading cinemas to cineplex
-        dummyCinema = new Cinema("Gold Class",10,10,"Gold class is so cool wow ",9896);
+        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",201);
         dummyCineplex.addNewCinema(dummyCinema);
-        dummyCinema = new Cinema("Platinum Class",5,5,"Platinum class is the best",3456);
+        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",202);
         dummyCineplex.addNewCinema(dummyCinema);
-        dummyCinema = new Cinema("3D",40,50,"Wow 3D so cool",7897);
+        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",203);
         dummyCineplex.addNewCinema(dummyCinema);
 
+        dummyCineplex = new Cineplex("JEM"); //creating new cineplex
+        thisVendor.addNewCineplex(dummyCineplex);
+        //ading cinemas to cineplex
+        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",301);
+        dummyCineplex.addNewCinema(dummyCinema);
+        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",302);
+        dummyCineplex.addNewCinema(dummyCinema);
+        dummyCinema = new Cinema(CinemaTypes.PLATINUM,10,20,"The most luxurious cinematic destination. Platinum Movie Suites: Cinemas with its own exclusive lounge area, leather recliner seats, and wider legroom.",303);
+        dummyCineplex.addNewCinema(dummyCinema);
 
         //serialising data
         try {
@@ -81,19 +90,26 @@ public class CineplexController {
         }
 
         Vendor outputVendor = (Vendor)cineplexesInfo.get(0); //obtain vendor (there is only one vendor)
-        outputVendor.printCineplexes();
+
+        int choice=-1;
 
 
-        int choice;
-        Scanner in = new Scanner(System.in);
-        System.out.println("Welcome to "+ outputVendor.getVendorName() +" cinemas!");
-        outputVendor.printCineplexes();
+        int back=0;
+        while (back==0){
+            Scanner in = new Scanner(System.in);
+            System.out.println("Welcome to "+ outputVendor.getVendorName() +" cinemas!");
+            outputVendor.printCineplexes();
 
-        //prompts user to choose cinepelx
-        System.out.println("Choose a cineplex to view their cinemas: ");
-        choice=in.nextInt();
+            //prompts user to choose cineplex
+            System.out.println("Choose a cineplex to view their cinemas: ");
+            choice=in.nextInt();
 
-        Cineplex cineplexChoice=outputVendor.getCineplex(choice-1);
-        cineplexChoice.printCinemas();
+            Cineplex cineplexChoice=outputVendor.getCineplex(choice-1);
+            cineplexChoice.printCinemas();
+            System.out.println("Enter 0 to return to Cineplex list. Enter 1 to exit.");
+            back=in.nextInt();
+        }
+
+
     }
 }
