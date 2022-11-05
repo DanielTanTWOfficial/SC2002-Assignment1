@@ -1,0 +1,50 @@
+package model;
+
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Cinema implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 123457L;
+    private CinemaTypes cinemaType;
+    private String cinemaDetails;
+    private int numSeats;
+    private int numRow;
+    private int numCol;
+    private int cinemaCode;
+
+    public Cinema(CinemaTypes cinemaType, int numRow, int numCol, String cinemaDetails, int cinemaCode) {
+        this.cinemaType = cinemaType;
+        this.numCol= numCol;
+        this.numRow = numRow;
+        this.cinemaDetails=cinemaDetails;
+        this.numSeats=numCol*numRow;
+        this.cinemaCode=cinemaCode;
+    }
+
+    public String getCinemaTypes() {
+        return cinemaType;
+    }
+
+    public int getNumSeats() {
+        return numSeats;
+    }
+
+    public String getCinemaDetails() {
+        return cinemaDetails;
+    }
+
+    public int getNumRow() {
+        return numRow;
+    }
+
+    public int getNumCol() {
+        return numCol;
+    }
+
+    public int getCinemaCode() {
+        return cinemaCode;
+    }
+}
+
+
