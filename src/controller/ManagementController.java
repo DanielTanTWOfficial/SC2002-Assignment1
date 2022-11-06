@@ -22,6 +22,17 @@ import model.Cineplex;
 import model.Cinema;
 
 public class ManagementController {
+	public static ArrayList<Object> readMovieListingsFile() {
+		ArrayList<Object> movieListings = new ArrayList<>();
+		try {
+			movieListings = SerializationUtil.deserialize("movieListings.ser");
+			return movieListings;
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return new ArrayList<Object>();
+	}
+
 	/**
      * Provides admin options to choose action to take for movie management
      */
@@ -200,6 +211,7 @@ public class ManagementController {
     	// serialize to file
 		try {
 			SerializationUtil.serialize(newMovieListing, "movieListings.ser");
+			System.out.println("Movie listing created successfully!");
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Movie listing save unsuccessful!");
@@ -774,5 +786,22 @@ public class ManagementController {
     	}
 
     	return 1;
+	}
+
+	public static void listMovies() {
+		System.out.println("Current Movies Showing: ");
+
+		int numberMoviesShowing = 1;
+		ArrayList<Object> movieListings = readMovieListingsFile();
+
+
+		for (int i = 0; i < movieListings.size(); i++) {
+			MovieListing currentMovieListing = (MovieListing) movieListings.get(i);
+			if (currentMovieListing.getMovie().getStatus() == ShowingStatus.NOW_SHOWING) {
+				System.out.print(numberMoviesShowing + ": ");
+				currentMovieListing.printSimpleInfo();
+				numberMoviesShowing++;
+			}
+		}
 	}
 }
