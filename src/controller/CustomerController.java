@@ -264,11 +264,13 @@ public class CustomerController {
 		ArrayList<Object> vendors = VendorController.readVendorsFile();
 		Vendor vendor = (Vendor) vendors.get(0); // only have 1 vendor
 
-		Cineplex chosenCineplex;
-		do {
-			chosenCineplex = CineplexController.chooseCineplex(vendor);
-			
-		} while (chosenCineplex.getNumCinemas() != 0);
+		Cineplex chosenCineplex = CineplexController.chooseCineplex(vendor);
+		if (chosenCineplex == null) {
+			return;
+		}
+
+		Movie chosenMovie = 
+
 		
 
 
