@@ -1,8 +1,10 @@
 package model;
 
+import model.Cinema.CinemaClass;
+
 public class CinemaBooking {
     private static final long serialVersionUID = 123459L;
-    private CinemaTypes cinemaName;
+    private CinemaClass cinemaClass;
 
     private Seat[][] seats;
 
@@ -16,7 +18,7 @@ public class CinemaBooking {
 
 
     public CinemaBooking(Cinema cinema) {
-        this.cinemaName = cinema.getCinemaName();
+        this.cinemaClass = cinema.getCinemaClass();
         this.numRow=cinema.getNumRow();
         this.numCol= cinema.getNumCol();
         this.cinemaCode= cinema.getCinemaCode();
@@ -29,11 +31,11 @@ public class CinemaBooking {
             }
         }
 
-        System.out.println("Cinema "+cinemaName+" ready for booking!");
+        System.out.println("Cinema "+cinemaCode+" ready for booking!");
     }
 
-    public String getCinemaName() {
-        return cinemaName;
+    public CinemaClass getCinemaClass() {
+        return cinemaClass;
     }
 
     public int getNumSeats() {
@@ -51,7 +53,7 @@ public class CinemaBooking {
             System.out.print(String.format("%-5d",i+1));
             for (int j=0;j<numCol;j++){
                 String symbol="o"; //unassigned seats
-                if (seats[i][j].getAssigned()==1) symbol="x"; //assigned seats
+                if (seats[i][j].getAssigned()==true) symbol="x"; //assigned seats
                 System.out.print(symbol+" ");
             }
             System.out.println();
