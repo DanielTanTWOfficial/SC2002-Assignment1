@@ -1,12 +1,17 @@
 package model;
 
+import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 import model.Movie.MovieType;
 
-public class Ticket {
+public class Ticket implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4187781382629687412L;
 	private String ticketId;
 	private String showtimeId;
 	private int CinemaCode;
