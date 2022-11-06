@@ -245,4 +245,38 @@ public class CustomerController {
 
 		return 1;
 	}
+
+	/*
+	 * 1. List movies
+	 * 2. List and Choose Cineplex
+	 * 3. Choose Movie 
+	 * 4. List and Choose Showtime (Note: all movies have the same showtimes)
+	 * 5. List and Choose Seat 
+	 * 6. Compute Price
+	 * 7. Prompt for email and mobile number
+	 * 8. Perform Transaction
+	 * 9. Save booking
+	 */
+	public static void makeBooking() {
+		ManagementController.listMovies();
+
+		// can replace with chooseVendor, but do we want to do that for this project...
+		ArrayList<Object> vendors = VendorController.readVendorsFile();
+		Vendor vendor = (Vendor) vendors.get(0); // only have 1 vendor
+
+		Cineplex chosenCineplex = CineplexController.chooseCineplex(vendor);
+		if (chosenCineplex == null) {
+			return;
+		}
+
+		Movie chosenMovie = 
+
+		
+
+
+
+
+
+		
+	}
 }
