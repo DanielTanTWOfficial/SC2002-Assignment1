@@ -17,6 +17,8 @@ import model.MovieListing;
 import model.SerializationUtil;
 import model.Showtime;
 import model.Vendor;
+import model.Cinema.CinemaClass;
+import model.Movie.ShowingStatus;
 
 public class CustomerController {
     /**
@@ -153,9 +155,11 @@ public class CustomerController {
 		Vendor vendor = null;
 		MovieListing mListing = null;
 		Showtime showtime = null;
-		int cinemaCode;
+		Cineplex cineplex = null;
+		CinemaClass cinemaClass;
+		int count;
 		int selection = 0;
-		String usrInput;
+		String usrInput, location;
 		LocalDate filterDate;
 
 		// dates will be formatted into YYYY-MM-DD format
@@ -186,18 +190,20 @@ public class CustomerController {
 		System.out.println("Enter the cineplex to view the showtimes: ");
 		selection = InputController.getIntRange(1, cineplexes.size());
     	
-    	System.out.println("Available cinemas: ");
-    	
-    	cinemas = cineplexes.get(selection-1).getCinemas();
-    	
-    	for(int i=0;i<cinemas.size();i++) {
-    		System.out.println((i+1) + ". " + cinemas.get(i).getCinemaCode());
+		cineplex = cineplexes.get(selection-1);
+		location = cineplex.getLocation();
+
+		System.out.println("Cinema classes: ");
+		count = 1;
+    	for(CinemaClass status : CinemaClass.values()) {
+    		System.out.println(count + ". " + status);
+    		count++;
     	}
-    	
-		System.out.println("Select the cinema to view the showtimes: ");
-		selection = InputController.getIntRange(1, cinemas.size());
-    	
-    	cinemaCode = cinemas.get(selection-1).getCinemaCode();
+		
+		System.out.println("Enter the desired cinema class");
+		selection = InputController.getIntRange(1, CinemaClass.values().length);
+
+		cinemaClass = CinemaClass.values()[selection-1];
 
     	System.out.println("Available movies to check showtimes for: ");
     	try {
@@ -224,9 +230,9 @@ public class CustomerController {
 		usrInput = sc.next();
     	filterDate = LocalDate.parse(usrInput, dateFormat);
 
-		// filter out showtimes available for the chosen cinema only
+		// filter out showtimes available for the chosen cineplex and cinemaClass on selected date only
 		for(int i=0;i<showtimes.size();i++) {
-			if(showtimes.get(i).getCinemaCode() == cinemaCode && showtimes.get(i).getDate().isEqual(filterDate)) {
+			if(showtimes.get(i).getLocation() == location && showtimes.get(i).getCinemaBooking().getCinemaClass() == cinemaClass && showtimes.get(i).getDate().isEqual(filterDate)) {
 				matchingShowtimes.add(showtimes.get(i));
 			}
 		}
