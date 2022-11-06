@@ -28,10 +28,8 @@ public class CustomerController {
     	ArrayList<MovieListing> castedListings = new ArrayList<>();
     	MovieListing mListing = null;
 		String filterVal = "";
-		int selection = 0;
+		boolean invalid = true;
 		boolean bySales = true;
-
-		Scanner sc = new Scanner(System.in);
 
 		// read set filter value from file
 		Path path = Paths.get("filter.txt");
@@ -49,20 +47,21 @@ public class CustomerController {
 			bySales = false;
 		}
 		else if(filterVal == "any") {
-			while(true) {
+			while(invalid) {
 				System.out.println("Do you want to filter by ticket sales (1) or overall rating (2)? ");
-				try {
-					selection = Integer.parseInt(sc.nextLine());
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				}
-				if(selection <= 2 && selection > 0) {
-					break;
-				}
-				System.out.println("Invalid option, try again.");
-			}
-			if(selection == 2) {
-				bySales = false;
+				switch(InputController.getIntRange(1, 2)) {
+					case 1:
+						bySales = true;
+						invalid = false;
+						break;
+					case 2:
+						bySales = false;
+						invalid = false;
+						break;
+					default:
+						System.out.println("Invalid option");
+						break;
+					}
 			}
 		}
     	
@@ -120,8 +119,6 @@ public class CustomerController {
     	MovieListing mListing = null;
 		int selection = 0;
 
-		Scanner sc = new Scanner(System.in);
-
 		try {
 			mListings = SerializationUtil.deserialize("movieListings.ser");
 		} catch (IOException | ClassNotFoundException e) {
@@ -133,18 +130,8 @@ public class CustomerController {
     		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
     	}
 
-		while(true) {
-			System.out.println("Which movie do you want to view details of? ");
-			try {
-				selection = Integer.parseInt(sc.nextLine());
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
-			if(selection <= mListings.size() && selection > 0) {
-				break;
-			}
-			System.out.println("Invalid option, try again.");
-		}
+		System.out.println("Which movie do you want to view details of? ");
+		selection = InputController.getIntRange(1, mListings.size());
 
 		mListing = (MovieListing)mListings.get(selection-1);
 
@@ -196,19 +183,8 @@ public class CustomerController {
     		System.out.println((1+1) + ". " + cineplexes.get(i).getLocation());
     	}
     	
-    	while(true) {
-    		System.out.println("Enter the cineplex to view the showtimes: ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-    		if(selection <= cineplexes.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
+		System.out.println("Enter the cineplex to view the showtimes: ");
+		selection = InputController.getIntRange(1, cineplexes.size());
     	
     	System.out.println("Available cinemas: ");
     	
@@ -218,19 +194,8 @@ public class CustomerController {
     		System.out.println((i+1) + ". " + cinemas.get(i).getCinemaCode());
     	}
     	
-    	while(true) {
-    		System.out.println("Select the cinema to view the showtimes: ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-    		if(selection <= cinemas.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
+		System.out.println("Select the cinema to view the showtimes: ");
+		selection = InputController.getIntRange(1, cinemas.size());
     	
     	cinemaCode = cinemas.get(selection-1).getCinemaCode();
 
@@ -248,19 +213,8 @@ public class CustomerController {
     		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
     	}
     	
-    	while(true) {
-    		System.out.println("Which movie do you want to view the showtimes for: ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-    		if(selection <= mListings.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
+		System.out.println("Which movie do you want to view the showtimes for: ");
+		selection = InputController.getIntRange(1, mListings.size());
     	
     	mListing = (MovieListing)mListings.get(selection-1);
 
@@ -281,19 +235,8 @@ public class CustomerController {
 			System.out.println((i+1) + ". Date: " + matchingShowtimes.get(i).getDate() + " Time: " + matchingShowtimes.get(i).getStart());
 		}
 
-		while(true) {
-    		System.out.println("Which showtime do you want to check seat availability of: ");
-    		try {
-	    	    selection = Integer.parseInt(sc.nextLine());
-	    	} catch (NumberFormatException e) {
-	    	    e.printStackTrace();
-	    	    return 0;
-	    	}
-    		if(selection <= matchingShowtimes.size() && selection > 0) {
-	    		break;
-	    	}
-	    	System.out.println("Invalid option, try again.");
-    	}
+		System.out.println("Which showtime do you want to check seat availability of: ");
+		selection = InputController.getIntRange(1, matchingShowtimes.size());
 
 		showtime = matchingShowtimes.get(selection-1);
 
