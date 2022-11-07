@@ -10,8 +10,10 @@ public class Booking {
 	private double totalCost;
 	private ArrayList<Ticket> tickets; // Either store ticket or ticketid
 	
-	public Booking() {
-		
+	public Booking(String bookingId, LocalDate date) {
+		this.bookingId = bookingId;
+		this.date = date;
+		tickets = new ArrayList<Ticket>();
 	}
 
 	public String getBookingId() {
@@ -31,6 +33,10 @@ public class Booking {
 	}
 
 	public double getTotalCost() {
+		totalCost = 0;
+		for (int i = 0; i < tickets.size(); i++) {
+			totalCost += tickets.get(i).getPrice(); 
+		}
 		return totalCost;
 	}
 
@@ -44,5 +50,10 @@ public class Booking {
 
 	public void setTickets(ArrayList<Ticket> tickets) {
 		this.tickets = tickets;
+	}
+	
+	public int addTicket(Ticket ticket) {
+		this.tickets.add(ticket);
+		return 1;
 	}
 }

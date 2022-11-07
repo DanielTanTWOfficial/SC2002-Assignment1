@@ -92,9 +92,13 @@ public class Ticket implements Serializable{
 		this.ticketType = ticketType;
 	}
 	
-	// Adult Ticket
-	// Mon-Wed (Category 1)
-	// Thurs-Fri6pm (Category 2)
-	// Fri6pm-Sun (Category 3)
+	public void printTicket() {
+		System.out.printf("TicketId: %s, Movie: %s\n", ticketId, movieTitle);
+		System.out.printf("ShowtimeId: %s\n", showtimeId);
+		System.out.printf("Cinema: %d\n", CinemaCode);
+		System.out.printf("Ticket Type: %s\n", ticketType);
+		System.out.printf("Seat No: %s\n", seatNo);
+		System.out.printf("Price: %.2f\n", price);
+	}
 	
 }

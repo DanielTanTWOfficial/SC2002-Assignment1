@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+import model.Booking;
 import model.Cinema;
 import model.Cineplex;
 import model.Movie;
@@ -18,6 +19,7 @@ import model.MovieListing;
 import model.SerializationUtil;
 import model.Showtime;
 import model.Ticket;
+import model.Transaction;
 import model.Vendor;
 import model.Cinema.CinemaClass;
 import model.Movie.ShowingStatus;
@@ -282,73 +284,108 @@ public class CustomerController {
 		ArrayList<Object> movieListings = MovieListingController.readMovieListingsFile();
 		Vendor vendor = (Vendor) vendors.get(0); // only have 1 vendor
 
-		// 1. List Movies
-		ArrayList<Movie> movies = new ArrayList<Movie>();
-		for (int i = 0; i < movieListings.size(); i++) {
-			MovieListing list = (MovieListing) movieListings.get(i);
-			if (!movies.contains(list.getMovie()))
-				movies.add(list.getMovie());
-			System.out.println(movies.size() + ". " + list.getMovie().getTitle());
-		}
-		
-		// 2. Select movie
-		System.out.print("Select Movie: ");
-		int chosenMovie = InputController.getIntRange(1, movies.size()) -1;
-		Movie movie = movies.get(chosenMovie);
-		
-		// 3. Display Show times
-		ArrayList<Showtime> showtimes = new ArrayList<Showtime>();
-		for (int i = 0; i < movieListings.size(); i++) {
-			MovieListing list = (MovieListing) movieListings.get(i);
-			if (list.getMovie() == movies.get(chosenMovie)) {
-				for (int j = 0; j < list.getShowtimes().size(); j++) {
-					Showtime showtime = list.getShowtimes().get(j);
-					showtimes.add(showtime);
-					System.out.printf("%d. Location: %s, Cinema: %s, Date: %s %s\n", showtimes.size(), showtime.getLocation(), showtime.getCinemaCode(), showtime.getDate(), showtime.getStart());
+		Booking booking = new Booking("B001", LocalDate.now());
+		boolean running = true;
+		while (running) {
+			// 1. List Movies
+			ArrayList<Movie> movies = new ArrayList<Movie>();
+			for (int i = 0; i < movieListings.size(); i++) {
+				MovieListing list = (MovieListing) movieListings.get(i);
+				if (!movies.contains(list.getMovie()))
+					movies.add(list.getMovie());
+				System.out.println(movies.size() + ". " + list.getMovie().getTitle());
+			}
+			
+			// 2. Select movie
+			System.out.print("Select Movie: ");
+			int chosenMovie = InputController.getIntRange(1, movies.size()) -1;
+			Movie movie = movies.get(chosenMovie);
+			
+			// 3. Display Show times
+			ArrayList<Showtime> showtimes = new ArrayList<Showtime>();
+			for (int i = 0; i < movieListings.size(); i++) {
+				MovieListing list = (MovieListing) movieListings.get(i);
+				if (list.getMovie() == movies.get(chosenMovie)) {
+					for (int j = 0; j < list.getShowtimes().size(); j++) {
+						Showtime showtime = list.getShowtimes().get(j);
+						showtimes.add(showtime);
+						System.out.printf("%d. Location: %s, Cinema: %s, class: %s, Date: %s, Time: %s\n", showtimes.size(), showtime.getLocation(), showtime.getCinemaCode(), showtime.getCinemaBooking().getCinemaClass(), showtime.getDate(), showtime.getStart());
+					}
+					break;
 				}
-				break;
+			}
+			
+			// 4. Select Show times
+			System.out.print("Select Showtime: ");
+			int chosenShowtime = InputController.getIntRange(1, showtimes.size()) -1;
+			Showtime showtime = showtimes.get(chosenShowtime);
+			
+			// 5. Display seats
+			System.out.println();
+			showtime.getCinemaBooking().printSeats();
+			
+			// 6. Select seat
+			System.out.print("Select Seat: ");
+			String chosenSeat = InputController.getString();
+			System.out.println("Selected String: " + chosenSeat);
+			
+			// 7. Display ticket types
+			for (int i = 0; i < TicketType.values().length; i++) {
+				System.out.println(i+1 + ". " + TicketType.values()[i]);
+			}
+			
+			// 8. Select ticket type
+			System.out.print("Select Ticket Type: ");
+			int chosenType = InputController.getIntRange(1, TicketType.values().length) -1;
+			System.out.println();
+			
+			// 9. Generate Ticket
+			String tId = "T" + showtime.getCinemaCode() + chosenSeat;
+			Ticket ticket = new Ticket(tId, showtime.getShowtimeId(), showtime.getCinemaCode(), movie.getTitle(), TicketType.values()[chosenType], 0, chosenSeat);
+			PriceController.computePrice(ticket, showtime, showtime.getCinemaBooking().getCinemaClass(), movie);
+			booking.addTicket(ticket);
+			
+			// Set seat as taken
+			int row = (int) chosenSeat.charAt(0) - 65;
+			chosenSeat = chosenSeat.replace(Character.toString(chosenSeat.charAt(0)), "");
+			int column = Integer.parseInt(chosenSeat) - 1;
+			showtime.getCinemaBooking().assignSeat(row, column);
+			
+			// perform transaction
+			System.out.println("1. Make Payment");
+			System.out.println("2. Continue booking");
+			System.out.println("3. Exit");
+			int choice = InputController.getIntRange(1, 3);
+			switch (choice) {
+				case 1:
+					running = false;
+					break;
+				case 3:
+					running = false;
+					return;
+				default:
+					break;		
 			}
 		}
 		
-		// 4. Select Show times
-		System.out.print("Select Showtime: ");
-		int chosenShowtime = InputController.getIntRange(1, showtimes.size()) -1;
-		Showtime showtime = showtimes.get(chosenShowtime);
-		
-		// 5. Display seats
-		System.out.println();
-		showtime.getCinemaBooking().printSeats();
-		
-		// 6. Select seat
-		System.out.print("Select Seat: ");
-		String chosenSeat = InputController.getString();
-		System.out.println("Selected String: " + chosenSeat);
-		
-		// 7. Display ticket types
-		for (int i = 0; i < TicketType.values().length; i++) {
-			System.out.println(i+1 + ". " + TicketType.values()[i]);
+		Transaction transaction = new Transaction("TR001", booking.getBookingId(), booking.getTotalCost());
+		System.out.println("----- Transaction: " + transaction.getTransactionId() + "-----");
+		for (int i = 0; i < booking.getTickets().size(); i++) {
+			Ticket t = booking.getTickets().get(i);
+			t.printTicket();
+			System.out.println();
 		}
+		System.out.println("Total Cost = " + booking.getTotalCost());
+				
+		// prompt for email and mobile phone
+		System.out.print("Enter email address: ");
+		String email = InputController.getEmail();
+		System.out.print("Enter mobile number: ");
+		String mobileNo = InputController.getMobileNumber();
+				
 		
-		// 8. Select ticket type
-		System.out.print("Select Ticket Type: ");
-		int chosenType = InputController.getIntRange(1, TicketType.values().length) -1;
-		System.out.println();
-		
-		// 9. Create ticket
-		Ticket ticket = new Ticket("T001", showtime.getShowtimeId(), showtime.getCinemaCode(), movie.getTitle(), TicketType.values()[chosenType], 0, chosenSeat);
-		PriceController.computePrice(ticket, showtime, showtime.getCinemaBooking().getCinemaClass(), movie);
-		System.out.println(ticket.getPrice());
-		
-		// Set seat as taken !!THIS DOESNT UPDATE MOVIELISTING BECAUSE IDK HOW
-		int row = (int) chosenSeat.charAt(0) - 65;
-		chosenSeat = chosenSeat.replace(Character.toString(chosenSeat.charAt(0)), "");
-		int column = Integer.parseInt(chosenSeat) - 1;
-		showtime.getCinemaBooking().assignSeat(row, column);
-		
-		BookingController.saveTicketsFile(ticket);
-		// perform transaction
-		// prompt for email and movile phone
-		
-		// generate ticket
+		for (int i = 0; i < booking.getTickets().size(); i++)
+			BookingController.saveTicketsFile(booking.getTickets().get(i));
+		System.out.println("Transaction Successful!");
 	}
 }
