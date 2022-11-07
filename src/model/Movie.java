@@ -17,7 +17,7 @@ public class Movie implements Serializable {
 	private static final long serialVersionUID = 3502145753890835117L;
 	public enum ShowingStatus { COMING_SOON, PREVIEW, NOW_SHOWING, END_OF_SHOWING };
 	public enum MovieRating { PG, NC16, M18, R21 };
-	public enum MovieType { BLOCKBUSTER, DIGITAL, IMAX };
+	public enum MovieType { BLOCKBUSTER, INDIE, IMAX };
 	private String title;
 	private String director;
 	private ArrayList<String> cast;
