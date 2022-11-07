@@ -136,4 +136,7 @@ public class InputController {
         return input;
     }
     
+    // add boolean input
+    // add date input
+
 }

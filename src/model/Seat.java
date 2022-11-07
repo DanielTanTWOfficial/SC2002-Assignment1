@@ -22,4 +22,8 @@ public class Seat {
             System.out.println("Seat assigned successfully!");
         }
     }
+
+    public void unAssign() {
+        assigned = false;
+    }
 }

@@ -34,6 +34,18 @@ public class CinemaBooking {
         System.out.println("Cinema "+cinemaCode+" ready for booking!");
     }
 
+    public Seat[][] getSeats() {
+        return this.seats;
+    }
+
+    public int getNumRows() {
+        return this.numRow;
+    }
+
+    public int getNumCols() {
+        return this.numCol;
+    }
+
     public CinemaClass getCinemaClass() {
         return cinemaClass;
     }
