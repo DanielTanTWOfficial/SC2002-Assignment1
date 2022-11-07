@@ -8,14 +8,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import controller.*;
-import model.SerializationUtil;
-import controller.AdminController;
-import controller.CineplexController;
-import controller.CinemaController;
-import controller.CustomerController;
-import controller.InputController;
-import controller.ManagementController;
-import controller.SystemController;
 import model.Vendor;
 import model.Cinema.CinemaClass;
 import model.Cineplex;
@@ -109,10 +101,10 @@ public class moblima {
             System.out.print("Select action: ");
             switch(InputController.getIntRange(1, 6)) {
                 case 1:
-                    ManagementController.movieActions();
+                    MovieListingController.movieActions();
                     break;
                 case 2:
-                    ManagementController.showtimeActions();
+                    ShowtimeController.showtimeActions();
                     break;
                 case 3:
                     CustomerController.displayAllMovieListings();
