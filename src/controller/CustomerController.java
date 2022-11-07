@@ -256,7 +256,7 @@ public class CustomerController {
 	 * 1. List movies
 	 * 2. List and Choose Cineplex
 	 * 3. Choose Movie 
-	 * 4. List and Choose Showtime
+	 * 4. List and Choose Showtime (Note: all movies have the same showtimes)
 	 * 5. List and Choose Seat 
 	 * 6. Compute Price
 	 * 7. Prompt for email and mobile number
@@ -270,48 +270,12 @@ public class CustomerController {
 		ArrayList<Object> vendors = VendorController.readVendorsFile();
 		Vendor vendor = (Vendor) vendors.get(0); // only have 1 vendor
 
-		boolean cineplexDone = false;
-		Cineplex chosenCineplex = null;
-		ArrayList<Object> movieListings = ManagementController.readMovieListingsFile();
-		while (!cineplexDone) {
-			chosenCineplex = CineplexController.chooseCineplex(vendor);
-			if (chosenCineplex == null) { // exit booking
-				return;
-			}
-
-			// check if cineplex has movieListings, else pick another cineplex
-			int numberShowtimes = 0;
-			for (int i = 0; i < movieListings.size(); i++) {
-				MovieListing currentMovieListing = (MovieListing) movieListings.get(i);
-				for (int j = 0; j < currentMovieListing.getShowtimes().size(); j++) {
-					Showtime currentShowtime = currentMovieListing.getShowtimes().get(j);
-					if (chosenCineplex.getLocation().equals(currentShowtime.getLocation())) {
-						numberShowtimes++;
-					}
-				}
-			}
-			if (numberShowtimes == 0) {
-				System.out.println("Chosen cineplex has no movies showing! Please pick another cineplex.");
-			}
-			else {
-				cineplexDone = true;
-			}
-		}
-		
-		// choose Movie
-		// if chosenMovie has showtimes in chosenCineplex, then list them 
-		System.out.print("Choose a movie from the list: ");
-		int movieChoice = InputController.getInt();
-		System.out.println("Showtimes: ");
-		MovieListing chosenMovieListing = (MovieListing) movieListings.get(movieChoice - 1);
-		for (int i = 0; i < chosenMovieListing.getShowtimes().size(); i++) {
-			Showtime currentShowtime = chosenMovieListing.getShowtimes().get(i);
-			if (chosenCineplex.getLocation().equals(currentShowtime.getLocation())) {
-				currentShowtime.printShowtime();
-			}
+		Cineplex chosenCineplex = CineplexController.chooseCineplex(vendor);
+		if (chosenCineplex == null) {
+			return;
 		}
 
-
+		Movie chosenMovie = 
 
 		
 

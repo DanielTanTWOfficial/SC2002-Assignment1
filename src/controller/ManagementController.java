@@ -694,6 +694,7 @@ public class ManagementController {
 		int numberMoviesShowing = 1;
 		ArrayList<Object> movieListings = readMovieListingsFile();
 
+
 		for (int i = 0; i < movieListings.size(); i++) {
 			MovieListing currentMovieListing = (MovieListing) movieListings.get(i);
 			if (currentMovieListing.getMovie().getStatus() == ShowingStatus.NOW_SHOWING) {
