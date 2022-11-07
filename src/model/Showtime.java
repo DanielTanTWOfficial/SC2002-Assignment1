@@ -9,7 +9,7 @@ import model.CinemaBooking;
  * @author d188878
  * The Showtime class, which implements the IShowtime interface and Serializable interface
  */
-public class Showtime implements IShowtime, Serializable {
+public class Showtime implements Serializable {
 	/**
 	 * Automatically generated serialVerisonUID value to verify that the sender 
 	 * and receiver of a serialized object have loaded classes for that object that
@@ -53,7 +53,6 @@ public class Showtime implements IShowtime, Serializable {
 	 * This method implements the code to allow cinema staff to edit the date of showtimes
 	 * @param date
 	 */
-	@Override
 	public void editDate(LocalDate date) {
 		this.date = date;
 		System.out.println("Updated showtime date to " + date.toString());
@@ -62,7 +61,6 @@ public class Showtime implements IShowtime, Serializable {
 	/**
 	 * This method implements the code to allow cinema staff to edit the start time of showtimes
 	 */
-	@Override
 	public void editStart(LocalTime start) {
 		this.start = start;
 		System.out.println("Updated showtime start to " + start.toString());
@@ -71,7 +69,6 @@ public class Showtime implements IShowtime, Serializable {
 	/**
 	 * This method implements the code to allow cinema staff to edit the end time of showtimes
 	 */
-	@Override
 	public void editEnd(LocalTime end) {
 		this.end = end;
 		System.out.println("Updated showtime end to " + end.toString());
@@ -80,7 +77,6 @@ public class Showtime implements IShowtime, Serializable {
 	/**
 	 * This method implements the code to allow the booking system to update the seat availability
 	 */
-	@Override
 	public void updateSeatStatus(int row, int col) {
 		cinemaBooking.assignSeat(row, col);
 	}

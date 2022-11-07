@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author d188878
  * The MovieListing class, which implements the IMovieListing interface and Serializable interface
  */
-public class MovieListing implements IMovieListing, Serializable, Comparable<MovieListing> {
+public class MovieListing implements Serializable, Comparable<MovieListing> {
 	/**
 	 * Automatically generated serialVerisonUID value to verify that the sender 
 	 * and receiver of a serialized object have loaded classes for that object that
@@ -43,7 +43,6 @@ public class MovieListing implements IMovieListing, Serializable, Comparable<Mov
 	 * Prints a pretty display of movie info
 	 * @param withReviews is true when displaying a single movie listing to include given reviews
 	 */
-	@Override
 	public void printInfo(boolean withReviews) {
 		System.out.println("Movie: " + movie.getTitle());
 		System.out.println("Director: " + movie.getDirector());
@@ -78,7 +77,6 @@ public class MovieListing implements IMovieListing, Serializable, Comparable<Mov
 	/**
 	 * Allows staff to add new reviews
 	 */
-	@Override
 	public void addReview(Review review) {
 		this.reviews.add(review);
 		// call updateOverallRating() only if there is more than 1 individual rating
@@ -90,7 +88,6 @@ public class MovieListing implements IMovieListing, Serializable, Comparable<Mov
 	/**
 	 * Allows staff to add new showtimes
 	 */
-	@Override
 	public void addShowtime(Showtime showtime) {
 		this.showtimes.add(showtime);
 	}
@@ -100,7 +97,6 @@ public class MovieListing implements IMovieListing, Serializable, Comparable<Mov
 	 * or overall ratings
 	 * @param listing
 	 */
-	@Override
 	public int compareTo(MovieListing listing) {
 		if(this.bySales) {
 			if(this.ticketSales > listing.getTicketSales()) {
