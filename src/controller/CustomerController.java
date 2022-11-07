@@ -307,9 +307,11 @@ public class CustomerController {
 		for (int i = 0; i < chosenMovieListing.getShowtimes().size(); i++) {
 			Showtime currentShowtime = chosenMovieListing.getShowtimes().get(i);
 			if (chosenCineplex.getLocation().equals(currentShowtime.getLocation())) {
+				System.out.print((i + 1) + ": ");
 				currentShowtime.printShowtime();
 			}
 		}
+		int showtimeChoice = InputController
 
 
 
