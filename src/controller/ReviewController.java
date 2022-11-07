@@ -36,12 +36,8 @@ public class ReviewController{ //this is the reviewcontroller class
         int movienumber = sc.nextInt() - 1; //edit here to minus the movienumber by 1 because print value increase by 1
         MovieListing movieselected = (MovieListing)mListings.get(movienumber); //the exact movie that is being entered the review
 
-        //checking the reviews file
-        try {
-			reviewsArray = SerializationUtil.deserialize("reviews.ser");
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+        
+        //entering review details
 
         System.out.println("Please enter your name:");
         String name = sc.next();
@@ -70,30 +66,29 @@ public class ReviewController{ //this is the reviewcontroller class
         Review r1 = new Review(name, reviewdetails, reviewID, rating);
         movieselected.addReview(r1);
 
-        sc.close();
-    }
-
-    public static void addReview(ArrayList<Review> reviewsArray, Review review){ //put reviews into reviews array
-            reviewsArray.add(review);
-            try {
-                SerializationUtil.serialize(reviewsArray,"reviews.ser");
-                System.out.println("Review # " + reviewsArray.get(reviewsArray.size()) + " added!");
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("Review adding unsuccessful!");
-            }
-        }
-    
-
-    public static ArrayList<Object> readReviewsFile() { //read the reviews file and deseralize it
-        ArrayList<Object> reviews = new ArrayList<>();
-        try {
-			reviews = SerializationUtil.deserialize("reviews.ser");
-            return reviews;
-		} catch (IOException | ClassNotFoundException e) {
+        // save new movie listings to file
+    	File dfile = new File("movieListings.ser");
+    	try {
+			SerializationUtil.deleteFile(dfile);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        return new ArrayList<Object>();
+    	
+    	// serialize updated movies to file
+    	for(int i=0;i<mListings.size();i++) {
+    		mListing = (MovieListing)mListings.get(i);
+    		try {
+    			SerializationUtil.serialize(mListing, "movieListings.ser");
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    			System.out.println("MovieListing update unsuccessful!");
+    		}
+    	}
+
+        sc.close();
     }
+    
+
+
 
 }
