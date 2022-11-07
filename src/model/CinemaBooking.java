@@ -1,8 +1,10 @@
 package model;
 
+import java.io.Serializable;
+
 import model.Cinema.CinemaClass;
 
-public class CinemaBooking {
+public class CinemaBooking implements Serializable{
     private static final long serialVersionUID = 123459L;
     private CinemaClass cinemaClass;
 
@@ -60,13 +62,18 @@ public class CinemaBooking {
 
     public void printSeats(){
         System.out.println("----- Screen -----");
-
+        
+        System.out.printf("%-5c", ' ');
+        for (int i = 0; i < numCol; i++)
+        	System.out.printf("%-3d", i+1);
+        System.out.println();
+        
         for (int i=0;i<numRow;i++){
-            System.out.print(String.format("%-5d",i+1));
+            System.out.print(String.format("%-5c",(char)i+65));
             for (int j=0;j<numCol;j++){
                 String symbol="o"; //unassigned seats
                 if (seats[i][j].getAssigned()==true) symbol="x"; //assigned seats
-                System.out.print(symbol+" ");
+                System.out.printf("%-3s", symbol);
             }
             System.out.println();
         }
