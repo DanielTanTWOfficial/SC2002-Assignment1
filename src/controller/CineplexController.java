@@ -84,7 +84,7 @@ public class CineplexController {
     public static Cineplex chooseCineplex(Vendor vendor) {
         // ArrayList<Object> cineplexesInfo = readCineplexesFile();
 
-        System.out.println("Welcome to "+ vendor.getVendorName() + "!");
+        // System.out.println("Welcome to "+ vendor.getVendorName() + "!");
         boolean exit = false;
         while (!exit) {
             System.out.println("Choose a cineplex to view your movie (0 to return): ");

@@ -22,6 +22,17 @@ import model.Cineplex;
 import model.Cinema;
 
 public class ManagementController {
+	public static ArrayList<Object> readMovieListingsFile() {
+		ArrayList<Object> movieListings = new ArrayList<>();
+		try {
+			movieListings = SerializationUtil.deserialize("movieListings.ser");
+			return movieListings;
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return new ArrayList<Object>();
+	}
+
 	/**
      * Provides admin options to choose action to take for movie management
      */
@@ -122,16 +133,9 @@ public class ManagementController {
     	}
     	System.out.println("Select the showing status: ");
     	
-    	switch (InputController.getIntRange(1, 3)) {
-		case 1: showingStatus = ShowingStatus.values()[0];
-				break;
-		case 2: showingStatus = ShowingStatus.values()[1];
-				break;
-		case 3: showingStatus = ShowingStatus.values()[2];
-				break;
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + selection);
-		}
+    	selection = InputController.getIntRange(1, ShowingStatus.values().length);
+
+		showingStatus = ShowingStatus.values()[0];
     	
     	System.out.println("Available movie rating: ");
     	count = 1;
@@ -140,19 +144,9 @@ public class ManagementController {
     		count++;
     	}
     	System.out.println("Select the movie rating: ");
-    	selection = InputController.getIntRange(1, 4);
+    	selection = InputController.getIntRange(1, MovieRating.values().length);
     	
-    	switch (selection) {
-		case 1: movieRating = MovieRating.values()[0];
-				break;
-		case 2: movieRating = MovieRating.values()[1];
-				break;
-		case 3: movieRating = MovieRating.values()[2];
-				break;
-		case 4: movieRating = MovieRating.values()[3];
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + selection);
-		}
+		movieRating = MovieRating.values()[selection-1];
     	
     	System.out.println("Available movie type: ");
     	count = 1;
@@ -162,17 +156,9 @@ public class ManagementController {
     	}
     	System.out.println("Select the movie type: ");
     	
-    	switch (InputController.getIntRange(1, 4)) {
-		case 1: movieType = MovieType.values()[0];
-				break;
-		case 2: movieType = MovieType.values()[1];
-				break;
-		case 3: movieType = MovieType.values()[2];
-				break;
-		case 4: movieType = MovieType.values()[3];
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + selection);
-		}
+    	selection = InputController.getIntRange(1, MovieType.values().length);
+
+		movieType = MovieType.values()[selection-1];
     	
     	Movie newMovie = new Movie(title, director, cast, synopsis, duration, showingStatus, movieRating, movieType);
 		
@@ -194,6 +180,7 @@ public class ManagementController {
     	// serialize to file
 		try {
 			SerializationUtil.serialize(newMovieListing, "movieListings.ser");
+			System.out.println("Movie listing created successfully!");
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Movie listing save unsuccessful!");
@@ -299,18 +286,9 @@ public class ManagementController {
     		count++;
     	}
     	System.out.println("Select the showing status: ");
-    	selection = InputController.getIntRange(1, 3);
+    	selection = InputController.getIntRange(1, ShowingStatus.values().length);
     	
-    	switch (selection) {
-		case 1: showingStatus = ShowingStatus.values()[0];
-				break;
-		case 2: showingStatus = ShowingStatus.values()[1];
-				break;
-		case 3: showingStatus = ShowingStatus.values()[2];
-				break;
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + selection);
-		}
+		showingStatus = ShowingStatus.values()[selection-1];
     	
     	// call to edit movie showing status
     	mListing.getMovie().editStatus(showingStatus);
@@ -348,6 +326,7 @@ public class ManagementController {
     	ArrayList<Cinema> cinemas = new ArrayList<>();
 		Vendor vendor = null;
 		Cinema cinema = null;
+		Cineplex cineplex = null;
     	MovieListing mListing = null;
     	int selection = 0;
     	String showtimeId,  usrInput;
@@ -405,7 +384,8 @@ public class ManagementController {
     	
     	System.out.println("Available cinemas: ");
     	
-    	cinemas = cineplexes.get(selection-1).getCinemas();
+		cineplex = cineplexes.get(selection-1);
+    	cinemas = cineplex.getCinemas();
     	
     	for(int i=0;i<cinemas.size();i++) {
     		System.out.println((i+1) + ". " + cinemas.get(i).getCinemaCode());
@@ -430,11 +410,17 @@ public class ManagementController {
     	showtimeId = mListing.getMovie().getTitle().split("[ \\t\\n\\,\\?\\;\\.\\:\\!]")[0] + mListing.getShowtimes().size();
 
     	// create the new showtime object
-    	newShowtime = new Showtime(showtimeId, date, start, end, cinema);
+    	newShowtime = new Showtime(showtimeId, date, start, end, cinema, cineplex.getLocation());
 
 		// check if the showtime will overlap with another showtime at the same Cinema
-		if(checkShowtimeOverlap(newShowtime, mListing)) {
+		if(checkShowtimeOverlap(newShowtime, mListings)) {
 			System.out.println("The showtime overlaps with another existing showtime!");
+			return 0;
+		}
+
+		// check if there is a clash of showings of the same movie at the same cineplex at the same start time
+		if(checkDuplicateShowtime(newShowtime, mListing)) {
+			System.out.println("There is already a showtime at this time for this movie at this cineplex!");
 			return 0;
 		}
     	
@@ -464,23 +450,54 @@ public class ManagementController {
     	return 1;
     }
 
-	
 	/** 
-	 * Called by addShowtime() to check if a showtime overlaps with another at the same cinema
+	 * Called by addShowtime() to check if a new showtime overlaps with another at the same cinema
+	 * @param showtime
+	 * @param mListings
+	 * @return boolean
+	 */
+	public static boolean checkShowtimeOverlap(Showtime showtime, ArrayList<Object> mListings) {
+		ArrayList<Showtime> showtimes = new ArrayList<>();
+		MovieListing mListing = null;
+
+		// loop through all movie listings and their showtimes
+		for(int i=0;i<mListings.size();i++) {
+			mListing = (MovieListing)mListings.get(i);
+			showtimes = mListing.getShowtimes();
+			for(int j=0;j<showtimes.size();j++) {
+				// first check if the cinema is the same
+				if(showtime.getCinemaCode() == showtimes.get(i).getCinemaCode()) {
+					// then check if the date is the same
+					if(showtime.getDate().isEqual(showtimes.get(i).getDate())) {
+						// check if the showtimes overlap
+						if(showtime.getStart().isBefore(showtimes.get(i).getEnd()) && showtimes.get(i).getStart().isBefore(showtime.getEnd())) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/** 
+	 * Called by addShowtime() to check if a new showtime starts at the same time as another showtime for the same movie
+	 * at the same Cineplex
 	 * @param showtime
 	 * @param mListing
 	 * @return boolean
 	 */
-	public static boolean checkShowtimeOverlap(Showtime showtime, MovieListing mListing) {
+	public static boolean checkDuplicateShowtime(Showtime showtime, MovieListing mListing) {
 		ArrayList<Showtime> showtimes = mListing.getShowtimes();
-		
+
 		for(int i=0;i<showtimes.size();i++) {
-			// first check if the cinema is the same
-			if(showtime.getCinemaCode() == showtimes.get(i).getCinemaCode()) {
+			// first check if the cineplex is the same
+			if(showtime.getLocation() == showtimes.get(i).getLocation()) {
 				// then check if the date is the same
 				if(showtime.getDate().isEqual(showtimes.get(i).getDate())) {
-					// check if the showtimes overlap
-					if(showtime.getStart().isBefore(showtimes.get(i).getEnd()) && showtimes.get(i).getStart().isBefore(showtime.getEnd())) {
+					// check if the showtimes have the same start time
+					if(showtime.getStart().equals(showtimes.get(i).getStart())) {
 						return true;
 					}
 				}
@@ -564,8 +581,12 @@ public class ManagementController {
 			end = start.plus(mListing.getMovie().getDuration());
         	showtime.editStart(start);
 			showtime.editEnd(end);
-			if(checkShowtimeOverlap(showtime, mListing)) {
+			if(checkShowtimeOverlap(showtime, mListings)) {
 				System.out.println("Cannot confirm changes as showtime will overlap with another!");
+				return 0;
+			}
+			if(checkDuplicateShowtime(showtime, mListing)) {
+				System.out.println("Cannot confirm changes as there is already another showtime at the same time for this movie at this cineplex!");
 				return 0;
 			}
         	break;
@@ -665,5 +686,22 @@ public class ManagementController {
     	}
 
     	return 1;
+	}
+
+	public static void listMovies() {
+		System.out.println("Current Movies Showing: ");
+
+		int numberMoviesShowing = 1;
+		ArrayList<Object> movieListings = readMovieListingsFile();
+
+
+		for (int i = 0; i < movieListings.size(); i++) {
+			MovieListing currentMovieListing = (MovieListing) movieListings.get(i);
+			if (currentMovieListing.getMovie().getStatus() == ShowingStatus.NOW_SHOWING) {
+				System.out.print(numberMoviesShowing + ": ");
+				currentMovieListing.printSimpleInfo();
+				numberMoviesShowing++;
+			}
+		}
 	}
 }

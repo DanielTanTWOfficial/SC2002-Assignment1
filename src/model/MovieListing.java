@@ -69,6 +69,13 @@ public class MovieListing implements IMovieListing, Serializable, Comparable<Mov
 	}
 
 	/**
+	 * Prints information shown when booking
+	 */
+	public void printSimpleInfo() {
+		System.out.println(movie.getTitle() + " " + movie.getMovieRating() + " " + movie.getMovieType());
+	}
+
+	/**
 	 * Allows staff to add new reviews
 	 */
 	@Override
