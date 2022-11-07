@@ -52,7 +52,7 @@ public class Cineplex implements Serializable {
             System.out.println("Cinema Code: " + currentCinema.getCinemaCode());
             System.out.println("Number of seats: " + currentCinema.getNumSeats());
             System.out.println();
-        System.out.println("Cinemas at "+this.location+": \n");
+            System.out.println("Cinemas at "+this.location+": \n");
         }
 
         // int[] cinemasPrinted = new int[2];
