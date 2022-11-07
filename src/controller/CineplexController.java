@@ -53,8 +53,9 @@ public class CineplexController {
         dummyCineplex.addNewCinema(dummyCinema);
         dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",302);
         dummyCineplex.addNewCinema(dummyCinema);
-        dummyCinema = new Cinema(CinemaTypes.PLATINUM,10,20,"The most luxurious cinematic destination. Platinum Movie Suites: Cinemas with its own exclusive lounge area, leather recliner seats, and wider legroom.",303);
+        dummyCinema = new Cinema(CinemaTypes.PLATINUM,10,20,"The most luxurious cinematic destination, only in JEM mall. Platinum Movie Suites: Cinemas with its own exclusive lounge area, leather recliner seats, and wider legroom.",303);
         dummyCineplex.addNewCinema(dummyCinema);
+
 
         //serialising data
         try {
