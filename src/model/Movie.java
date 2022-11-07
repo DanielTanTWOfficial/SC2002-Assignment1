@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * @author d188878
  * The Movie class, which implements the IMovie interface and Serializable interface
  */
-public class Movie implements IMovie, Serializable {
+public class Movie implements Serializable {
 	/**
 	 * Automatically generated serialVerisonUID value to verify that the sender 
 	 * and receiver of a serialized object have loaded classes for that object that
@@ -58,7 +58,6 @@ public class Movie implements IMovie, Serializable {
 	 * @param nStatus
 	 * This method implements the code to allow cinema staff to edit the status of movies
 	 */
-	@Override
 	public void editStatus(ShowingStatus nStatus) {
 		this.status = nStatus;
 		System.out.println("Updated the showing status to " + status);
@@ -68,7 +67,6 @@ public class Movie implements IMovie, Serializable {
 	 * This method implements the code to indicate that a movie is to be removed by updating 
 	 * the status to END_OF_SHOWING
 	 */
-	@Override
 	public void deleteMovie() {
 		this.status = ShowingStatus.END_OF_SHOWING;
 		System.out.println("Marked movie as removed.");

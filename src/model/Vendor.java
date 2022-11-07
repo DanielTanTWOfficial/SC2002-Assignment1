@@ -6,7 +6,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Vendor implements IVendor, Serializable {
+public class Vendor implements Serializable {
     @Serial
     private static final long serialVersionUID = 123456L;
     public String vendorName;
