@@ -41,51 +41,17 @@ public class CineplexController {
     /**
      * Creates the cineplexes and cinemas
      */
+    public static void addCineplexes(Vendor vendor, ArrayList<Cineplex> cineplexesArray){
+        for (int i = 0; i < cineplexesArray.size(); i++) {
+            vendor.addNewCineplex(cineplexesArray.get(i));
 
-    public static void addCathayCineplexes(){
-        //-----creating cineplexes and cinemas
-        Vendor thisVendor = new Vendor("Cathay Cineplexes");
-
-        Cineplex dummyCineplex;
-        Cinema dummyCinema;
-
-        dummyCineplex = new Cineplex("Cineleisure Orchard"); //creating new cineplex
-        thisVendor.addNewCineplex(dummyCineplex);
-        //ading cinemas to cineplex
-        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",101);
-        dummyCineplex.addNewCinema(dummyCinema);
-        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",102);
-        dummyCineplex.addNewCinema(dummyCinema);
-        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",103);
-        dummyCineplex.addNewCinema(dummyCinema);
-
-        dummyCineplex = new Cineplex("West Mall"); //creating new cineplex
-        thisVendor.addNewCineplex(dummyCineplex);
-        //ading cinemas to cineplex
-        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",201);
-        dummyCineplex.addNewCinema(dummyCinema);
-        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",202);
-        dummyCineplex.addNewCinema(dummyCinema);
-        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",203);
-        dummyCineplex.addNewCinema(dummyCinema);
-
-        dummyCineplex = new Cineplex("JEM"); //creating new cineplex
-        thisVendor.addNewCineplex(dummyCineplex);
-        //ading cinemas to cineplex
-        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",301);
-        dummyCineplex.addNewCinema(dummyCinema);
-        dummyCinema = new Cinema(CinemaTypes.STANDARD,11,22,"DOLBY ATMOS: Feel every dimension.",302);
-        dummyCineplex.addNewCinema(dummyCinema);
-        dummyCinema = new Cinema(CinemaTypes.PLATINUM,10,20,"The most luxurious cinematic destination, only in JEM mall. Platinum Movie Suites: Cinemas with its own exclusive lounge area, leather recliner seats, and wider legroom.",303);
-        dummyCineplex.addNewCinema(dummyCinema);
-
-
-        //serialising data
-        try {
-            SerializationUtil.serialize(thisVendor,"VendorCineplexesInfo.ser");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
+            try {
+                SerializationUtil.serialize(cineplexesArray.get(i),"cineplexes.ser");
+                System.out.println("Cineplex @ " + cineplexesArray.get(i).getLocation() + " added!");
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Cineplex adding unsuccessful!");
+            }
         }
     }
 

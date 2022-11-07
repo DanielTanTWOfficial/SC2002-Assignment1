@@ -44,15 +44,15 @@ public class Cineplex implements Serializable {
         System.out.println("Cinemas at "+ this.location +": \n");
 
         //print cinemas
-        for (int i=0;i<numCinemas;i++){
-            if (cinemasPrinted[this.cinemas.get(i).getCinemaType().ordinal()]==0) {
-                System.out.println(cinemaTypestoString(this.cinemas.get(i).getCinemaType()));
-                System.out.println("Number of seats: " + this.cinemas.get(i).getNumSeats());
-                System.out.println("Description: " + this.cinemas.get(i).getCinemaDetails());
-                System.out.println();
+        for (int i = 0; i < numCinemas; i++) {
+            Cinema currentCinema = this.cinemas.get(i);
 
-                cinemasPrinted[this.cinemas.get(i).getCinemaType().ordinal()]=1;
-            }
+            System.out.println("============== " + (i + 1) + " =============");
+            System.out.println(currentCinema.cinemaTypestoString(currentCinema.getCinemaClass()));
+            System.out.println("Cinema Code: " + currentCinema.getCinemaCode());
+            System.out.println("Number of seats: " + currentCinema.getNumSeats());
+            System.out.println();
+        System.out.println("Cinemas at "+this.location+": \n");
         }
 
         // int[] cinemasPrinted = new int[2];
