@@ -426,7 +426,6 @@ public class ShowtimeController {
 		int numberMoviesShowing = 1;
 		ArrayList<Object> movieListings = MovieListingController.readMovieListingsFile();
 
-
 		for (int i = 0; i < movieListings.size(); i++) {
 			MovieListing currentMovieListing = (MovieListing) movieListings.get(i);
 			if (currentMovieListing.getMovie().getStatus() == ShowingStatus.NOW_SHOWING) {
