@@ -297,21 +297,81 @@ public class CustomerController {
 				cineplexDone = true;
 			}
 		}
+
+		// choose cinemaClass
+		System.out.println("Please choose the cinema class you want:");
+		int count = 1;
+		for (CinemaClass status: CinemaClass.values()) {
+			System.out.println(count + ": " + status);
+			count++;
+		}
+		boolean cinemaClassDone = false;
+		CinemaClass chosenCinemaClass;
+		int chosenCinemaClassInt = InputController.getIntRange(1, CinemaClass.values().length);
+		chosenCinemaClass = CinemaClass.values()[chosenCinemaClassInt - 1];
+		
 		
 		// choose Movie
 		// if chosenMovie has showtimes in chosenCineplex, then list them 
 		System.out.print("Choose a movie from the list: ");
 		int movieChoice = InputController.getInt();
+
+		ArrayList<Showtime> showtimeChoices = new ArrayList<>();
 		System.out.println("Showtimes: ");
 		MovieListing chosenMovieListing = (MovieListing) movieListings.get(movieChoice - 1);
 		for (int i = 0; i < chosenMovieListing.getShowtimes().size(); i++) {
 			Showtime currentShowtime = chosenMovieListing.getShowtimes().get(i);
-			if (chosenCineplex.getLocation().equals(currentShowtime.getLocation())) {
+			if (chosenCineplex.getLocation().equals(currentShowtime.getLocation()) && (currentShowtime.getCinemaBooking().getCinemaClass().equals(chosenCinemaClass))) {
+				showtimeChoices.add(currentShowtime);
 				System.out.print((i + 1) + ": ");
 				currentShowtime.printShowtime();
 			}
 		}
-		int showtimeChoice = InputController
+
+		// Choose seats
+		System.out.print("Choose the showtime: ");
+		int showtimeChoice = InputController.getInt();
+		Showtime chosenShowtime = showtimeChoices.get(showtimeChoice - 1);
+		chosenShowtime.getCinemaBooking().printSeats();
+
+		boolean seatChosen = false;
+		boolean anotherSeatChoice = true;
+		int seatsChosen = 0;
+		int row, col; // seat details
+		while (!seatChosen && anotherSeatChoice) {
+			System.out.print("Please enter the row number: ");
+			row = InputController.getIntRange(1, chosenShowtime.getCinemaBooking().getNumRows());
+			System.out.print("Please enter the col number: ");
+			col = InputController.getIntRange(1, chosenShowtime.getCinemaBooking().getNumCols());
+			
+			if (!chosenShowtime.getCinemaBooking().getSeats()[row - 1][col - 1].getAssigned()) {
+				seatChosen = true;
+				seatsChosen++;
+				chosenShowtime.getCinemaBooking().getSeats()[row - 1][col - 1].assignSeat();
+				System.out.println("Would you like to choose another seat? (y/n)");
+				anotherSeatChoice = InputController.getBoolean();
+				if (anotherSeatChoice) {
+					seatChosen = false;
+				}
+				else {
+					anotherSeatChoice = false;
+				}
+			}
+			else {
+				System.out.println("Seat has been taken");
+			}
+		}
+
+		// compute price
+		double totalPrice = PriceController.computePrice(chosenCineplex, chosenShowtime, seatsChosen);
+
+		// perform transaction
+			// prompt for email and movile phone
+		
+		// generate ticket
+		
+
+
 
 
 
