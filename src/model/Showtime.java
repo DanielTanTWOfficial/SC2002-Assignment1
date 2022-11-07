@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import model.CinemaBooking;
 
 /**
  * @author d188878
@@ -19,7 +20,8 @@ public class Showtime implements IShowtime, Serializable {
 	private LocalDate date;
 	private LocalTime start;
 	private LocalTime end;
-	private String cinemaCode;
+	private String location;
+	private int cinemaCode;
 	private CinemaBooking cinemaBooking;
 	
 	/**
@@ -33,15 +35,17 @@ public class Showtime implements IShowtime, Serializable {
 	 * @param date
 	 * @param start
 	 * @param end
-	 * @param code
+	 * @param cinema
+	 * @param location
 	 */
-	public Showtime(String showtimeId, LocalDate date, LocalTime start, LocalTime end, String code) {
+	public Showtime(String showtimeId, LocalDate date, LocalTime start, LocalTime end, Cinema cinema, String location) {
 		this.showtimeId = showtimeId;
 		this.date = date;
 		this.start = start;
 		this.end = end;
-		this.cinemaCode = code;
-		this.cinemaBooking = new CinemaBooking();
+		this.cinemaCode = cinema.getCinemaCode();
+		this.cinemaBooking = new CinemaBooking(cinema);
+		this.location = location;
 		System.out.println("Showtime created!");
 	}
 	
@@ -89,6 +93,7 @@ public class Showtime implements IShowtime, Serializable {
 		System.out.println("Date: " + this.date);
 		System.out.println("Start: " + this.start);
 		System.out.println("End: " + this.end);
+		System.out.println("Cineplex location: " + this.location);
 		System.out.println("Cinema Code: " + this.cinemaCode);
 	}
 	
@@ -123,7 +128,7 @@ public class Showtime implements IShowtime, Serializable {
 	/**
 	 * @return cinemaCode
 	 */
-	public String getCinemaCode() {
+	public int getCinemaCode() {
 		return cinemaCode;
 	}
 	
@@ -134,4 +139,10 @@ public class Showtime implements IShowtime, Serializable {
 		return cinemaBooking;
 	}
 
+	/**
+	 * @return location
+	 */
+	public String getLocation() {
+		return location;
+	}
 }

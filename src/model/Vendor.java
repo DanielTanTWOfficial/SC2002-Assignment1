@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Objects;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,12 +15,12 @@ public class Vendor implements IVendor, Serializable {
 
     public Vendor(String vendorName) {
         this.vendorName = vendorName;
-        this.cineplexes= new ArrayList<Cineplex>();
-        this.numCineplexes=0;
+        this.cineplexes = new ArrayList<Cineplex>();
+        this.numCineplexes = 0;
     }
 
     public String getVendorName() {
-        return vendorName;
+        return this.vendorName;
     }
 
     public void setVendorName(String vendorName) {
