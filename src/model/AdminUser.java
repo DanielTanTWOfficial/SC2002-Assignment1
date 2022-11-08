@@ -4,12 +4,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 public class AdminUser extends User {
 	private static final long serialVersionUID = 167358L;
-	private String passwordPlain;
 	private String passwordHashed;
 
     public AdminUser(String email, String password) {
 		super(email);
-		this.passwordPlain = password;
 		this.passwordHashed = passwordSHA512(password, email);
 	}
 

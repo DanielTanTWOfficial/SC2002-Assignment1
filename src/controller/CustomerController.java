@@ -327,7 +327,7 @@ public class CustomerController {
 		
 		// Step 4 - Choose Movie
 		// if chosen movie has showtimes in chosenCineplex, then list them 
-		System.out.print("Choose a movie from the list: ");
+		System.out.print("Movies Showing: ");
 		int movieChoice = InputController.getInt();
 
 		ArrayList<Showtime> showtimeChoices = new ArrayList<>();

@@ -161,6 +161,7 @@ public class MainMenu {
                     break;
                 case 7:
                     SystemController.configureFilter();
+                    break;
                 case 8:
                     exit = true;
                     System.out.println("Exiting...");
