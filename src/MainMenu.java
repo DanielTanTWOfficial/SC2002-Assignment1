@@ -48,7 +48,6 @@ public class MainMenu {
     // This is not under any of the modules as admins cannot add cineplexes or cinemas so we have to do this manually
     public void initialiseInfra() {
         Vendor cathay = new Vendor("Cathay Cineplexes");
-        VendorController.addVendor(cathay);
         
         ArrayList<Cineplex> cineplexes = new ArrayList<>();
         Cineplex orchard = new Cineplex("Cineleisure Orchard");
@@ -57,7 +56,6 @@ public class MainMenu {
         cineplexes.add(orchard);
         cineplexes.add(westmall);
         cineplexes.add(jem);
-        CineplexController.addCineplexes(cathay, cineplexes);
 
         ArrayList<Cinema> cinemasOrchard = new ArrayList<>();
         cinemasOrchard.add(new Cinema(CinemaClass.STANDARD, 101, 11, 22));
@@ -76,6 +74,8 @@ public class MainMenu {
         cinemasJem.add(new Cinema(CinemaClass.STANDARD, 302, 11, 22));
         cinemasJem.add(new Cinema(CinemaClass.PLATINUM, 303, 10, 20));
         CinemaController.addCinemas(jem, cinemasJem);
+        CineplexController.addCineplexes(cathay, cineplexes);
+        VendorController.addVendor(cathay);
     }
 
     /*
