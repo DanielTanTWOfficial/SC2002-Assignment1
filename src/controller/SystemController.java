@@ -13,6 +13,16 @@ import model.Holiday;
 import model.SerializationUtil;
 
 public class SystemController {
+	public static ArrayList<Object> readHolidaysFile() {
+		ArrayList<Object> holidays = new ArrayList<>();
+        try {
+        	holidays = SerializationUtil.deserialize("holidays.ser");
+            return holidays;
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+        return new ArrayList<Object>();
+	}
     /**
      * Called to add holidays into the system
      * @return int
@@ -22,7 +32,6 @@ public class SystemController {
     	ArrayList<LocalDate> holidays = new ArrayList<>();
     	Holiday holiday = null;
     	LocalDate holidayDate;
-    	String usrInput;
     	char selection;
     	boolean firstTime = true;
     	

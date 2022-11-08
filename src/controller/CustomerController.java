@@ -270,15 +270,18 @@ public class CustomerController {
 	 * 3. Choose cinema class 
 	 * 4. Choose Movie 
 	 * 5. List and Choose Showtime
-	 * 6. List and Choose Seat 
-	 * 7. Compute Price
-	 * 8. Prompt for email and mobile number
-	 * 9. Perform Transaction
-	 * 10. Save booking
+	 * 6. List and Choose Ticket Type
+	 * 7. List and Choose Seat 
+	 * 8. Generate ticket
+	 * 9. Compute Price
+	 * 10. Perform Transaction
+	 * 		10a. Prompt for email and mobile number
+	 * 11. Save booking
 	 */
 	public static void makeBooking() {
 		// Step 1 - List all movie listings that are available for booking
 		displayAllMovieListings();
+		System.out.println();
 
 		// Step 2 - Display all cineplexes for Cathay, and let user choose one
 		// @return chosenCineplex
@@ -314,6 +317,7 @@ public class CustomerController {
 				cineplexDone = true;
 			}
 		}
+		System.out.println();
 
 		// Step 3 - Choose cinema class
 		System.out.println("Please choose an available cinema class:");
@@ -327,17 +331,20 @@ public class CustomerController {
 		CinemaClass chosenCinemaClass;
 		int chosenCinemaClassChoice = InputController.getIntRange(1, presentCinemaClasses.size());
 		chosenCinemaClass = presentCinemaClasses.get(chosenCinemaClassChoice - 1);
+		System.out.println();
 		
 		// Step 4 - Choose Movie
-		// if chosen movie has showtimes in chosenCineplex, then list them 
 		System.out.print("Movies Showing: ");
 		int movieChoice = InputController.getInt();
 		MovieListing chosenMovieListing = (MovieListing) movieListings.get(movieChoice - 1);
-		if (chosenMovieListing.getMovie().getStatus() == ShowingStatus.COMING_SOON) {
+		if (chosenMovieListing.getMovie().getStatus() == ShowingStatus.COMING_SOON || chosenMovieListing.getMovie().getStatus() == ShowingStatus.END_OF_SHOWING) {
 			System.out.println("This movie is not available for booking");
 			return;
 		}
+		System.out.println();
 
+		// Step 5 - List and Choose Showtime
+		// If chosen movie has showtimes in chosenCineplex, then list them 
 		ArrayList<Showtime> showtimeChoices = new ArrayList<>();
 		System.out.println("Showtimes: ");
 		for (int i = 0; i < chosenMovieListing.getShowtimes().size(); i++) {
@@ -349,25 +356,26 @@ public class CustomerController {
 			}
 		}
 
-		// Choose showtime
 		System.out.print("Choose the showtime: ");
 		int showtimeChoice = InputController.getInt();
 		Showtime chosenShowtime = showtimeChoices.get(showtimeChoice - 1);
+		System.out.println();
 		
-		// 7. Display ticket types
+		// Step 6 - List and Choose Ticket Types
 		for (int i = 0; i < TicketType.values().length; i++) {
-			System.out.println(i+1 + ". " + TicketType.values()[i]);
+			System.out.println((i + 1) + ": " + TicketType.values()[i]);
 		}
-		
-		// 8. Select ticket type
 		System.out.print("Select Ticket Type: ");
-		int chosenType = InputController.getIntRange(1, TicketType.values().length) -1;
+		int chosenType = InputController.getIntRange(1, TicketType.values().length) - 1;
 		System.out.println();
 
+		// Step 7 - List and Choose Seat(s)
+		// Step 8 - Generate Ticket for each seat chosen
 		boolean seatChosen = false;
 		boolean anotherSeatChoice = true;
 		int seatsChosen = 0;
-		int row, col; // seat details
+		int row, col;
+		ArrayList<Ticket> holdingTickets;
 		while (!seatChosen && anotherSeatChoice) {
 			chosenShowtime.getCinemaBooking().printSeats();
 			System.out.print("Please enter the row number: ");
@@ -395,8 +403,6 @@ public class CustomerController {
 				System.out.println("Seat has been taken");
 			}
 		}
-
-		
 		System.out.println();
 		
 		for (int i = 0; i < booking.getTickets().size(); i++) {
@@ -404,6 +410,11 @@ public class CustomerController {
 			System.out.println();
 		}
 		System.out.println("Total Cost = " + booking.getTotalCost());
+		System.out.println("Continue with payment? (y/n");
+		boolean continueTransaction = InputController.getBoolean();
+		if (!continueTransaction) {
+			return;
+		}
 		// prompt for email and mobile phone
 		System.out.print("Enter email address: ");
 		String email = InputController.getEmail();
