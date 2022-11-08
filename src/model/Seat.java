@@ -1,6 +1,8 @@
 package model;
 
-public class Seat {
+import java.io.Serializable;
+
+public class Seat implements Serializable {
     private static final long serialVersionUID = 123450L;
     private boolean assigned; // true - taken, false - vacant
     // optional feature: seatType for couple seats, XL seats, etc...

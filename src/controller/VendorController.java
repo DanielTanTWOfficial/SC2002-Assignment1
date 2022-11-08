@@ -12,7 +12,7 @@ public class VendorController {
     public static ArrayList<Object> readVendorsFile() {
         ArrayList<Object> vendors = new ArrayList<>();
         try {
-			vendors = SerializationUtil.deserialize("cineplexes.ser");
+			vendors = SerializationUtil.deserialize("vendors.ser");
             return vendors;
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
