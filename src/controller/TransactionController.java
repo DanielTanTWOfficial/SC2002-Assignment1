@@ -16,12 +16,12 @@ public class TransactionController {
         	transactionList = SerializationUtil.deserialize("transactions.ser");
             return transactionList;
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("transactions.ser not found");
 		}
         return new ArrayList<Object>();
 	}
 	
-	public static void saveTicketsFile(Transaction transaction) {
+	public static void saveTransactionFile(Transaction transaction) {
 		try {
 			SerializationUtil.serialize(transaction, "transactions.ser");
 		} catch (IOException e) {
