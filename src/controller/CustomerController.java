@@ -42,7 +42,7 @@ public class CustomerController {
 			e.printStackTrace();
 		}
 
-		System.out.println("=============== ALL MOVIES =============== ");
+		System.out.println("=============== TOP MOVIES =============== ");
 
 		// if filter value is set by admin, user cannot choose, otherwise they can choose
 		if(filterVal == "ratings") {
@@ -96,22 +96,32 @@ public class CustomerController {
      * Called to print all movie listing information.
      */
     public static void displayAllMovieListings() {
-    	ArrayList<Object> mListings = new ArrayList<>();
-    	MovieListing mListing = null;
+    	ArrayList<Object> movieListings = MovieListingController.readMovieListingsFile();
+    	MovieListing movieListing;
     	
-    	try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		System.out.println("=============== TOP MOVIES =============== ");
-    	
-    	for(int i=0;i<mListings.size();i++) {
-    		mListing = (MovieListing)mListings.get(i);
-    		mListing.printInfo(false);
+		System.out.println("=============== ALL MOVIES =============== ");
+    	for(int i = 0; i < movieListings.size(); i++) {
+    		movieListing = (MovieListing) movieListings.get(i);
+    		movieListing.printInfo(false);
     	}
     }
+
+	public static void displayShowingMovieListings() {
+		System.out.println("Current Movies Available for Booking: ");
+
+		int numberMoviesShowing = 1;
+		ArrayList<Object> movieListings = MovieListingController.readMovieListingsFile();
+
+
+		for (int i = 0; i < movieListings.size(); i++) {
+			MovieListing currentMovieListing = (MovieListing) movieListings.get(i);
+			if (currentMovieListing.getMovie().getStatus() == ShowingStatus.NOW_SHOWING || currentMovieListing.getMovie().getStatus() == ShowingStatus.PREVIEW) {
+				System.out.print(numberMoviesShowing + ": ");
+				currentMovieListing.printSimpleInfo();
+				numberMoviesShowing++;
+			}
+		}
+	}
 
 	/**
      * Called to print details of a specific movie listing
@@ -253,28 +263,32 @@ public class CustomerController {
 	}
 
 	/*
-	 * 1. List movies
-	 * 2. List and Choose Cineplex
-	 * 3. Choose Movie 
-	 * 4. List and Choose Showtime
-	 * 5. List and Choose Seat 
-	 * 6. Compute Price
-	 * 7. Prompt for email and mobile number
-	 * 8. Perform Transaction
-	 * 9. Save booking
+	 * 1. Display all movie listings
+	 * 2. Display and Choose Cineplex
+	 * 3. Choose cinema class 
+	 * 4. Choose Movie 
+	 * 5. List and Choose Showtime
+	 * 6. List and Choose Seat 
+	 * 7. Compute Price
+	 * 8. Prompt for email and mobile number
+	 * 9. Perform Transaction
+	 * 10. Save booking
 	 */
 	public static void makeBooking() {
-		ManagementController.listMovies();
+		// Step 1 - List all movie listings that are available for booking
+		displayShowingMovieListings();
 
-		// can replace with chooseVendor, but do we want to do that for this project...
+		// Step 2 - Display all cineplexes for Cathay, and let user choose one
+		// @return chosenCineplex
+		// !!! Future feature: let user choose vendor
 		ArrayList<Object> vendors = VendorController.readVendorsFile();
-		Vendor vendor = (Vendor) vendors.get(0); // only have 1 vendor
+		Vendor cathay = (Vendor) vendors.get(0); // only have 1 vendor
 
 		boolean cineplexDone = false;
-		Cineplex chosenCineplex = null;
-		ArrayList<Object> movieListings = ManagementController.readMovieListingsFile();
+		Cineplex chosenCineplex;
+		ArrayList<Object> movieListings = MovieListingController.readMovieListingsFile();
 		while (!cineplexDone) {
-			chosenCineplex = CineplexController.chooseCineplex(vendor);
+			chosenCineplex = CineplexController.chooseCineplex(cathay);
 			if (chosenCineplex == null) { // exit booking
 				return;
 			}
@@ -298,21 +312,21 @@ public class CustomerController {
 			}
 		}
 
-		// choose cinemaClass
-		System.out.println("Please choose the cinema class you want:");
-		int count = 1;
-		for (CinemaClass status: CinemaClass.values()) {
-			System.out.println(count + ": " + status);
-			count++;
+		// Step 3 - Choose cinema class
+		System.out.println("Please choose an available cinema class:");
+		ArrayList<CinemaClass> presentCinemaClasses = chosenCineplex.getCineplexCinemaClasses();
+		int counter = 1;
+		for (CinemaClass status: presentCinemaClasses) {
+			System.out.println(counter + ": " + status);
+			counter++;
 		}
-		boolean cinemaClassDone = false;
+
 		CinemaClass chosenCinemaClass;
-		int chosenCinemaClassInt = InputController.getIntRange(1, CinemaClass.values().length);
-		chosenCinemaClass = CinemaClass.values()[chosenCinemaClassInt - 1];
+		int chosenCinemaClassChoice = InputController.getIntRange(1, presentCinemaClasses.size());
+		chosenCinemaClass = presentCinemaClasses.get(chosenCinemaClassChoice - 1);
 		
-		
-		// choose Movie
-		// if chosenMovie has showtimes in chosenCineplex, then list them 
+		// Step 4 - Choose Movie
+		// if chosen movie has showtimes in chosenCineplex, then list them 
 		System.out.print("Choose a movie from the list: ");
 		int movieChoice = InputController.getInt();
 

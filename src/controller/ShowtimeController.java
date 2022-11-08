@@ -420,20 +420,5 @@ public class ShowtimeController {
     	return 1;
 	}
 
-	public static void listMovies() {
-		System.out.println("Current Movies Showing: ");
-
-		int numberMoviesShowing = 1;
-		ArrayList<Object> movieListings = MovieListingController.readMovieListingsFile();
-
-
-		for (int i = 0; i < movieListings.size(); i++) {
-			MovieListing currentMovieListing = (MovieListing) movieListings.get(i);
-			if (currentMovieListing.getMovie().getStatus() == ShowingStatus.NOW_SHOWING) {
-				System.out.print(numberMoviesShowing + ": ");
-				currentMovieListing.printSimpleInfo();
-				numberMoviesShowing++;
-			}
-		}
-	}
+	
 }
