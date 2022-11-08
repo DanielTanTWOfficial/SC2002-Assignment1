@@ -1,11 +1,13 @@
 package controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +29,7 @@ import model.Movie.ShowingStatus;
 public class CustomerController {
     /**
      * Displays the top 5 movie listings by ticket sales or reviewer ratings
-     * @param bySales
+	 * Reads the admin set ranking filter
      */
     public static void displayTopMovieListings() {
     	ArrayList<Object> mListings = new ArrayList<>();
@@ -37,13 +39,21 @@ public class CustomerController {
 		boolean invalid = true;
 		boolean bySales = true;
 
-		// read set filter value from file
-		Path path = Paths.get("filter.txt");
-		try {
-			filterVal = Files.readString(path, StandardCharsets.UTF_8);
+		File f = new File("filter.txt");
+		if(f.exists()) {
+			// read set filter value from file
+			Path path = Paths.get("filter.txt");
+			try {
+				filterVal = Files.readString(path, StandardCharsets.UTF_8);
+				filterVal = filterVal.replace("\n", "").replace("\r", "");
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		catch (IOException e) {
-			e.printStackTrace();
+		else {
+			// default filter is to let the user choose
+			filterVal = "any";
 		}
 
 		System.out.println("=============== TOP MOVIES =============== ");
@@ -89,10 +99,20 @@ public class CustomerController {
     	Collections.sort(castedListings);
     	
     	// display the top 5 movie listings by sales/ratings
-    	for(int i=0;i<5;i++) {
-    		System.out.print((i+1) + ". ");
-    		mListing = castedListings.get(i);
-    		mListing.printInfo(false);
+    	if(castedListings.size() < 5) {
+    		// if less than 5 movie listings, just display all
+    		for(int i=0;i<castedListings.size();i++) {
+        		System.out.print((i+1) + ". ");
+        		mListing = castedListings.get(i);
+        		mListing.printInfo(false);
+        	}
+    	}
+    	else {
+    		for(int i=0;i<5;i++) {
+        		System.out.print((i+1) + ". ");
+        		mListing = castedListings.get(i);
+        		mListing.printInfo(false);
+        	}
     	}
     }
     
@@ -107,6 +127,7 @@ public class CustomerController {
     	for(int i = 0; i < movieListings.size(); i++) {
     		movieListing = (MovieListing) movieListings.get(i);
     		movieListing.printInfo(false);
+    		System.out.println();
     	}
     }
 
@@ -288,7 +309,7 @@ public class CustomerController {
 		// !!! Future feature: let user choose vendor
 		ArrayList<Object> vendors = VendorController.readVendorsFile();
 		Vendor cathay = (Vendor) vendors.get(0); // only have 1 vendor
-		Booking booking = new Booking("B001", LocalDate.now());
+		Booking booking = new Booking("B"+LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + LocalTime.now().format(DateTimeFormatter.ofPattern("HHmm")), LocalDate.now());
 
 		boolean cineplexDone = false;
 		Cineplex chosenCineplex = null;
@@ -334,7 +355,8 @@ public class CustomerController {
 		System.out.println();
 		
 		// Step 4 - Choose Movie
-		System.out.print("Movies Showing: ");
+		// if chosen movie has showtimes in chosenCineplex, then list them 
+		System.out.print("Choose Movie: ");
 		int movieChoice = InputController.getInt();
 		MovieListing chosenMovieListing = (MovieListing) movieListings.get(movieChoice - 1);
 		if (chosenMovieListing.getMovie().getStatus() == ShowingStatus.COMING_SOON || chosenMovieListing.getMovie().getStatus() == ShowingStatus.END_OF_SHOWING) {
@@ -387,7 +409,7 @@ public class CustomerController {
 				seatChosen = true;
 				seatsChosen++;
 				chosenShowtime.getCinemaBooking().getSeats()[row - 1][col - 1].assignSeat();
-				Ticket t = new Ticket("T001", chosenShowtime.getShowtimeId(), chosenShowtime.getCinemaCode(), chosenMovieListing.getMovie().getTitle(), TicketType.values()[chosenType], "R"+row+"C"+col);
+				Ticket t = new Ticket("T"+chosenShowtime.getCinemaCode()+"R"+row+"C"+col, chosenShowtime.getStart(), chosenShowtime.getCinemaCode(), chosenMovieListing.getMovie().getTitle(), TicketType.values()[chosenType], "R"+row+"C"+col);
 				PriceController.computePrice(t, chosenShowtime, chosenCinemaClass, chosenMovieListing.getMovie());
 				booking.getTickets().add(t);
 				System.out.println("Would you like to choose another seat? (y/n)");
@@ -420,11 +442,36 @@ public class CustomerController {
 		String email = InputController.getEmail();
 		System.out.print("Enter mobile number: ");
 		String mobileNo = InputController.getMobileNumber();
-		Transaction transaction = new Transaction("T001", booking, email, mobileNo);
+		String TID = chosenShowtime.getCinemaCode() + chosenShowtime.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + chosenShowtime.getStart().format(DateTimeFormatter.ofPattern("HHmm"));
+		Transaction transaction = new Transaction(TID, booking, email, mobileNo);
 		transaction.printTransaction();
 		
 		//Serialize transaction
-		TransactionController.saveTicketsFile(transaction);
+		TransactionController.saveTransactionFile(transaction);
 		System.out.println("Transaction Successful!");
+	}
+	
+	public static void viewBookingHistory() {
+		// request email, read transaction file, print bookings
+		System.out.print("Enter email address: ");
+		String email = InputController.getEmail();
+		
+		ArrayList<Object> transactionList = TransactionController.readTransactionFile();
+		boolean hasTransaction = false;
+		System.out.println("-------- TRANSACTIONS FOR " + email + "--------");
+		for (int i = 0; i < transactionList.size(); i++) {
+			Transaction transaction = (Transaction) transactionList.get(i);
+			if (transaction.getEmailAddress().equalsIgnoreCase(email)) {
+				hasTransaction = true;
+				System.out.println("TransactionId: " + transaction.getTransactionId());
+				for (Ticket t : transaction.getBooking().getTickets())
+					t.printTicket();
+				System.out.println("Transaction Amount: " + transaction.getTranAmount());
+				System.out.println();
+			}
+		}
+		if(!hasTransaction)
+			System.out.println("No Transactions found");
+		
 	}
 }
