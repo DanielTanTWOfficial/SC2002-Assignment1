@@ -16,7 +16,10 @@ import model.Cinema;
 
 public class MainMenu {
     public void main() {
-        initialiseInfra();
+    	File f = new File("vendors.ser");
+        if (f.exists() == false) {
+        	initialiseInfra();
+        }
 
         boolean exit = false;
 		while (!exit) {

@@ -133,8 +133,7 @@ public class ShowtimeController {
     	cinema = cinemas.get(selection-1);
     	
     	System.out.println("Enter the showtime date YYYY/MM/DD (E.g. 2022/10/02): ");
-    	usrInput = sc.next();
-    	date = LocalDate.parse(usrInput, dateFormat);
+    	date = InputController.getDate();
     	
     	System.out.println("Enter the showtime start time HH:MM (E.g. 10:30): ");
     	usrInput = sc.next();
@@ -276,7 +275,7 @@ public class ShowtimeController {
     	
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
-    		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
+    		System.out.println((i+1) + ". " + mListing.getMovie().getTitle());
     	}
     	
 		System.out.println("Enter the movie to edit the showtime for: ");
@@ -306,8 +305,8 @@ public class ShowtimeController {
     	switch(InputController.getIntRange(1, 2)) {
     	case 1:
     		System.out.println("Enter the new date YYYY/MM/DD (E.g. 2022/10/03): ");
-    		usrInput = sc.next();
-    		date = LocalDate.parse(usrInput, dateFormat);
+    		date = InputController.getDate();
+    		
     		showtime.editDate(date);
     		break;
     	case 2:
@@ -379,7 +378,7 @@ public class ShowtimeController {
     	
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
-    		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
+    		System.out.println((i+1) + ". " + mListing.getMovie().getTitle());
     	}
     	
 		System.out.println("Enter the movie to remove the showtime for: ");

@@ -50,12 +50,17 @@ public class MovieListing implements Serializable, Comparable<MovieListing> {
 		for(int i=0;i<movie.getCast().size();i++) {
 			System.out.print(movie.getCast().get(i) + " ");
 		}
-		System.out.println("Duration: " + movie.getDuration().toMinutes() + " mins");
+		System.out.println("\nDuration: " + movie.getDuration().toMinutes() + " mins");
 		System.out.println("Content Rating: " + movie.getMovieRating());
 		System.out.println("Movie Type: " + movie.getMovieType());
 		System.out.println("Showing Status: " + movie.getStatus());
 		System.out.println("Ticket Sales: " + this.ticketSales);
-		System.out.println("Overall Rating: " + this.overallRating);
+		if(this.reviews.size() > 1) {
+			System.out.println("Overall Rating: " + String.format("%.1f", this.overallRating));
+		}
+		else {
+			System.out.println("Overall Rating: NA");
+		}
 		if(withReviews) {
 			System.out.println("\nSynopsis: \n");
 			System.out.println(movie.getSynopsis());

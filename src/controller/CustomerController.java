@@ -11,11 +11,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+import model.Booking;
 import model.Cinema;
 import model.Cineplex;
 import model.MovieListing;
 import model.SerializationUtil;
 import model.Showtime;
+import model.Ticket;
+import model.Ticket.TicketType;
+import model.Transaction;
 import model.Vendor;
 import model.Cinema.CinemaClass;
 import model.Movie.ShowingStatus;
@@ -139,7 +143,7 @@ public class CustomerController {
     	
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
-    		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
+    		System.out.println((i+1) + ". " + mListing.getMovie().getTitle());
     	}
 
 		System.out.println("Which movie do you want to view details of? ");
@@ -179,28 +183,22 @@ public class CustomerController {
 		System.out.println("=============== SEAT AVAILABILITY =============== ");
 		System.out.println("Available cineplexes: ");
     	try {
-			cineplexesInfo = SerializationUtil.deserialize("VendorCineplexesInfo.ser");
+			cineplexesInfo = SerializationUtil.deserialize("cineplexes.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read cineplexes info.");
 			return 0;
 		}
     	
-    	System.out.println("Available cineplexes: ");
     	
-		vendor = (Vendor)cineplexesInfo.get(0);
-
-    	// get list of cineplexes to display to user
-    	cineplexes = vendor.getCineplexes();
-    	
-    	for(int i=0;i<cineplexes.size();i++) {
-    		System.out.println((1+1) + ". " + cineplexes.get(i).getLocation());
+    	for(int i=0;i<cineplexesInfo.size();i++) {
+    		System.out.println((i+1) + ". " + ((Cineplex)cineplexesInfo.get(i)).getLocation());
     	}
     	
 		System.out.println("Enter the cineplex to view the showtimes: ");
-		selection = InputController.getIntRange(1, cineplexes.size());
+		selection = InputController.getIntRange(1, cineplexesInfo.size());
     	
-		cineplex = cineplexes.get(selection-1);
+		cineplex = (Cineplex)cineplexesInfo.get(selection-1);
 		location = cineplex.getLocation();
 
 		System.out.println("Cinema classes: ");
@@ -226,7 +224,7 @@ public class CustomerController {
     	
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
-    		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
+    		System.out.println((i+1) + ". " + mListing.getMovie().getTitle());
     	}
     	
 		System.out.println("Which movie do you want to view the showtimes for: ");
@@ -237,14 +235,18 @@ public class CustomerController {
 		showtimes = mListing.getShowtimes();
 
     	System.out.println("Enter the date to view showtimes for YYYY/MM/DD (E.g. 2022/10/03): ");
-		usrInput = sc.next();
-    	filterDate = LocalDate.parse(usrInput, dateFormat);
+    	filterDate = InputController.getDate();
 
 		// filter out showtimes available for the chosen cineplex and cinemaClass on selected date only
 		for(int i=0;i<showtimes.size();i++) {
 			if(showtimes.get(i).getLocation() == location && showtimes.get(i).getCinemaBooking().getCinemaClass() == cinemaClass && showtimes.get(i).getDate().isEqual(filterDate)) {
 				matchingShowtimes.add(showtimes.get(i));
 			}
+		}
+		
+		if(matchingShowtimes.size() == 0) {
+			System.out.println("No showtime for the date entered!");
+			return 0;
 		}
 
 		for(int i=0;i<matchingShowtimes.size();i++) {
@@ -276,16 +278,17 @@ public class CustomerController {
 	 */
 	public static void makeBooking() {
 		// Step 1 - List all movie listings that are available for booking
-		displayShowingMovieListings();
+		displayAllMovieListings();
 
 		// Step 2 - Display all cineplexes for Cathay, and let user choose one
 		// @return chosenCineplex
 		// !!! Future feature: let user choose vendor
 		ArrayList<Object> vendors = VendorController.readVendorsFile();
 		Vendor cathay = (Vendor) vendors.get(0); // only have 1 vendor
+		Booking booking = new Booking("B001", LocalDate.now());
 
 		boolean cineplexDone = false;
-		Cineplex chosenCineplex;
+		Cineplex chosenCineplex = null;
 		ArrayList<Object> movieListings = MovieListingController.readMovieListingsFile();
 		while (!cineplexDone) {
 			chosenCineplex = CineplexController.chooseCineplex(cathay);
@@ -329,10 +332,14 @@ public class CustomerController {
 		// if chosen movie has showtimes in chosenCineplex, then list them 
 		System.out.print("Movies Showing: ");
 		int movieChoice = InputController.getInt();
+		MovieListing chosenMovieListing = (MovieListing) movieListings.get(movieChoice - 1);
+		if (chosenMovieListing.getMovie().getStatus() == ShowingStatus.COMING_SOON) {
+			System.out.println("This movie is not available for booking");
+			return;
+		}
 
 		ArrayList<Showtime> showtimeChoices = new ArrayList<>();
 		System.out.println("Showtimes: ");
-		MovieListing chosenMovieListing = (MovieListing) movieListings.get(movieChoice - 1);
 		for (int i = 0; i < chosenMovieListing.getShowtimes().size(); i++) {
 			Showtime currentShowtime = chosenMovieListing.getShowtimes().get(i);
 			if (chosenCineplex.getLocation().equals(currentShowtime.getLocation()) && (currentShowtime.getCinemaBooking().getCinemaClass().equals(chosenCinemaClass))) {
@@ -342,17 +349,27 @@ public class CustomerController {
 			}
 		}
 
-		// Choose seats
+		// Choose showtime
 		System.out.print("Choose the showtime: ");
 		int showtimeChoice = InputController.getInt();
 		Showtime chosenShowtime = showtimeChoices.get(showtimeChoice - 1);
-		chosenShowtime.getCinemaBooking().printSeats();
+		
+		// 7. Display ticket types
+		for (int i = 0; i < TicketType.values().length; i++) {
+			System.out.println(i+1 + ". " + TicketType.values()[i]);
+		}
+		
+		// 8. Select ticket type
+		System.out.print("Select Ticket Type: ");
+		int chosenType = InputController.getIntRange(1, TicketType.values().length) -1;
+		System.out.println();
 
 		boolean seatChosen = false;
 		boolean anotherSeatChoice = true;
 		int seatsChosen = 0;
 		int row, col; // seat details
 		while (!seatChosen && anotherSeatChoice) {
+			chosenShowtime.getCinemaBooking().printSeats();
 			System.out.print("Please enter the row number: ");
 			row = InputController.getIntRange(1, chosenShowtime.getCinemaBooking().getNumRows());
 			System.out.print("Please enter the col number: ");
@@ -362,6 +379,9 @@ public class CustomerController {
 				seatChosen = true;
 				seatsChosen++;
 				chosenShowtime.getCinemaBooking().getSeats()[row - 1][col - 1].assignSeat();
+				Ticket t = new Ticket("T001", chosenShowtime.getShowtimeId(), chosenShowtime.getCinemaCode(), chosenMovieListing.getMovie().getTitle(), TicketType.values()[chosenType], "R"+row+"C"+col);
+				PriceController.computePrice(t, chosenShowtime, chosenCinemaClass, chosenMovieListing.getMovie());
+				booking.getTickets().add(t);
 				System.out.println("Would you like to choose another seat? (y/n)");
 				anotherSeatChoice = InputController.getBoolean();
 				if (anotherSeatChoice) {
@@ -376,25 +396,24 @@ public class CustomerController {
 			}
 		}
 
-		// compute price
-		double totalPrice = PriceController.computePrice(chosenCineplex, chosenShowtime, seatsChosen);
-
-		// perform transaction
-			// prompt for email and movile phone
 		
-		// generate ticket
+		System.out.println();
 		
-
-
-
-
-
+		for (int i = 0; i < booking.getTickets().size(); i++) {
+			booking.getTickets().get(i).printTicket();
+			System.out.println();
+		}
+		System.out.println("Total Cost = " + booking.getTotalCost());
+		// prompt for email and mobile phone
+		System.out.print("Enter email address: ");
+		String email = InputController.getEmail();
+		System.out.print("Enter mobile number: ");
+		String mobileNo = InputController.getMobileNumber();
+		Transaction transaction = new Transaction("T001", booking, email, mobileNo);
+		transaction.printTransaction();
 		
-
-
-
-
-
-		
+		//Serialize transaction
+		TransactionController.saveTicketsFile(transaction);
+		System.out.println("Transaction Successful!");
 	}
 }

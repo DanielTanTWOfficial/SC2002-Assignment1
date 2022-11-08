@@ -41,30 +41,15 @@ public class ReviewController{ //this is the reviewcontroller class
         //entering review details
 
         System.out.println("Please enter your name:");
-        String name = sc.next();
+        String name = InputController.getString();
         System.out.println("Please enter your review: ");
-        String reviewdetails = sc.next();
-        System.out.println("Please enter a review ID that is unique:");
-        int reviewID = sc.nextInt();
-        int reviewflag = 0;
-        while(reviewflag != 1)
-        {
-            for(int i = 0; i < reviewsArray.size(); i++)
-            {
-                review = (Review)reviewsArray.get(i);
-                if(review.getReviewID() == reviewID)
-                {
-                    System.out.println("Please re-enter another review ID: ");
-                }
-    
-            }
-            reviewflag = 1;
-        }
+        String reviewdetails = InputController.getString();
+       
         System.out.println("Please enter your rating for this movie: " + movieselected.getMovie().getTitle());
-        double rating = sc.nextDouble();
+        double rating = InputController.getPositiveDouble();
 
         //creating the review based on the details being submitted 
-        Review r1 = new Review(name, reviewdetails, reviewID, rating);
+        Review r1 = new Review(name, reviewdetails, rating);
         movieselected.addReview(r1);
 
         // save new movie listings to file
@@ -86,7 +71,6 @@ public class ReviewController{ //this is the reviewcontroller class
     		}
     	}
 
-        sc.close();
     }
     
 
