@@ -56,7 +56,7 @@ public class MovieListing implements Serializable, Comparable<MovieListing> {
 		System.out.println("Showing Status: " + movie.getStatus());
 		System.out.println("Ticket Sales: " + this.ticketSales);
 		if(this.reviews.size() > 1) {
-			System.out.println("Overall Rating: " + this.overallRating);
+			System.out.println("Overall Rating: " + String.format("%.1f", this.overallRating));
 		}
 		else {
 			System.out.println("Overall Rating: NA");
