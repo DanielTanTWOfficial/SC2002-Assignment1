@@ -3,13 +3,9 @@ package controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import model.SerializationUtil;
-import model.User;
 import model.AdminUser;
-import model.CustomerUser;
-
 
 public class AdminController {
     
@@ -21,17 +17,35 @@ public class AdminController {
 			adminAccounts = SerializationUtil.deserialize("adminAccounts.ser");
             return adminAccounts;
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
         return new ArrayList<Object>();
     }
 
-    // we only allow one admin account per email for security reasons
-    public static boolean isAdminAccount(String email) {
+    public static void readAdminAccountsFileAndPrint() {
+        ArrayList<Object> adminAccounts = readAdminAccountsFile();
+        for (int i = 0; i < adminAccounts.size(); i++) {
+            AdminUser verifiedUser = (AdminUser) adminAccounts.get(i); 
+            System.out.println("Email: " + verifiedUser.getEmail() + ", Password: " + verifiedUser.getPasswordHashed());
+        }
+    }
+
+    public static boolean isAdminAccountByEmail(String email) {
         ArrayList<Object> adminAccounts = readAdminAccountsFile();
         for (int i = 0; i < adminAccounts.size(); i++) {
             AdminUser verifiedUser = (AdminUser) adminAccounts.get(i);
             if (verifiedUser.getEmail().equals(email)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isAdminAccountByPassword(String password) {
+        ArrayList<Object> adminAccounts = readAdminAccountsFile();
+        for (int i = 0; i < adminAccounts.size(); i++) {
+            AdminUser verifiedUser = (AdminUser) adminAccounts.get(i);
+            if (verifiedUser.validatePassword(password)) {
                 return true;
             }
         }
@@ -91,7 +105,7 @@ public class AdminController {
         System.out.println("Please enter your new account's password.");
         String password = InputController.getString();
         
-        if (isAdminAccount(email)) {
+        if (isAdminAccountByEmail(email)) {
             System.out.println("Admin account already exist!");
         }
         else {
@@ -112,7 +126,7 @@ public class AdminController {
         System.out.println("Please enter the email of admin account to delete.");
         String email = InputController.getEmail();
 
-        if (!isAdminAccount(email)) {
+        if (!isAdminAccountByEmail(email)) {
             System.out.println("Admin account does not exist!");
         }
         else {
@@ -125,36 +139,78 @@ public class AdminController {
                     break;
                 }
             }
+
+            File dfile = new File("adminAccounts.ser");
+            try {
+                SerializationUtil.deleteFile(dfile);
+            } catch (IOException e) {
+                // e.printStackTrace();
+            }
+            
+            for(int i = 0; i < adminAccounts.size(); i++) {
+                AdminUser verifiedUser = (AdminUser) adminAccounts.get(i);
+                try {
+                    SerializationUtil.serialize(verifiedUser, "adminAccounts.ser");
+                } catch (IOException e) {
+                    // e.printStackTrace();
+                }
+    	    }
         }  
     }
 
-    // public static void changeEmail() {
-    //     System.out.println("=== Changing account password ===");
+    public static void changePassword() {
+        ArrayList<Object> adminAccounts = readAdminAccountsFile();
+        System.out.println("=== Changing account password ===");
 
-    //     do {
-    //         System.out.println("Please enter your current email.");
-    //         String oldEmail = InputController.getEmail();
-    //         System.out.println("Please enter your new email.");
-    //         String newEmail = InputController.getEmail();
+        System.out.println("Please enter your current password.");
+        String oldPassword = InputController.getString();
+        System.out.println("Please enter your new password.");
+        String newPassword = InputController.getString();
 
-            
-    //     }
+        boolean exit = false;
+        while (!exit) {
+            if (oldPassword.equals(newPassword)) {
+                System.out.println("Same password! Would you like to try again? (y/n)");
+                boolean booleanChoice = InputController.getBoolean();
+                if (!booleanChoice) {
+                    exit = true;
+                }
+            }
+            else if (!isAdminAccountByPassword(oldPassword)) {
+                System.out.println("Wrong current password! Would you like to try again? (y/n)");
+                boolean booleanChoice = InputController.getBoolean();
+                if (!booleanChoice) {
+                    exit = true;
+                }
+            }
+            else {
+                for (int i = 0; i < adminAccounts.size(); i++) {
+                    AdminUser currentUser = (AdminUser) adminAccounts.get(i);
+                    if (currentUser.validatePassword(oldPassword)) {
+                        exit = true;
+                        System.out.println("Account password changed successfully");
+                        currentUser.updatePassword(oldPassword, newPassword);
+                    }
+                }
+    
+                File dfile = new File("adminAccounts.ser");
+                try {
+                    SerializationUtil.deleteFile(dfile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                
+                for(int i = 0; i < adminAccounts.size(); i++) {
+                    AdminUser verifiedUser = (AdminUser) adminAccounts.get(i);
+                    try {
+                        SerializationUtil.serialize(verifiedUser, "adminAccounts.ser");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
         
-    // }
 
-    // public static void changePassword() {
-    //     System.out.println("=== Changing account password ===");
-
-    //     System.out.println("Please enter your email.");
-    //     String email = InputController.getEmail();
-    //     System.out.println("Please enter your password.");
-    //     String password = InputController.getString();
-
-    //     if (verify(email, password)) {
-    //         ArrayList<Object> adminAccounts = readAdminAccountsFile();
-    //     }
-
-        
-
-    // }
+    }
 }

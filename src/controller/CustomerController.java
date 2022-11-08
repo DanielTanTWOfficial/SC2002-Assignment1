@@ -17,6 +17,8 @@ import model.MovieListing;
 import model.SerializationUtil;
 import model.Showtime;
 import model.Vendor;
+import model.Cinema.CinemaClass;
+import model.Movie.ShowingStatus;
 
 public class CustomerController {
     /**
@@ -40,7 +42,7 @@ public class CustomerController {
 			e.printStackTrace();
 		}
 
-		System.out.println("=============== ALL MOVIES =============== ");
+		System.out.println("=============== TOP MOVIES =============== ");
 
 		// if filter value is set by admin, user cannot choose, otherwise they can choose
 		if(filterVal == "ratings") {
@@ -94,22 +96,32 @@ public class CustomerController {
      * Called to print all movie listing information.
      */
     public static void displayAllMovieListings() {
-    	ArrayList<Object> mListings = new ArrayList<>();
-    	MovieListing mListing = null;
+    	ArrayList<Object> movieListings = MovieListingController.readMovieListingsFile();
+    	MovieListing movieListing;
     	
-    	try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		System.out.println("=============== TOP MOVIES =============== ");
-    	
-    	for(int i=0;i<mListings.size();i++) {
-    		mListing = (MovieListing)mListings.get(i);
-    		mListing.printInfo(false);
+		System.out.println("=============== ALL MOVIES =============== ");
+    	for(int i = 0; i < movieListings.size(); i++) {
+    		movieListing = (MovieListing) movieListings.get(i);
+    		movieListing.printInfo(false);
     	}
     }
+
+	public static void displayShowingMovieListings() {
+		System.out.println("Current Movies Available for Booking: ");
+
+		int numberMoviesShowing = 1;
+		ArrayList<Object> movieListings = MovieListingController.readMovieListingsFile();
+
+
+		for (int i = 0; i < movieListings.size(); i++) {
+			MovieListing currentMovieListing = (MovieListing) movieListings.get(i);
+			if (currentMovieListing.getMovie().getStatus() == ShowingStatus.NOW_SHOWING || currentMovieListing.getMovie().getStatus() == ShowingStatus.PREVIEW) {
+				System.out.print(numberMoviesShowing + ": ");
+				currentMovieListing.printSimpleInfo();
+				numberMoviesShowing++;
+			}
+		}
+	}
 
 	/**
      * Called to print details of a specific movie listing
@@ -153,9 +165,11 @@ public class CustomerController {
 		Vendor vendor = null;
 		MovieListing mListing = null;
 		Showtime showtime = null;
-		int cinemaCode;
+		Cineplex cineplex = null;
+		CinemaClass cinemaClass;
+		int count;
 		int selection = 0;
-		String usrInput;
+		String usrInput, location;
 		LocalDate filterDate;
 
 		// dates will be formatted into YYYY-MM-DD format
@@ -186,18 +200,20 @@ public class CustomerController {
 		System.out.println("Enter the cineplex to view the showtimes: ");
 		selection = InputController.getIntRange(1, cineplexes.size());
     	
-    	System.out.println("Available cinemas: ");
-    	
-    	cinemas = cineplexes.get(selection-1).getCinemas();
-    	
-    	for(int i=0;i<cinemas.size();i++) {
-    		System.out.println((i+1) + ". " + cinemas.get(i).getCinemaCode());
+		cineplex = cineplexes.get(selection-1);
+		location = cineplex.getLocation();
+
+		System.out.println("Cinema classes: ");
+		count = 1;
+    	for(CinemaClass status : CinemaClass.values()) {
+    		System.out.println(count + ". " + status);
+    		count++;
     	}
-    	
-		System.out.println("Select the cinema to view the showtimes: ");
-		selection = InputController.getIntRange(1, cinemas.size());
-    	
-    	cinemaCode = cinemas.get(selection-1).getCinemaCode();
+		
+		System.out.println("Enter the desired cinema class");
+		selection = InputController.getIntRange(1, CinemaClass.values().length);
+
+		cinemaClass = CinemaClass.values()[selection-1];
 
     	System.out.println("Available movies to check showtimes for: ");
     	try {
@@ -224,9 +240,9 @@ public class CustomerController {
 		usrInput = sc.next();
     	filterDate = LocalDate.parse(usrInput, dateFormat);
 
-		// filter out showtimes available for the chosen cinema only
+		// filter out showtimes available for the chosen cineplex and cinemaClass on selected date only
 		for(int i=0;i<showtimes.size();i++) {
-			if(showtimes.get(i).getCinemaCode() == cinemaCode && showtimes.get(i).getDate().isEqual(filterDate)) {
+			if(showtimes.get(i).getLocation() == location && showtimes.get(i).getCinemaBooking().getCinemaClass() == cinemaClass && showtimes.get(i).getDate().isEqual(filterDate)) {
 				matchingShowtimes.add(showtimes.get(i));
 			}
 		}
@@ -244,5 +260,141 @@ public class CustomerController {
 		showtime.getCinemaBooking().printSeats();
 
 		return 1;
+	}
+
+	/*
+	 * 1. Display all movie listings
+	 * 2. Display and Choose Cineplex
+	 * 3. Choose cinema class 
+	 * 4. Choose Movie 
+	 * 5. List and Choose Showtime
+	 * 6. List and Choose Seat 
+	 * 7. Compute Price
+	 * 8. Prompt for email and mobile number
+	 * 9. Perform Transaction
+	 * 10. Save booking
+	 */
+	public static void makeBooking() {
+		// Step 1 - List all movie listings that are available for booking
+		displayShowingMovieListings();
+
+		// Step 2 - Display all cineplexes for Cathay, and let user choose one
+		// @return chosenCineplex
+		// !!! Future feature: let user choose vendor
+		ArrayList<Object> vendors = VendorController.readVendorsFile();
+		Vendor cathay = (Vendor) vendors.get(0); // only have 1 vendor
+
+		boolean cineplexDone = false;
+		Cineplex chosenCineplex;
+		ArrayList<Object> movieListings = MovieListingController.readMovieListingsFile();
+		while (!cineplexDone) {
+			chosenCineplex = CineplexController.chooseCineplex(cathay);
+			if (chosenCineplex == null) { // exit booking
+				return;
+			}
+
+			// check if cineplex has movieListings, else pick another cineplex
+			int numberShowtimes = 0;
+			for (int i = 0; i < movieListings.size(); i++) {
+				MovieListing currentMovieListing = (MovieListing) movieListings.get(i);
+				for (int j = 0; j < currentMovieListing.getShowtimes().size(); j++) {
+					Showtime currentShowtime = currentMovieListing.getShowtimes().get(j);
+					if (chosenCineplex.getLocation().equals(currentShowtime.getLocation())) {
+						numberShowtimes++;
+					}
+				}
+			}
+			if (numberShowtimes == 0) {
+				System.out.println("Chosen cineplex has no movies showing! Please pick another cineplex.");
+			}
+			else {
+				cineplexDone = true;
+			}
+		}
+
+		// Step 3 - Choose cinema class
+		System.out.println("Please choose an available cinema class:");
+		ArrayList<CinemaClass> presentCinemaClasses = chosenCineplex.getCineplexCinemaClasses();
+		int counter = 1;
+		for (CinemaClass status: presentCinemaClasses) {
+			System.out.println(counter + ": " + status);
+			counter++;
+		}
+
+		CinemaClass chosenCinemaClass;
+		int chosenCinemaClassChoice = InputController.getIntRange(1, presentCinemaClasses.size());
+		chosenCinemaClass = presentCinemaClasses.get(chosenCinemaClassChoice - 1);
+		
+		// Step 4 - Choose Movie
+		// if chosen movie has showtimes in chosenCineplex, then list them 
+		System.out.print("Choose a movie from the list: ");
+		int movieChoice = InputController.getInt();
+
+		ArrayList<Showtime> showtimeChoices = new ArrayList<>();
+		System.out.println("Showtimes: ");
+		MovieListing chosenMovieListing = (MovieListing) movieListings.get(movieChoice - 1);
+		for (int i = 0; i < chosenMovieListing.getShowtimes().size(); i++) {
+			Showtime currentShowtime = chosenMovieListing.getShowtimes().get(i);
+			if (chosenCineplex.getLocation().equals(currentShowtime.getLocation()) && (currentShowtime.getCinemaBooking().getCinemaClass().equals(chosenCinemaClass))) {
+				showtimeChoices.add(currentShowtime);
+				System.out.print((i + 1) + ": ");
+				currentShowtime.printShowtime();
+			}
+		}
+
+		// Choose seats
+		System.out.print("Choose the showtime: ");
+		int showtimeChoice = InputController.getInt();
+		Showtime chosenShowtime = showtimeChoices.get(showtimeChoice - 1);
+		chosenShowtime.getCinemaBooking().printSeats();
+
+		boolean seatChosen = false;
+		boolean anotherSeatChoice = true;
+		int seatsChosen = 0;
+		int row, col; // seat details
+		while (!seatChosen && anotherSeatChoice) {
+			System.out.print("Please enter the row number: ");
+			row = InputController.getIntRange(1, chosenShowtime.getCinemaBooking().getNumRows());
+			System.out.print("Please enter the col number: ");
+			col = InputController.getIntRange(1, chosenShowtime.getCinemaBooking().getNumCols());
+			
+			if (!chosenShowtime.getCinemaBooking().getSeats()[row - 1][col - 1].getAssigned()) {
+				seatChosen = true;
+				seatsChosen++;
+				chosenShowtime.getCinemaBooking().getSeats()[row - 1][col - 1].assignSeat();
+				System.out.println("Would you like to choose another seat? (y/n)");
+				anotherSeatChoice = InputController.getBoolean();
+				if (anotherSeatChoice) {
+					seatChosen = false;
+				}
+				else {
+					anotherSeatChoice = false;
+				}
+			}
+			else {
+				System.out.println("Seat has been taken");
+			}
+		}
+
+		// compute price
+		double totalPrice = PriceController.computePrice(chosenCineplex, chosenShowtime, seatsChosen);
+
+		// perform transaction
+			// prompt for email and movile phone
+		
+		// generate ticket
+		
+
+
+
+
+
+		
+
+
+
+
+
+		
 	}
 }

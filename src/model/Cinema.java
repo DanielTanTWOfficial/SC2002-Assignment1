@@ -12,7 +12,6 @@ public class Cinema implements Serializable {
     private int numRow;
     private int numCol;
     private int numSeats;
-    private Seat[] seats;
 
     public Cinema(CinemaClass cinemaClass, int cinemaCode, int numRow, int numCol) {
         this.cinemaClass = cinemaClass;
@@ -20,7 +19,6 @@ public class Cinema implements Serializable {
         this.numCol= numCol;
         this.numRow = numRow;
         this.numSeats=numCol*numRow;
-        this.seats = new Seat[numSeats];
     }
 
     public CinemaClass getCinemaClass() {
@@ -49,24 +47,6 @@ public class Cinema implements Serializable {
 
     public int getNumCol() {
         return numCol;
-    }
-
-    public Seat getSeat(int seatID) {
-        return this.seats[seatID];
-    }
-
-    public int getNumOccupiedSeats() {
-        int occupied = 0;
-        for (int i = 0; i < numSeats; i++) {
-            if (this.seats[i].getAssigned()) {
-                occupied += 1;
-            }
-        }
-        return occupied;
-    }
-
-    public int getNumNotOccupiedSeats() {
-        return this.numSeats - getNumOccupiedSeats();
     }
 }
 

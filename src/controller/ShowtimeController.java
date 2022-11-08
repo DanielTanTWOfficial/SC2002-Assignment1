@@ -21,34 +21,8 @@ import model.Movie.ShowingStatus;
 import model.Cineplex;
 import model.Cinema;
 
-public class ManagementController {
-	/**
-     * Provides admin options to choose action to take for movie management
-     */
-	public static void movieActions() {
-		System.out.println("=============== MOVIE CONTROL =============== ");
-		System.out.println("1. Create a new movie listing");
-		System.out.println("2. Update a movie status");
-		System.out.println("3. Remove a movie listing");
-		System.out.println("============================================= ");
-        System.out.print("Select action: ");
-		switch(InputController.getIntRange(1, 3)) {
-		case 1:
-			createMovie();
-			break;
-		case 2:
-			updateMovieStatus();
-			break;
-		case 3:
-			deleteMovie();
-			break;
-		default:
-			System.out.println("Invalid option");
-			break;
-		}
-	}
-
-	/**
+public class ShowtimeController {
+    /**
      * Provides admin options to choose action to take for showtime management
      */
 	public static void showtimeActions() {
@@ -60,283 +34,19 @@ public class ManagementController {
         System.out.print("Select action: ");
 		switch(InputController.getIntRange(1, 3)) {
 		case 1:
-			addShowtime();
+			ShowtimeController.addShowtime();
 			break;
 		case 2:
-			editShowtime();
+			ShowtimeController.editShowtime();
 			break;
 		case 3:
-			removeShowtime();
+			ShowtimeController.removeShowtime();
 			break;
 		default:
 			System.out.println("Invalid option");
 			break;
 		}
 	}
-
-    /**
-     * Creates a new Movie object
-     * @return int
-     */
-    public static int createMovie() {
-    	String title;
-    	String director;
-    	ArrayList<String> cast = new ArrayList<>();
-    	int numCast = 0, count, selection = 0;
-    	String synopsis;
-		Duration duration;
-    	ShowingStatus showingStatus;
-    	MovieRating movieRating;
-    	MovieType movieType;
-    	
-    	Scanner sc = new Scanner(System.in);
-    	
-    	System.out.println("=============== MOVIE CREATION =============== ");
-    	System.out.println("Enter the movie title: ");
-    	title = sc.nextLine();
-    	System.out.println("Enter the director: ");
-    	director = sc.nextLine();
-    	System.out.println("Enter the synopsis: ");
-    	synopsis = sc.nextLine();
-		System.out.println("Enter the duration in minutes: ");
-		duration = Duration.ofMinutes(sc.nextLong());
-    	
-    	while(true) {
-	    	System.out.println("Enter the number of cast members (min. 2): ");
-	    	numCast = InputController.getPositiveInt();
-	    	if(numCast >= 2) {
-	    		break;
-	    	}
-	    	System.out.println("Too few cast members!");
-    	}
-    	for(int i=0;i<numCast;i++) {
-    		System.out.println("Enter name of cast member " + (i+1) + ": ");
-    		cast.add(sc.nextLine());
-    	}
-    	
-    	System.out.println("Available showing status options: ");
-    	count = 1;
-    	for(ShowingStatus status : ShowingStatus.values()) {
-    		System.out.println(count + ". " + status);
-    		count++;
-    	}
-    	System.out.println("Select the showing status: ");
-    	
-    	switch (InputController.getIntRange(1, 3)) {
-		case 1: showingStatus = ShowingStatus.values()[0];
-				break;
-		case 2: showingStatus = ShowingStatus.values()[1];
-				break;
-		case 3: showingStatus = ShowingStatus.values()[2];
-				break;
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + selection);
-		}
-    	
-    	System.out.println("Available movie rating: ");
-    	count = 1;
-    	for(MovieRating rating : MovieRating.values()) {
-    		System.out.println(count + ". " + rating);
-    		count++;
-    	}
-    	System.out.println("Select the movie rating: ");
-    	selection = InputController.getIntRange(1, 4);
-    	
-    	switch (selection) {
-		case 1: movieRating = MovieRating.values()[0];
-				break;
-		case 2: movieRating = MovieRating.values()[1];
-				break;
-		case 3: movieRating = MovieRating.values()[2];
-				break;
-		case 4: movieRating = MovieRating.values()[3];
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + selection);
-		}
-    	
-    	System.out.println("Available movie type: ");
-    	count = 1;
-    	for(MovieType type : MovieType.values()) {
-    		System.out.println(count + ". " + type);
-    		count++;
-    	}
-    	System.out.println("Select the movie type: ");
-    	
-    	switch (InputController.getIntRange(1, 4)) {
-		case 1: movieType = MovieType.values()[0];
-				break;
-		case 2: movieType = MovieType.values()[1];
-				break;
-		case 3: movieType = MovieType.values()[2];
-				break;
-		case 4: movieType = MovieType.values()[3];
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + selection);
-		}
-    	
-    	Movie newMovie = new Movie(title, director, cast, synopsis, duration, showingStatus, movieRating, movieType);
-		
-		if(createMovieListing(newMovie) == 1) {
-			return 1;
-		}
-		
-		return 0;
-    }
-    
-    /**
-     * Creates a new movie listing for the new movie
-     * @param movie
-     * @return int
-     */
-    private static int createMovieListing(Movie movie) {
-    	MovieListing newMovieListing = new MovieListing(movie);
-    	
-    	// serialize to file
-		try {
-			SerializationUtil.serialize(newMovieListing, "movieListings.ser");
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("Movie listing save unsuccessful!");
-			return 0;
-		}
-		
-		return 1;
-    }
-    
-    /**
-     * Deletes a movie object
-     * @return int
-     */
-    public static int deleteMovie() {
-    	ArrayList<Object> mListings = new ArrayList<>();
-    	MovieListing mListing = null;
-    	int selection = 0;
-    	
-    	System.out.println("=============== MOVIE DELETION =============== ");
-    	System.out.println("Available movies: ");
-    	
-    	try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-    	
-    	for(int i=0;i<mListings.size();i++) {
-    		mListing = (MovieListing)mListings.get(i);
-    		System.out.println((i+1) + ". " + mListing.getMovie().getTitle());
-    	}
-    	
-		System.out.println("Which movie do you want to delete? ");
-		selection = InputController.getIntRange(1, mListings.size());
-    	
-    	mListing = (MovieListing)mListings.get(selection-1);
-    	
-    	// set the showingStatus to END_OF_SHOWING
-    	mListing.getMovie().deleteMovie();
-    	
-    	// remove movie listing
-    	mListings.remove(selection-1);
-    	
-    	// delete movie file to be overwritten
-    	File dfile = new File("movieListings.ser");
-    	try {
-			SerializationUtil.deleteFile(dfile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    	
-    	// save remaining movie objects to file
-    	for(int i=0;i<mListings.size();i++) {
-			mListing = (MovieListing)mListings.get(i);
-    		// serialize to file
-    		try {
-    			SerializationUtil.serialize(mListing, "movieListings.ser");
-    		} catch (IOException e) {
-    			e.printStackTrace();
-    			System.out.println("Movie listing update unsuccessful!");
-    			return 0;
-    		}
-    	}
-    	
-    	return 0;
-    }
-    
-    /**
-     * Called to update the showing status of movies
-     * @return int
-     */
-    public static int updateMovieStatus() {
-    	ArrayList<Object> mListings = new ArrayList<>();
-    	MovieListing mListing = null;
-    	int count, selection = 0;
-    	ShowingStatus showingStatus;
-    	
-    	System.out.println("=============== MOVIE STATUS UPDATE =============== ");
-    	System.out.println("Available movies: ");
-    	
-    	try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("Unable to read movie listings.");
-			return 0;
-		}
-    	
-    	for(int i=0;i<mListings.size();i++) {
-    		mListing = (MovieListing)mListings.get(i);
-    		System.out.println((i+1) + ". " + mListing.getMovie().getTitle() + ": " + mListing.getMovie().getStatus());
-    	}
-    	
-		System.out.println("Which movie do you want to update the status for? ");
-		selection = InputController.getIntRange(1, mListings.size());
-    	
-    	mListing = (MovieListing)mListings.get(selection-1);
-    	
-    	System.out.println("Available status options: ");
-    	count = 1;
-    	for(ShowingStatus status : ShowingStatus.values()) {
-    		System.out.println(count + ". " + status);
-    		count++;
-    	}
-    	System.out.println("Select the showing status: ");
-    	selection = InputController.getIntRange(1, 3);
-    	
-    	switch (selection) {
-		case 1: showingStatus = ShowingStatus.values()[0];
-				break;
-		case 2: showingStatus = ShowingStatus.values()[1];
-				break;
-		case 3: showingStatus = ShowingStatus.values()[2];
-				break;
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + selection);
-		}
-    	
-    	// call to edit movie showing status
-    	mListing.getMovie().editStatus(showingStatus);
-    	
-    	File dfile = new File("movieListings.ser");
-    	try {
-			SerializationUtil.deleteFile(dfile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    	
-    	// serialize updated movies to file
-    	for(int i=0;i<mListings.size();i++) {
-    		mListing = (MovieListing)mListings.get(i);
-    		try {
-    			SerializationUtil.serialize(mListing, "movieListings.ser");
-    		} catch (IOException e) {
-    			e.printStackTrace();
-    			System.out.println("Movie update unsuccessful!");
-    			return 0;
-    		}
-    	}
-    	
-    	return 1;
-    }
-    
     /**
      * Called to add a new showtime for a movie
      * @return int
@@ -348,6 +58,7 @@ public class ManagementController {
     	ArrayList<Cinema> cinemas = new ArrayList<>();
 		Vendor vendor = null;
 		Cinema cinema = null;
+		Cineplex cineplex = null;
     	MovieListing mListing = null;
     	int selection = 0;
     	String showtimeId,  usrInput;
@@ -373,7 +84,7 @@ public class ManagementController {
     	
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
-    		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
+    		System.out.println((i+1) + ". " + mListing.getMovie().getTitle());
     	}
     	
 		System.out.println("Enter the movie to add the showtime for: ");
@@ -382,7 +93,7 @@ public class ManagementController {
     	mListing = (MovieListing)mListings.get(selection-1);
     	
     	try {
-			cineplexesInfo = SerializationUtil.deserialize("VendorCineplexesInfo.ser");
+			cineplexesInfo = SerializationUtil.deserialize("cineplexes.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read cineplexes info.");
@@ -391,13 +102,17 @@ public class ManagementController {
     	
     	System.out.println("Available cineplexes: ");
     	
-		vendor = (Vendor)cineplexesInfo.get(0);
+		//vendor = (Vendor)cineplexesInfo.get(0);
 
     	// get list of cineplexes to display to user
-    	cineplexes = vendor.getCineplexes();
+		
+		for(int i=0;i<cineplexesInfo.size();i++) {
+			cineplexes.add((Cineplex)cineplexesInfo.get(i));
+		}
+    	//cineplexes = vendor.getCineplexes();
     	
     	for(int i=0;i<cineplexes.size();i++) {
-    		System.out.println((1+1) + ". " + cineplexes.get(i).getLocation());
+    		System.out.println((i+1) + ". " + cineplexes.get(i).getLocation());
     	}
     	
 		System.out.println("Enter the cineplex for the showtime: ");
@@ -405,7 +120,8 @@ public class ManagementController {
     	
     	System.out.println("Available cinemas: ");
     	
-    	cinemas = cineplexes.get(selection-1).getCinemas();
+		cineplex = cineplexes.get(selection-1);
+    	cinemas = cineplex.getCinemas();
     	
     	for(int i=0;i<cinemas.size();i++) {
     		System.out.println((i+1) + ". " + cinemas.get(i).getCinemaCode());
@@ -430,11 +146,17 @@ public class ManagementController {
     	showtimeId = mListing.getMovie().getTitle().split("[ \\t\\n\\,\\?\\;\\.\\:\\!]")[0] + mListing.getShowtimes().size();
 
     	// create the new showtime object
-    	newShowtime = new Showtime(showtimeId, date, start, end, cinema);
+    	newShowtime = new Showtime(showtimeId, date, start, end, cinema, cineplex.getLocation());
 
 		// check if the showtime will overlap with another showtime at the same Cinema
-		if(checkShowtimeOverlap(newShowtime, mListing)) {
+		if(checkShowtimeOverlap(newShowtime, mListings)) {
 			System.out.println("The showtime overlaps with another existing showtime!");
+			return 0;
+		}
+
+		// check if there is a clash of showings of the same movie at the same cineplex at the same start time
+		if(checkDuplicateShowtime(newShowtime, mListing)) {
+			System.out.println("There is already a showtime at this time for this movie at this cineplex!");
 			return 0;
 		}
     	
@@ -464,23 +186,54 @@ public class ManagementController {
     	return 1;
     }
 
-	
 	/** 
-	 * Called by addShowtime() to check if a showtime overlaps with another at the same cinema
+	 * Called by addShowtime() to check if a new showtime overlaps with another at the same cinema
+	 * @param showtime
+	 * @param mListings
+	 * @return boolean
+	 */
+	public static boolean checkShowtimeOverlap(Showtime showtime, ArrayList<Object> mListings) {
+		ArrayList<Showtime> showtimes = new ArrayList<>();
+		MovieListing mListing = null;
+
+		// loop through all movie listings and their showtimes
+		for(int i=0;i<mListings.size();i++) {
+			mListing = (MovieListing)mListings.get(i);
+			showtimes = mListing.getShowtimes();
+			for(int j=0;j<showtimes.size();j++) {
+				// first check if the cinema is the same
+				if(showtime.getCinemaCode() == showtimes.get(i).getCinemaCode()) {
+					// then check if the date is the same
+					if(showtime.getDate().isEqual(showtimes.get(i).getDate())) {
+						// check if the showtimes overlap
+						if(showtime.getStart().isBefore(showtimes.get(i).getEnd()) && showtimes.get(i).getStart().isBefore(showtime.getEnd())) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/** 
+	 * Called by addShowtime() to check if a new showtime starts at the same time as another showtime for the same movie
+	 * at the same Cineplex
 	 * @param showtime
 	 * @param mListing
 	 * @return boolean
 	 */
-	public static boolean checkShowtimeOverlap(Showtime showtime, MovieListing mListing) {
+	public static boolean checkDuplicateShowtime(Showtime showtime, MovieListing mListing) {
 		ArrayList<Showtime> showtimes = mListing.getShowtimes();
-		
+
 		for(int i=0;i<showtimes.size();i++) {
-			// first check if the cinema is the same
-			if(showtime.getCinemaCode() == showtimes.get(i).getCinemaCode()) {
+			// first check if the cineplex is the same
+			if(showtime.getLocation() == showtimes.get(i).getLocation()) {
 				// then check if the date is the same
 				if(showtime.getDate().isEqual(showtimes.get(i).getDate())) {
-					// check if the showtimes overlap
-					if(showtime.getStart().isBefore(showtimes.get(i).getEnd()) && showtimes.get(i).getStart().isBefore(showtime.getEnd())) {
+					// check if the showtimes have the same start time
+					if(showtime.getStart().equals(showtimes.get(i).getStart())) {
 						return true;
 					}
 				}
@@ -564,8 +317,12 @@ public class ManagementController {
 			end = start.plus(mListing.getMovie().getDuration());
         	showtime.editStart(start);
 			showtime.editEnd(end);
-			if(checkShowtimeOverlap(showtime, mListing)) {
+			if(checkShowtimeOverlap(showtime, mListings)) {
 				System.out.println("Cannot confirm changes as showtime will overlap with another!");
+				return 0;
+			}
+			if(checkDuplicateShowtime(showtime, mListing)) {
+				System.out.println("Cannot confirm changes as there is already another showtime at the same time for this movie at this cineplex!");
 				return 0;
 			}
         	break;
@@ -666,4 +423,6 @@ public class ManagementController {
 
     	return 1;
 	}
+
+	
 }
