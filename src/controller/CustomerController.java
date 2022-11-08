@@ -157,6 +157,7 @@ public class CustomerController {
      */
 	public static void displaySpecificListing() {
 		ArrayList<Object> mListings = new ArrayList<>();
+		ArrayList<MovieListing> availableListings = new ArrayList<>();
     	MovieListing mListing = null;
 		int selection = 0;
 
@@ -168,13 +169,19 @@ public class CustomerController {
     	
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
-    		System.out.println((i+1) + ". " + mListing.getMovie().getTitle());
+			if(mListing.getMovie().getStatus() != ShowingStatus.END_OF_SHOWING) {
+				availableListings.add(mListing);
+			}
     	}
+
+		for(int i=0;i<availableListings.size();i++) {
+			System.out.println((i+1) + ". " + availableListings.get(i).getMovie().getTitle());
+		}
 
 		System.out.println("Which movie do you want to view details of? ");
 		selection = InputController.getIntRange(1, mListings.size());
 
-		mListing = (MovieListing)mListings.get(selection-1);
+		mListing = availableListings.get(selection-1);
 
 		mListing.printInfo(true);
 
