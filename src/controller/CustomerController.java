@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -27,7 +28,7 @@ import model.Movie.ShowingStatus;
 public class CustomerController {
     /**
      * Displays the top 5 movie listings by ticket sales or reviewer ratings
-     * @param bySales
+	 * Reads the admin set ranking filter
      */
     public static void displayTopMovieListings() {
     	ArrayList<Object> mListings = new ArrayList<>();
@@ -37,13 +38,21 @@ public class CustomerController {
 		boolean invalid = true;
 		boolean bySales = true;
 
-		// read set filter value from file
-		Path path = Paths.get("filter.txt");
-		try {
-			filterVal = Files.readString(path, StandardCharsets.UTF_8);
+		File f = new File("filter.txt");
+		if(f.exists()) {
+			// read set filter value from file
+			Path path = Paths.get("filter.txt");
+			try {
+				filterVal = Files.readString(path, StandardCharsets.UTF_8);
+				filterVal = filterVal.replace("\n", "").replace("\r", "");
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		catch (IOException e) {
-			e.printStackTrace();
+		else {
+			// default filter is to let the user choose
+			filterVal = "any";
 		}
 
 		System.out.println("=============== TOP MOVIES =============== ");
@@ -89,10 +98,20 @@ public class CustomerController {
     	Collections.sort(castedListings);
     	
     	// display the top 5 movie listings by sales/ratings
-    	for(int i=0;i<5;i++) {
-    		System.out.print((i+1) + ". ");
-    		mListing = castedListings.get(i);
-    		mListing.printInfo(false);
+    	if(castedListings.size() < 5) {
+    		// if less than 5 movie listings, just display all
+    		for(int i=0;i<castedListings.size();i++) {
+        		System.out.print((i+1) + ". ");
+        		mListing = castedListings.get(i);
+        		mListing.printInfo(false);
+        	}
+    	}
+    	else {
+    		for(int i=0;i<5;i++) {
+        		System.out.print((i+1) + ". ");
+        		mListing = castedListings.get(i);
+        		mListing.printInfo(false);
+        	}
     	}
     }
     
