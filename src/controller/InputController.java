@@ -94,7 +94,7 @@ public class InputController {
     public static String getString() {
         String input = "";
         while(input.equals("")) {
-            input = sc.nextLine();
+            input += sc.nextLine();
             if(input.equals("")) {
                 System.out.println("That's an empty string!");
             }
