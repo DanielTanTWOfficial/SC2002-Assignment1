@@ -28,7 +28,7 @@ public class CinemaController {
             cineplex.addNewCinema(cinemasArray.get(i));
 
             try {
-                SerializationUtil.serialize(cinemasArray.get(i),"cinemas.ser");
+                SerializationUtil.serialize(cinemasArray.get(i),"cineplexes.ser");
                 System.out.println("Cinema of code  " + cinemasArray.get(i).getCinemaCode() + " added!");
             } catch (IOException e) {
                 e.printStackTrace();

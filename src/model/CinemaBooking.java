@@ -1,10 +1,8 @@
 package model;
 
-import java.io.Serializable;
-
 import model.Cinema.CinemaClass;
 
-public class CinemaBooking implements Serializable {
+public class CinemaBooking {
     private static final long serialVersionUID = 123459L;
     private CinemaClass cinemaClass;
 
