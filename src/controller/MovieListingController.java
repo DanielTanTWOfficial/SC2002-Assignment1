@@ -91,11 +91,11 @@ public class MovieListingController {
     	
     	System.out.println("=============== MOVIE CREATION =============== ");
     	System.out.println("Enter the movie title: ");
-    	title = sc.nextLine();
+    	title = InputController.getString();
     	System.out.println("Enter the director: ");
-    	director = sc.nextLine();
+    	director = InputController.getString();
     	System.out.println("Enter the synopsis: ");
-    	synopsis = sc.nextLine();
+    	synopsis = InputController.getString();
 		System.out.println("Enter the duration in minutes: ");
 		duration = Duration.ofMinutes(sc.nextLong());
     	
@@ -109,7 +109,7 @@ public class MovieListingController {
     	}
     	for(int i=0;i<numCast;i++) {
     		System.out.println("Enter name of cast member " + (i+1) + ": ");
-    		cast.add(sc.nextLine());
+    		cast.add(InputController.getString());
     	}
     	
     	System.out.println("Available showing status options: ");
@@ -122,7 +122,7 @@ public class MovieListingController {
     	
     	selection = InputController.getIntRange(1, ShowingStatus.values().length);
 
-		showingStatus = ShowingStatus.values()[0];
+		showingStatus = ShowingStatus.values()[selection-1];
     	
     	System.out.println("Available movie rating: ");
     	count = 1;
