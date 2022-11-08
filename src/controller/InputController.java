@@ -1,6 +1,9 @@
 package controller;
 
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class InputController {
     private static Scanner sc = new Scanner(System.in);
@@ -136,7 +139,41 @@ public class InputController {
         return input;
     }
     
-    // add boolean input
-    // add date input
+    public static boolean getBoolean() {
+        String input = "";
+        boolean output = false;
+        boolean valid = false;
+        while (!valid){
+            input = sc.next();
+            if(input.equals("y") || input.equals("Y")) {
+                valid = true;
+                output = true;
+            }
+            else if (input.equals("n") || input.equals("N")) {
+                valid = true;
+            }
+            else {
+                System.out.println("Must be either y or n");
+            }
+        }
+        return output;
+    }
+    
+    public static LocalDate getDate() {
+        LocalDate result = null;
+        String date;
+        boolean valid = false;
+        while(!valid) {
+            try {
+                date = sc.nextLine();
+                result = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                valid = true;
+            }
+            catch(DateTimeParseException e){
+                System.out.println("Must be of pattern DD/MM/YYYY!");
+            }
+        }
+        return result;
+    }
 
 }
