@@ -17,9 +17,17 @@ public class AdminController {
 			adminAccounts = SerializationUtil.deserialize("adminAccounts.ser");
             return adminAccounts;
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
         return new ArrayList<Object>();
+    }
+
+    public static void readAdminAccountsFileAndPrint() {
+        ArrayList<Object> adminAccounts = readAdminAccountsFile();
+        for (int i = 0; i < adminAccounts.size(); i++) {
+            AdminUser verifiedUser = (AdminUser) adminAccounts.get(i); 
+            System.out.println("Email: " + verifiedUser.getEmail() + ", Password: " + verifiedUser.getPasswordHashed());
+        }
     }
 
     public static boolean isAdminAccountByEmail(String email) {
@@ -136,72 +144,18 @@ public class AdminController {
             try {
                 SerializationUtil.deleteFile(dfile);
             } catch (IOException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
             
             for(int i = 0; i < adminAccounts.size(); i++) {
                 AdminUser verifiedUser = (AdminUser) adminAccounts.get(i);
                 try {
-                    SerializationUtil.serialize(verifiedUser, "movieListings.ser");
+                    SerializationUtil.serialize(verifiedUser, "adminAccounts.ser");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    // e.printStackTrace();
                 }
     	    }
         }  
-    }
-
-    public static void changeEmail() {
-        ArrayList<Object> adminAccounts = readAdminAccountsFile();
-        System.out.println("=== Changing account email ===");
-
-        System.out.println("Please enter your current email.");
-        String oldEmail = InputController.getEmail();
-        System.out.println("Please enter your new email.");
-        String newEmail = InputController.getEmail();
-        
-        boolean exit = false;
-        while (!exit) {
-            if (oldEmail.equals(newEmail)) {
-                System.out.println("Same email! Would you like to try again? (y/n)");
-                boolean booleanChoice = InputController.getBoolean();
-                if (!booleanChoice) {
-                    exit = true;
-                }
-            }
-            else if (!isAdminAccountByEmail(oldEmail)) {
-                System.out.println("Wrong current email! Would you like to try again? (y/n)");
-                boolean booleanChoice = InputController.getBoolean();
-                if (!booleanChoice) {
-                    exit = true;
-                }
-            }
-            else {
-                for (int i = 0; i < adminAccounts.size(); i++) {
-                    AdminUser currentUser = (AdminUser) adminAccounts.get(i);
-                    if (currentUser.getEmail().equals(oldEmail)) {
-                        exit = true;
-                        currentUser.updateEmail(newEmail);
-                    }
-                }
-    
-                File dfile = new File("adminAccounts.ser");
-                try {
-                    SerializationUtil.deleteFile(dfile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                
-                for(int i = 0; i < adminAccounts.size(); i++) {
-                    AdminUser verifiedUser = (AdminUser) adminAccounts.get(i);
-                    try {
-                        SerializationUtil.serialize(verifiedUser, "movieListings.ser");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        
     }
 
     public static void changePassword() {
@@ -234,6 +188,7 @@ public class AdminController {
                     AdminUser currentUser = (AdminUser) adminAccounts.get(i);
                     if (currentUser.validatePassword(oldPassword)) {
                         exit = true;
+                        System.out.println("Account password changed successfully");
                         currentUser.updatePassword(oldPassword, newPassword);
                     }
                 }
@@ -248,7 +203,7 @@ public class AdminController {
                 for(int i = 0; i < adminAccounts.size(); i++) {
                     AdminUser verifiedUser = (AdminUser) adminAccounts.get(i);
                     try {
-                        SerializationUtil.serialize(verifiedUser, "movieListings.ser");
+                        SerializationUtil.serialize(verifiedUser, "adminAccounts.ser");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

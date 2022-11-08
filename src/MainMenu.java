@@ -134,11 +134,10 @@ public class MainMenu {
             System.out.println("2. List holidays");
             System.out.println("3. Add holidays");
             System.out.println("4. Delete holidays");
-            System.out.println("5. Change email");
-            System.out.println("6. Change password");
-            System.out.println("7. Create admin account"); // only allow another admin to create admin accounts
-            System.out.println("8. Manage movie ranking filter settings");
-            System.out.println("9. Exit");
+            System.out.println("5. Change password");
+            System.out.println("6. Create admin account"); // only allow another admin to create admin accounts
+            System.out.println("7. Manage movie ranking filter settings");
+            System.out.println("8. Exit");
             System.out.println("============================================= ");
             System.out.print("Select action: ");
             switch(InputController.getIntRange(1, 9)) {
@@ -155,17 +154,14 @@ public class MainMenu {
                     SystemController.removeHoliday();
                     break;
                 case 5:
-                    AdminController.changeEmail();
-                    break;
-                case 6:
                     AdminController.changePassword();
                     break;
-                case 7:
+                case 6:
                     AdminController.createAdminAccount();
                     break;
-                case 8:
+                case 7:
                     SystemController.configureFilter();
-                case 9:
+                case 8:
                     exit = true;
                     System.out.println("Exiting...");
                     break;

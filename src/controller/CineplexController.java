@@ -33,7 +33,7 @@ public class CineplexController {
 			cineplexes = SerializationUtil.deserialize("cineplexes.ser");
             return cineplexes;
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
         return new ArrayList<Object>();
     }

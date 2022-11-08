@@ -22,7 +22,6 @@ public class InputController {
             }
             sc.nextLine();
         }
-        input = sc.nextInt();
         return input;
     }
 
@@ -44,7 +43,6 @@ public class InputController {
             }
             sc.nextLine();
         }
-        input = sc.nextInt();
         return input;
     }
 
@@ -67,7 +65,6 @@ public class InputController {
             }
             sc.nextLine();
         }
-        input = sc.nextInt();
         return input;
     }
 
