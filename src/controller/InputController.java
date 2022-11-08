@@ -94,7 +94,7 @@ public class InputController {
     public static String getString() {
         String input = "";
         while(input.equals("")) {
-            input = sc.nextLine();
+            input += sc.nextLine();
             if(input.equals("")) {
                 System.out.println("That's an empty string!");
             }
@@ -163,11 +163,11 @@ public class InputController {
         while(!valid) {
             try {
                 date = sc.nextLine();
-                result = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                result = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy/MM/dd"));
                 valid = true;
             }
             catch(DateTimeParseException e){
-                System.out.println("Must be of pattern DD/MM/YYYY!");
+                System.out.println("Must be of pattern YYYY/MM/DD!");
             }
         }
         return result;

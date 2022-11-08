@@ -41,11 +41,11 @@ public class ReviewController{ //this is the reviewcontroller class
         //entering review details
 
         System.out.println("Please enter your name:");
-        String name = sc.next();
+        String name = InputController.getString();
         System.out.println("Please enter your review: ");
-        String reviewdetails = sc.next();
+        String reviewdetails = InputController.getString();
         System.out.println("Please enter a review ID that is unique:");
-        int reviewID = sc.nextInt();
+        int reviewID = InputController.getPositiveInt();
         int reviewflag = 0;
         while(reviewflag != 1)
         {
@@ -61,7 +61,7 @@ public class ReviewController{ //this is the reviewcontroller class
             reviewflag = 1;
         }
         System.out.println("Please enter your rating for this movie: " + movieselected.getMovie().getTitle());
-        double rating = sc.nextDouble();
+        double rating = InputController.getPositiveDouble();
 
         //creating the review based on the details being submitted 
         Review r1 = new Review(name, reviewdetails, reviewID, rating);

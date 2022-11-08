@@ -139,7 +139,7 @@ public class CustomerController {
     	
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
-    		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
+    		System.out.println((i+1) + ". " + mListing.getMovie().getTitle());
     	}
 
 		System.out.println("Which movie do you want to view details of? ");
@@ -179,28 +179,22 @@ public class CustomerController {
 		System.out.println("=============== SEAT AVAILABILITY =============== ");
 		System.out.println("Available cineplexes: ");
     	try {
-			cineplexesInfo = SerializationUtil.deserialize("VendorCineplexesInfo.ser");
+			cineplexesInfo = SerializationUtil.deserialize("cineplexes.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read cineplexes info.");
 			return 0;
 		}
     	
-    	System.out.println("Available cineplexes: ");
     	
-		vendor = (Vendor)cineplexesInfo.get(0);
-
-    	// get list of cineplexes to display to user
-    	cineplexes = vendor.getCineplexes();
-    	
-    	for(int i=0;i<cineplexes.size();i++) {
-    		System.out.println((1+1) + ". " + cineplexes.get(i).getLocation());
+    	for(int i=0;i<cineplexesInfo.size();i++) {
+    		System.out.println((i+1) + ". " + ((Cineplex)cineplexesInfo.get(i)).getLocation());
     	}
     	
 		System.out.println("Enter the cineplex to view the showtimes: ");
-		selection = InputController.getIntRange(1, cineplexes.size());
+		selection = InputController.getIntRange(1, cineplexesInfo.size());
     	
-		cineplex = cineplexes.get(selection-1);
+		cineplex = (Cineplex)cineplexesInfo.get(selection-1);
 		location = cineplex.getLocation();
 
 		System.out.println("Cinema classes: ");
@@ -226,7 +220,7 @@ public class CustomerController {
     	
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
-    		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
+    		System.out.println((i+1) + ". " + mListing.getMovie().getTitle());
     	}
     	
 		System.out.println("Which movie do you want to view the showtimes for: ");
@@ -237,14 +231,18 @@ public class CustomerController {
 		showtimes = mListing.getShowtimes();
 
     	System.out.println("Enter the date to view showtimes for YYYY/MM/DD (E.g. 2022/10/03): ");
-		usrInput = sc.next();
-    	filterDate = LocalDate.parse(usrInput, dateFormat);
+    	filterDate = InputController.getDate();
 
 		// filter out showtimes available for the chosen cineplex and cinemaClass on selected date only
 		for(int i=0;i<showtimes.size();i++) {
 			if(showtimes.get(i).getLocation() == location && showtimes.get(i).getCinemaBooking().getCinemaClass() == cinemaClass && showtimes.get(i).getDate().isEqual(filterDate)) {
 				matchingShowtimes.add(showtimes.get(i));
 			}
+		}
+		
+		if(matchingShowtimes.size() == 0) {
+			System.out.println("No showtime for the date entered!");
+			return 0;
 		}
 
 		for(int i=0;i<matchingShowtimes.size();i++) {
