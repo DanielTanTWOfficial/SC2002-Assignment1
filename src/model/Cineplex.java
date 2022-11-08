@@ -2,6 +2,9 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import model.Cinema.CinemaClass;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,9 +38,24 @@ public class Cineplex implements Serializable {
         return cinemas;
     }
 
+    public Cinema getCinema(int i) {
+        return this.cinemas.get(i);
+    }
+
     public void addNewCinema(Cinema newCinema){
         this.cinemas.add(newCinema);
         this.numCinemas++;
+    }
+
+    public ArrayList<CinemaClass> getCineplexCinemaClasses() {
+        ArrayList<CinemaClass> presentCinemaClasses = new ArrayList<>();
+        for (int i = 0; i < getCinemas().size(); i++) {
+            Cinema currentCinema = getCinema(i);
+            if (!presentCinemaClasses.contains(currentCinema.getCinemaClass())) {
+                presentCinemaClasses.add(currentCinema.getCinemaClass());
+            }
+        }
+        return presentCinemaClasses;
     }
 
     public void printCinemas(){
@@ -74,8 +92,6 @@ public class Cineplex implements Serializable {
         // }
     }
 
-    public Cinema getCinema(int i) {
-        return this.cinemas.get(i);
-    }
+    
 
 }
