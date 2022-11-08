@@ -92,7 +92,9 @@ public class CustomerController {
     		if(!bySales) {
     			mListing.setBySales(false);
     		}
-    		castedListings.add(mListing);
+			if(mListing.getMovie().getStatus() != ShowingStatus.END_OF_SHOWING) {
+    			castedListings.add(mListing);
+			}
     	}
     	
     	// sort the castedListings ArrayList to get the sorted movie listings
@@ -126,8 +128,10 @@ public class CustomerController {
 		System.out.println("=============== ALL MOVIES =============== ");
     	for(int i = 0; i < movieListings.size(); i++) {
     		movieListing = (MovieListing) movieListings.get(i);
-    		movieListing.printInfo(false);
-    		System.out.println();
+			if(movieListing.getMovie().getStatus() != ShowingStatus.END_OF_SHOWING) {
+				movieListing.printInfo(false);
+				System.out.println();
+			}
     	}
     }
 

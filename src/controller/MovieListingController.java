@@ -115,8 +115,10 @@ public class MovieListingController {
     	System.out.println("Available showing status options: ");
     	count = 1;
     	for(ShowingStatus status : ShowingStatus.values()) {
-    		System.out.println(count + ". " + status);
-    		count++;
+			if(status != ShowingStatus.END_OF_SHOWING) {
+				System.out.println(count + ". " + status);
+				count++;
+			}
     	}
     	System.out.println("Select the showing status: ");
     	
@@ -207,9 +209,6 @@ public class MovieListingController {
     	
     	// set the showingStatus to END_OF_SHOWING
     	mListing.getMovie().deleteMovie();
-    	
-    	// remove movie listing
-    	mListings.remove(selection-1);
     	
     	// delete movie file to be overwritten
     	File dfile = new File("movieListings.ser");
