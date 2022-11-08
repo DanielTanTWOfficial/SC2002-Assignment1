@@ -146,7 +146,7 @@ public class MainMenu {
             System.out.print("Select action: ");
             switch(InputController.getIntRange(1, 9)) {
                 case 1:
-                    updatePrices();
+                    PriceController.updatePrices();
                     break;
                 case 2:
                     SystemController.listHolidays();
@@ -165,57 +165,6 @@ public class MainMenu {
                     break;
                 case 7:
                     SystemController.configureFilter();
-                    break;
-                case 8:
-                    exit = true;
-                    System.out.println("Exiting...");
-                    break;
-                default:
-                    System.out.println("Let's try that again...");
-            }
-        }
-    }
-
-    /*
-    Factors that affect price:
-        - CinemaType: STANDARD, PLATINUM
-        - MovieType: BLOCKBUSTER, INDIE, IMAX
-        - Age: Adult, Senior Citizen, Children
-        - Date: Holiday, Weekend
-     */
-    public void updatePrices() {
-        boolean exit = false;
-        while (!exit) {
-            System.out.println("1. Update Cinema Type Price");
-            System.out.println("2. Update Movie Type Price");
-            System.out.println("3. Update Standard Ticket Price");
-            System.out.println("4. Update Senior Citizen Ticket Price");
-            System.out.println("5. Update Child Ticket Price");
-            System.out.println("6. Update Weekend Price"); 
-            System.out.println("7. Update Holiday Price");
-            System.out.println("8. Exit");
-            System.out.print("Select action: ");
-            switch(InputController.getIntRange(1, 8)) {
-                case 1:
-
-                    break;
-                case 2:
-
-                    break;
-                case 3:
-
-                    break;
-                case 4:
-
-                    break;
-                case 5:
-
-                    break;
-                case 6:
-
-                    break;
-                case 7:
-
                     break;
                 case 8:
                     exit = true;

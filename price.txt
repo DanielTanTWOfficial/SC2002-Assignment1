@@ -1,9 +1,10 @@
-senior 4.0
 standard 0.0
-digital 0.0
+platinum 5.0
+blockbuster 1.0
+indie 0.5
+imax 2.0
+adult 8.5
+senior 4.0
 children 7.0
 weekend 2.5
-imax 2.0
-blockbuster 1.0
-adult 8.5
-platinum 5.0
+holiday 3.0
