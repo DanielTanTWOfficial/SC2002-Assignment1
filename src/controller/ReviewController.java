@@ -15,11 +15,12 @@ import java.util.Scanner;
 public class ReviewController{ //this is the reviewcontroller class
 
     
-    public static void submitReview(Review review){ //this method is to submit a review from the movie listings listed.
+    public static void submitReview(){ //this method is to submit a review from the movie listings listed.
         Scanner sc = new Scanner(System.in);
         ArrayList<Object> mListings = new ArrayList<>();
     	MovieListing mListing = null;
         ArrayList<Object> reviewsArray = new ArrayList<>();
+        Review review;
     	
     	try {
 			mListings = SerializationUtil.deserialize("movieListings.ser");

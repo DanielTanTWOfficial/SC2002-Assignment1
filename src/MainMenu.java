@@ -11,6 +11,7 @@ import controller.*;
 import model.Vendor;
 import model.Cinema.CinemaClass;
 import model.Cineplex;
+import model.Review;
 import model.Cinema;
 
 public class MainMenu {
@@ -263,7 +264,7 @@ public class MainMenu {
                     CustomerController.displayTopMovieListings();
                     break;
                 case 7:
-
+                    ReviewController.submitReview();
                     break;
                 case 8:
                     exit = true;
