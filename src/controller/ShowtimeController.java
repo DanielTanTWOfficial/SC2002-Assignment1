@@ -84,7 +84,7 @@ public class ShowtimeController {
     	
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
-    		System.out.println((1+1) + ". " + mListing.getMovie().getTitle());
+    		System.out.println((i+1) + ". " + mListing.getMovie().getTitle());
     	}
     	
 		System.out.println("Enter the movie to add the showtime for: ");
@@ -93,7 +93,7 @@ public class ShowtimeController {
     	mListing = (MovieListing)mListings.get(selection-1);
     	
     	try {
-			cineplexesInfo = SerializationUtil.deserialize("VendorCineplexesInfo.ser");
+			cineplexesInfo = SerializationUtil.deserialize("cineplexes.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read cineplexes info.");
@@ -102,13 +102,17 @@ public class ShowtimeController {
     	
     	System.out.println("Available cineplexes: ");
     	
-		vendor = (Vendor)cineplexesInfo.get(0);
+		//vendor = (Vendor)cineplexesInfo.get(0);
 
     	// get list of cineplexes to display to user
-    	cineplexes = vendor.getCineplexes();
+		
+		for(int i=0;i<cineplexesInfo.size();i++) {
+			cineplexes.add((Cineplex)cineplexesInfo.get(i));
+		}
+    	//cineplexes = vendor.getCineplexes();
     	
     	for(int i=0;i<cineplexes.size();i++) {
-    		System.out.println((1+1) + ". " + cineplexes.get(i).getLocation());
+    		System.out.println((i+1) + ". " + cineplexes.get(i).getLocation());
     	}
     	
 		System.out.println("Enter the cineplex for the showtime: ");

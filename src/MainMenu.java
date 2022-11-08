@@ -48,7 +48,6 @@ public class MainMenu {
     // This is not under any of the modules as admins cannot add cineplexes or cinemas so we have to do this manually
     public void initialiseInfra() {
         Vendor cathay = new Vendor("Cathay Cineplexes");
-        VendorController.addVendor(cathay);
         
         ArrayList<Cineplex> cineplexes = new ArrayList<>();
         Cineplex orchard = new Cineplex("Cineleisure Orchard");
@@ -57,7 +56,6 @@ public class MainMenu {
         cineplexes.add(orchard);
         cineplexes.add(westmall);
         cineplexes.add(jem);
-        CineplexController.addCineplexes(cathay, cineplexes);
 
         ArrayList<Cinema> cinemasOrchard = new ArrayList<>();
         cinemasOrchard.add(new Cinema(CinemaClass.STANDARD, 101, 11, 22));
@@ -76,6 +74,8 @@ public class MainMenu {
         cinemasJem.add(new Cinema(CinemaClass.STANDARD, 302, 11, 22));
         cinemasJem.add(new Cinema(CinemaClass.PLATINUM, 303, 10, 20));
         CinemaController.addCinemas(jem, cinemasJem);
+        CineplexController.addCineplexes(cathay, cineplexes);
+        VendorController.addVendor(cathay);
     }
 
     /*
@@ -87,9 +87,9 @@ public class MainMenu {
         3b. Register new admin accounts
     */
     public void adminModule() {
-        boolean loggedIn = AdminController.login();
+        //boolean loggedIn = AdminController.login();
 
-        while (loggedIn) {
+        while (true) {
             System.out.println("=============== MOBLIMA ADMIN =============== ");
             System.out.println("1. Create/Update/Remove movie listing");
             System.out.println("2. Create/Update/Remove movie showtimes");
@@ -116,8 +116,8 @@ public class MainMenu {
                     systemSettings();
                     break;
                 case 6:
-                    loggedIn = false;
-                    System.out.println("Logging out...");
+                    //loggedIn = false;
+                    //System.out.println("Logging out...");
                     break;
                 default:
                     System.out.println("Let's try that again...");
