@@ -435,7 +435,31 @@ public class CustomerController {
 		transaction.printTransaction();
 		
 		//Serialize transaction
-		TransactionController.saveTicketsFile(transaction);
+		TransactionController.saveTransactionFile(transaction);
 		System.out.println("Transaction Successful!");
+	}
+	
+	public static void viewBookingHistory() {
+		// request email, read transaction file, print bookings
+		System.out.print("Enter email address: ");
+		String email = InputController.getEmail();
+		
+		ArrayList<Object> transactionList = TransactionController.readTransactionFile();
+		boolean hasTransaction = false;
+		System.out.println("-------- TRANSACTIONS FOR " + email + "--------");
+		for (int i = 0; i < transactionList.size(); i++) {
+			Transaction transaction = (Transaction) transactionList.get(i);
+			if (transaction.getEmailAddress().equalsIgnoreCase(email)) {
+				hasTransaction = true;
+				System.out.println("TransactionId: " + transaction.getTransactionId());
+				for (Ticket t : transaction.getBooking().getTickets())
+					t.printTicket();
+				System.out.println("Transaction Amount: " + transaction.getTranAmount());
+				System.out.println();
+			}
+		}
+		if(!hasTransaction)
+			System.out.println("No Transactions found");
+		
 	}
 }

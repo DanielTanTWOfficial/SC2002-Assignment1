@@ -262,7 +262,7 @@ public class MainMenu {
                     CustomerController.makeBooking();
                     break;
                 case 5:
-
+                	CustomerController.viewBookingHistory();
                     break;
                 case 6:
                     CustomerController.displayTopMovieListings();
