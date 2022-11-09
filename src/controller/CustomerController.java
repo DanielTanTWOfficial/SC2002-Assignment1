@@ -59,10 +59,10 @@ public class CustomerController {
 		System.out.println("=============== TOP MOVIES =============== ");
 
 		// if filter value is set by admin, user cannot choose, otherwise they can choose
-		if(filterVal == "ratings") {
+		if(filterVal.equals("ratings")) {
 			bySales = false;
 		}
-		else if(filterVal == "any") {
+		else if(filterVal.equals("any")) {
 			while(invalid) {
 				System.out.println("Do you want to filter by ticket sales (1) or overall rating (2)? ");
 				switch(InputController.getIntRange(1, 2)) {
@@ -266,12 +266,12 @@ public class CustomerController {
 
 		showtimes = mListing.getShowtimes();
 
-    	System.out.println("Enter the date to view showtimes for YYYY/MM/DD (E.g. 2022/10/03): ");
-    	filterDate = InputController.getDate();
+    	//System.out.println("Enter the date to view showtimes for YYYY/MM/DD (E.g. 2022/10/03): ");
+    	//filterDate = InputController.getDate();
 
 		// filter out showtimes available for the chosen cineplex and cinemaClass on selected date only
 		for(int i=0;i<showtimes.size();i++) {
-			if(showtimes.get(i).getLocation() == location && showtimes.get(i).getCinemaBooking().getCinemaClass() == cinemaClass && showtimes.get(i).getDate().isEqual(filterDate)) {
+			if(showtimes.get(i).getLocation().equals(location) && showtimes.get(i).getCinemaBooking().getCinemaClass() == cinemaClass) {
 				matchingShowtimes.add(showtimes.get(i));
 			}
 		}

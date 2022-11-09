@@ -201,12 +201,15 @@ public class ShowtimeController {
 			showtimes = mListing.getShowtimes();
 			for(int j=0;j<showtimes.size();j++) {
 				// first check if the cinema is the same
-				if(showtime.getCinemaCode() == showtimes.get(i).getCinemaCode()) {
+				if(showtime.getCinemaCode() == showtimes.get(j).getCinemaCode()) {
 					// then check if the date is the same
-					if(showtime.getDate().isEqual(showtimes.get(i).getDate())) {
+					if(showtime.getDate().isEqual(showtimes.get(j).getDate())) {
 						// check if the showtimes overlap
-						if(showtime.getStart().isBefore(showtimes.get(i).getEnd()) && showtimes.get(i).getStart().isBefore(showtime.getEnd())) {
-							return true;
+						if(showtime.getStart().isBefore(showtimes.get(j).getEnd()) && showtimes.get(j).getStart().isBefore(showtime.getEnd())) {
+							// make sure showtime is not the one we are trying to edit
+							if(!showtime.getShowtimeId().equals(showtimes.get(j).getShowtimeId())) {
+								return true;
+							}
 						}
 					}
 				}
@@ -233,7 +236,10 @@ public class ShowtimeController {
 				if(showtime.getDate().isEqual(showtimes.get(i).getDate())) {
 					// check if the showtimes have the same start time
 					if(showtime.getStart().equals(showtimes.get(i).getStart())) {
-						return true;
+						// make sure showtime is not the one we are trying to edit
+						if(!showtime.getShowtimeId().equals(showtimes.get(i).getShowtimeId())) {
+							return true;
+						}
 					}
 				}
 			}
