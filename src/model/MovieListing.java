@@ -153,7 +153,7 @@ public class MovieListing implements Serializable, Comparable<MovieListing> {
 	 * @param ticketSales
 	 */
 	public void setTicketSales(double ticketSales) {
-		this.ticketSales = ticketSales;
+		this.ticketSales += ticketSales;
 	}
 
 	/**
