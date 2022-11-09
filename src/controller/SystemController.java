@@ -13,6 +13,16 @@ import model.Holiday;
 import model.SerializationUtil;
 
 public class SystemController {
+	public static ArrayList<Object> readHolidaysFile() {
+		ArrayList<Object> holidays = new ArrayList<>();
+        try {
+        	holidays = SerializationUtil.deserialize("holidays.ser");
+            return holidays;
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+        return new ArrayList<Object>();
+	}
     /**
      * Called to add holidays into the system
      * @return int
@@ -22,7 +32,6 @@ public class SystemController {
     	ArrayList<LocalDate> holidays = new ArrayList<>();
     	Holiday holiday = null;
     	LocalDate holidayDate;
-    	String usrInput;
     	char selection;
     	boolean firstTime = true;
     	
@@ -55,8 +64,7 @@ public class SystemController {
     	System.out.println("=============== HOLIDAY CREATION =============== ");
     	while(true) {
     		System.out.println("Enter the holiday date YYYY/MM/DD (E.g. 2022/10/03): ");
-    		usrInput = sc.next();
-    		holidayDate = LocalDate.parse(usrInput, dateFormat);
+    		holidayDate = InputController.getDate();
     		holidays.add(holidayDate);
     		System.out.println("Add another date (Y/N)? ");
     		selection = sc.next().charAt(0);
@@ -73,8 +81,10 @@ public class SystemController {
 			e.printStackTrace();
 		}
     	
-    	// serialize updated movies to file
-    	holiday = (Holiday)holidayObjects.get(0);
+    	if(firstTime == false) {
+	    	// serialize updated movies to file
+	    	holiday = (Holiday)holidayObjects.get(0);
+    	}
 		try {
 			SerializationUtil.serialize(holiday, "holidays.ser");
 		} catch (IOException e) {

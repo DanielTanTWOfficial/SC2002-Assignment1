@@ -8,12 +8,9 @@ import model.Movie.MovieType;
 
 public class Ticket implements Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4187781382629687412L;
 	private String ticketId;
-	private String showtimeId;
+	private LocalTime startTime;
 	private int CinemaCode;
 	private String movieTitle;
 	private TicketType ticketType;
@@ -26,13 +23,13 @@ public class Ticket implements Serializable{
 		
 	}
 	
-	public Ticket(String ticketId, String showtimeId, int CinemaCode, String movieTitle, TicketType ticketType, double price, String seatNo) {
+	public Ticket(String ticketId, LocalTime startTime, int CinemaCode, String movieTitle, TicketType ticketType, String seatNo) {
 		this.ticketId = ticketId;
-		this.showtimeId = showtimeId;
+		this.setStartTime(startTime);
 		this.CinemaCode = CinemaCode;
 		this.movieTitle = movieTitle;
 		this.ticketType = ticketType;
-		this.price = price;
+		this.price = 0;
 		this.seatNo = seatNo;
 	}
 
@@ -43,13 +40,13 @@ public class Ticket implements Serializable{
 	public void setTicketId(String ticketId) {
 		this.ticketId = ticketId;
 	}
-
-	public String getShowtimeId() {
-		return showtimeId;
+	
+	public LocalTime getStartTime() {
+		return startTime;
 	}
 
-	public void setShowtimeId(String showtimeId) {
-		this.showtimeId = showtimeId;
+	public void setStartTime(LocalTime startTime) {
+		this.startTime = startTime;
 	}
 
 	public int getCinemaCode() {
@@ -92,9 +89,12 @@ public class Ticket implements Serializable{
 		this.ticketType = ticketType;
 	}
 	
-	// Adult Ticket
-	// Mon-Wed (Category 1)
-	// Thurs-Fri6pm (Category 2)
-	// Fri6pm-Sun (Category 3)
-	
+	public void printTicket() {
+		System.out.printf("TicketId: %s, Movie: %s\n", ticketId, movieTitle);
+		System.out.printf("Showtime: %s\n", startTime);
+		System.out.printf("Cinema: %d\n", CinemaCode);
+		System.out.printf("Ticket Type: %s\n", ticketType);
+		System.out.printf("Seat No: %s\n", seatNo);
+		System.out.printf("Price: %.2f\n", price);
+	}
 }

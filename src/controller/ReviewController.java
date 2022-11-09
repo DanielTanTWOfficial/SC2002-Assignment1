@@ -54,6 +54,7 @@ public class ReviewController{
         String name = InputController.getString();
         System.out.println("Please enter your review: ");
         String reviewdetails = InputController.getString();
+
         System.out.println("Please enter your rating for this movie: " + movieselected.getMovie().getTitle());
         double rating = InputController.getPositiveDouble();
 

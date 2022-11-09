@@ -2,6 +2,14 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import model.SerializationUtil;
@@ -69,6 +77,16 @@ public class AdminController {
         // allow only 5 tries
     public static boolean login() {
         System.out.println("=== Logging In ===");
+
+        ArrayList<Object> adminAccounts = readAdminAccountsFile();
+        File f = new File("adminAccounts.ser");
+        if (f.exists()) {
+            adminAccounts = readAdminAccountsFile();
+        }
+        else {
+            System.out.println("No admin accounts registered! Please create an admin account!");
+            createAdminAccount();
+        }
 
         boolean result = false;
         boolean exit = false;
@@ -162,13 +180,15 @@ public class AdminController {
         ArrayList<Object> adminAccounts = readAdminAccountsFile();
         System.out.println("=== Changing account password ===");
 
-        System.out.println("Please enter your current password.");
-        String oldPassword = InputController.getString();
-        System.out.println("Please enter your new password.");
-        String newPassword = InputController.getString();
+        
 
         boolean exit = false;
         while (!exit) {
+            System.out.println("Please enter your current password.");
+            String oldPassword = InputController.getString();
+            System.out.println("Please enter your new password.");
+            String newPassword = InputController.getString();
+            
             if (oldPassword.equals(newPassword)) {
                 System.out.println("Same password! Would you like to try again? (y/n)");
                 boolean booleanChoice = InputController.getBoolean();

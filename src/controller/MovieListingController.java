@@ -91,11 +91,11 @@ public class MovieListingController {
     	
     	System.out.println("=============== MOVIE CREATION =============== ");
     	System.out.println("Enter the movie title: ");
-    	title = sc.nextLine();
+    	title = InputController.getString();
     	System.out.println("Enter the director: ");
-    	director = sc.nextLine();
+    	director = InputController.getString();
     	System.out.println("Enter the synopsis: ");
-    	synopsis = sc.nextLine();
+    	synopsis = InputController.getString();
 		System.out.println("Enter the duration in minutes: ");
 		duration = Duration.ofMinutes(sc.nextLong());
     	
@@ -109,20 +109,22 @@ public class MovieListingController {
     	}
     	for(int i=0;i<numCast;i++) {
     		System.out.println("Enter name of cast member " + (i+1) + ": ");
-    		cast.add(sc.nextLine());
+    		cast.add(InputController.getString());
     	}
     	
     	System.out.println("Available showing status options: ");
     	count = 1;
     	for(ShowingStatus status : ShowingStatus.values()) {
-    		System.out.println(count + ". " + status);
-    		count++;
+			if(status != ShowingStatus.END_OF_SHOWING) {
+				System.out.println(count + ". " + status);
+				count++;
+			}
     	}
     	System.out.println("Select the showing status: ");
     	
-    	selection = InputController.getIntRange(1, ShowingStatus.values().length);
+    	selection = InputController.getIntRange(1, ShowingStatus.values().length-1);
 
-		showingStatus = ShowingStatus.values()[0];
+		showingStatus = ShowingStatus.values()[selection-1];
     	
     	System.out.println("Available movie rating: ");
     	count = 1;
@@ -208,9 +210,6 @@ public class MovieListingController {
     	// set the showingStatus to END_OF_SHOWING
     	mListing.getMovie().deleteMovie();
     	
-    	// remove movie listing
-    	mListings.remove(selection-1);
-    	
     	// delete movie file to be overwritten
     	File dfile = new File("movieListings.ser");
     	try {
@@ -269,11 +268,13 @@ public class MovieListingController {
     	System.out.println("Available status options: ");
     	count = 1;
     	for(ShowingStatus status : ShowingStatus.values()) {
-    		System.out.println(count + ". " + status);
-    		count++;
+    		if(status != ShowingStatus.END_OF_SHOWING) {
+	    		System.out.println(count + ". " + status);
+	    		count++;
+    		}
     	}
     	System.out.println("Select the showing status: ");
-    	selection = InputController.getIntRange(1, ShowingStatus.values().length);
+    	selection = InputController.getIntRange(1, ShowingStatus.values().length-1);
     	
 		showingStatus = ShowingStatus.values()[selection-1];
     	

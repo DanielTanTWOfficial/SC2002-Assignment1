@@ -77,11 +77,11 @@ public class Review implements Serializable {
 		this.reviewerName = reviewerName;
 	}
 	
-	
 	/** 
 	 * This method is used to get the rating of the movie from the Review object.
 	 * @return double
 	 */
+
 	public double getRating()
 	{
 		return rating;
