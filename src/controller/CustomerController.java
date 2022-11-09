@@ -98,7 +98,7 @@ public class CustomerController {
     	}
     	
     	// sort the castedListings ArrayList to get the sorted movie listings
-    	Collections.sort(castedListings);
+    	Collections.sort(castedListings, Collections.reverseOrder());
     	
     	// display the top 5 movie listings by sales/ratings
     	if(castedListings.size() < 5) {
@@ -107,6 +107,7 @@ public class CustomerController {
         		System.out.print((i+1) + ". ");
         		mListing = castedListings.get(i);
         		mListing.printInfo(false);
+        		System.out.println();
         	}
     	}
     	else {
@@ -114,6 +115,7 @@ public class CustomerController {
         		System.out.print((i+1) + ". ");
         		mListing = castedListings.get(i);
         		mListing.printInfo(false);
+        		System.out.println();
         	}
     	}
     }
@@ -198,6 +200,7 @@ public class CustomerController {
 		ArrayList<Object> mListings = new ArrayList<>();
 		ArrayList<Showtime> showtimes = new ArrayList<>();
 		ArrayList<Showtime> matchingShowtimes = new ArrayList<>();
+		ArrayList<MovieListing> availableListings = new ArrayList<>();
 		Vendor vendor = null;
 		MovieListing mListing = null;
 		Showtime showtime = null;
@@ -256,13 +259,20 @@ public class CustomerController {
     	
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
+			if(mListing.getMovie().getStatus() != ShowingStatus.END_OF_SHOWING) {
+				availableListings.add(mListing);
+			}
+    	}
+    	
+    	for(int i=0;i<availableListings.size();i++) {
+    		mListing = availableListings.get(i);
     		System.out.println((i+1) + ". " + mListing.getMovie().getTitle());
     	}
     	
 		System.out.println("Which movie do you want to view the showtimes for: ");
 		selection = InputController.getIntRange(1, mListings.size());
     	
-    	mListing = (MovieListing)mListings.get(selection-1);
+    	mListing = availableListings.get(selection-1);
 
 		showtimes = mListing.getShowtimes();
 
