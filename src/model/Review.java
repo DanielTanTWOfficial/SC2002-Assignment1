@@ -9,14 +9,12 @@ public class Review implements Serializable {
 	private static final long serialVersionUID = -705589914269932166L;
 	private String reviewerName;
 	private String review;
-	private int reviewID;
 	private double rating;
 	
-	public Review(String reviewerName , String review , int reviewID , double rating)
+	public Review(String reviewerName , String review , double rating)
 	{
 		this.reviewerName = reviewerName;
 		this.review = review;
-		this.reviewID = reviewID;
 		this.rating = rating;
 	}
 	
@@ -38,16 +36,6 @@ public class Review implements Serializable {
 	public void setReviewerName(String reviewerName)
 	{
 		this.reviewerName = reviewerName;
-	}
-	
-	public int getReviewID()
-	{
-		return reviewID;
-	}
-	
-	public void setReviewID(int reviewID)
-	{
-		this.reviewID = reviewID;
 	}
 	
 	public double getRating()
