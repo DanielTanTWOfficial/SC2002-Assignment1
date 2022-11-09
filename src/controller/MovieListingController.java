@@ -122,7 +122,7 @@ public class MovieListingController {
     	}
     	System.out.println("Select the showing status: ");
     	
-    	selection = InputController.getIntRange(1, ShowingStatus.values().length);
+    	selection = InputController.getIntRange(1, ShowingStatus.values().length-1);
 
 		showingStatus = ShowingStatus.values()[selection-1];
     	
@@ -268,11 +268,13 @@ public class MovieListingController {
     	System.out.println("Available status options: ");
     	count = 1;
     	for(ShowingStatus status : ShowingStatus.values()) {
-    		System.out.println(count + ". " + status);
-    		count++;
+    		if(status != ShowingStatus.END_OF_SHOWING) {
+	    		System.out.println(count + ". " + status);
+	    		count++;
+    		}
     	}
     	System.out.println("Select the showing status: ");
-    	selection = InputController.getIntRange(1, ShowingStatus.values().length);
+    	selection = InputController.getIntRange(1, ShowingStatus.values().length-1);
     	
 		showingStatus = ShowingStatus.values()[selection-1];
     	
