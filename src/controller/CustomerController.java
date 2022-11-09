@@ -470,6 +470,29 @@ public class CustomerController {
 		//Serialize transaction
 		TransactionController.saveTransactionFile(transaction);
 		System.out.println("Transaction Successful!");
+
+		// add ticket price to total ticket sales for movie
+		chosenMovieListing.setTicketSales(transaction.getTranAmount());
+		
+		// update changes to MovieListing object to file
+		File dfile = new File("movieListings.ser");
+    	try {
+			SerializationUtil.deleteFile(dfile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+    	// serialize updated movies to file
+    	for(int i=0;i<movieListings.size();i++) {
+    		MovieListing movieListing = (MovieListing)movieListings.get(i);
+    		try {
+    			SerializationUtil.serialize(movieListing, "movieListings.ser");
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    			System.out.println("Movie update unsuccessful!");
+    			return;
+    		}
+    	}
 	}
 	
 	public static void viewBookingHistory() {
