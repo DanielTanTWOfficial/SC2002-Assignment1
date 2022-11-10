@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4bbd94dd-82ba-4496-b602-3135c04d4394" name="Changes" comment="Corrected Cineplex and changed movie description in CineplexController" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="db54eb88-d426-4054-a595-775f7f801a55" />
+        <option name="url" value="https://github.com/DanielTanTWOfficial/SC2002-Assignment1.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2GysvYLGuSWRdZWjfLwxkbHZfzs" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="SC2002-Assignment1" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="SC2002-Assignment1" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4bbd94dd-82ba-4496-b602-3135c04d4394" name="Changes" comment="" />
+      <created>1667372389196</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1667372389196</updated>
+      <workItem from="1667372406845" duration="5386000" />
+      <workItem from="1667379878419" duration="2967000" />
+      <workItem from="1667448037139" duration="3505000" />
+      <workItem from="1667557862116" duration="6992000" />
+      <workItem from="1667792618981" duration="310000" />
+      <workItem from="1667792999465" duration="2006000" />
+    </task>
+    <task id="LOCAL-00001" summary="Added CinemaBooking and Seat class">
+      <created>1667373661069</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1667373661069</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Edited CineplexController and CineplexBooking">
+      <created>1667380565436</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1667380565436</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Added Cinema, Cineplex and Vendor class">
+      <created>1667448952066</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1667448952067</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Changed main() method to cineplexController()">
+      <created>1667565922237</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1667565922238</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Updated Cinema, CinemaTypes, Cineplex, CineplexController">
+      <created>1667572040680</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1667572040681</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added interfaces ICineplex and IVendor">
+      <created>1667572259582</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1667572259582</updated>
+    </task>
+    <task id="LOCAL-00007" summary="For CinemaBooking: improved printSeats() function for better readability, updated variable types">
+      <created>1667574183444</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1667574183445</updated>
+    </task>
+    <task id="LOCAL-00008" summary="changed package for CinemaTypes enum">
+      <created>1667574412517</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1667574412517</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Corrected some variables in Cinema">
+      <created>1667574904459</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1667574904459</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Vendor class: changed the variable &quot;cineplexes&quot; type from array to ArrayLists, added a Getter method for the cineplexes list, added imports&#10;&#10;Cineplex class: changed the variable &quot;cinemas&quot; type from array to ArrayLists, added imports">
+      <created>1667631767697</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1667631767697</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Corrected Cineplex and changed movie description in CineplexController">
+      <created>1667793050378</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1667793050378</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="User">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="*" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added CinemaBooking and Seat class" />
+    <MESSAGE value="Edited CineplexController and CineplexBooking" />
+    <MESSAGE value="Added Cinema, Cineplex and Vendor class" />
+    <MESSAGE value="Changed main() method to cineplexController()" />
+    <MESSAGE value="Updated Cinema, CinemaTypes, Cineplex, CineplexController" />
+    <MESSAGE value="Added interfaces ICineplex and IVendor" />
+    <MESSAGE value="For CinemaBooking: improved printSeats() function for better readability, updated variable types" />
+    <MESSAGE value="changed package for CinemaTypes enum" />
+    <MESSAGE value="Corrected some variables in Cinema" />
+    <MESSAGE value="Vendor class: changed the variable &quot;cineplexes&quot; type from array to ArrayLists, added a Getter method for the cineplexes list, added imports&#10;&#10;Cineplex class: changed the variable &quot;cinemas&quot; type from array to ArrayLists, added imports" />
+    <MESSAGE value="Corrected Cineplex and changed movie description in CineplexController" />
+    <option name="LAST_COMMIT_MESSAGE" value="Corrected Cineplex and changed movie description in CineplexController" />
+  </component>
+</project>

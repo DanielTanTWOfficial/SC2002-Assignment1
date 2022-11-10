@@ -4,6 +4,11 @@ import java.io.Serial;
 import java.io.Serializable;
 
 public class Cinema implements Serializable {
+    /**
+	 * Automatically generated serialVerisonUID value to verify that the sender 
+	 * and receiver of a serialized object have loaded classes for that object that
+	 * are compatible with respect to serialization during deserialization.
+	 */
     @Serial
     private static final long serialVersionUID = 123457L;
     public enum CinemaClass {STANDARD, PLATINUM};
@@ -12,21 +17,27 @@ public class Cinema implements Serializable {
     private int numRow;
     private int numCol;
     private int numSeats;
-    private Seat[] seats;
 
+    /**
+     * Constructor to create a new Cinema object
+     * @param cinemaClass
+     * @param cinemaCode
+     * @param numRow
+     * @param numCol
+     */
     public Cinema(CinemaClass cinemaClass, int cinemaCode, int numRow, int numCol) {
         this.cinemaClass = cinemaClass;
         this.cinemaCode=cinemaCode;
         this.numCol= numCol;
         this.numRow = numRow;
         this.numSeats=numCol*numRow;
-        this.seats = new Seat[numSeats];
     }
-
-    public CinemaClass getCinemaClass() {
-        return cinemaClass;
-    }
-
+    
+    /**
+     * Converts cinemaTypes from enum to an extensive String
+     * @param cinemaClass
+     * @return cinemaTypes in String type
+     */
     public String cinemaTypestoString(CinemaClass cinemaClass){
         switch (cinemaClass){
             case STANDARD: return "Standard DOLBY ATMOS cinema";
@@ -35,38 +46,43 @@ public class Cinema implements Serializable {
         return "";
     }
 
+    /**
+     * @return cinemaClass
+     */
+    public CinemaClass getCinemaClass() {
+        return cinemaClass;
+    }
+
+    /**
+     * 
+     * @return cinemaCode
+     */
     public int getCinemaCode() {
         return cinemaCode;
     }
 
+    /**
+     * 
+     * @return numSeats
+     */
     public int getNumSeats() {
         return numSeats;
     }
 
+    /**
+     * 
+     * @return numRow
+     */
     public int getNumRow() {
         return numRow;
     }
 
+    /**
+     * 
+     * @return numCol
+     */
     public int getNumCol() {
         return numCol;
-    }
-
-    public Seat getSeat(int seatID) {
-        return this.seats[seatID];
-    }
-
-    public int getNumOccupiedSeats() {
-        int occupied = 0;
-        for (int i = 0; i < numSeats; i++) {
-            if (this.seats[i].getAssigned()) {
-                occupied += 1;
-            }
-        }
-        return occupied;
-    }
-
-    public int getNumNotOccupiedSeats() {
-        return this.numSeats - getNumOccupiedSeats();
     }
 }
 

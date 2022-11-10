@@ -1,8 +1,10 @@
 package model;
 
+import java.io.Serializable;
+
 import model.Cinema.CinemaClass;
 
-public class CinemaBooking {
+public class CinemaBooking implements Serializable {
     private static final long serialVersionUID = 123459L;
     private CinemaClass cinemaClass;
 
@@ -16,7 +18,10 @@ public class CinemaBooking {
 
     private int cinemaCode;
 
-
+    /**
+     * Constructor to create a new CinemaBooking object
+     * @param cinema
+    */
     public CinemaBooking(Cinema cinema) {
         this.cinemaClass = cinema.getCinemaClass();
         this.numRow=cinema.getNumRow();
@@ -34,29 +39,73 @@ public class CinemaBooking {
         System.out.println("Cinema "+cinemaCode+" ready for booking!");
     }
 
-    public CinemaClass getCinemaClass() {
-        return cinemaClass;
-    }
-
-    public int getNumSeats() {
-        return numSeats;
-    }
-
+    /**
+     * Assigns seat with given row and column number
+     * @param r (row number)
+     * @param c (column number)
+     */
     public void assignSeat(int r, int c){
-        seats[r][c].assignSeat();
-    }
+            seats[r][c].assignSeat();
+        }
 
+    /**
+     * Prints layout of seats and their availabilities
+     */
     public void printSeats(){
         System.out.println("----- Screen -----");
 
         for (int i=0;i<numRow;i++){
-            System.out.print(String.format("%-5d",i+1));
+            System.out.print(String.format("%-5d",i+1)); //print row number
+
+            int midCol=numCol/2;
+
             for (int j=0;j<numCol;j++){
                 String symbol="o"; //unassigned seats
                 if (seats[i][j].getAssigned()==true) symbol="x"; //assigned seats
+                if (j==midCol){
+                    System.out.print(" "); //print middle aisle
+                }
                 System.out.print(symbol+" ");
             }
+            System.out.print(" "); //print right aisle
             System.out.println();
-        }
+            }
     }
+
+    /**
+     * @return seats
+     */
+    public Seat[][] getSeats() {
+        return this.seats;
+    }
+
+    /**
+     * @return numRow
+     */
+    public int getNumRows() {
+        return this.numRow;
+    }
+
+    /**
+     * @return numCol
+     */
+    public int getNumCols() {
+        return this.numCol;
+    }
+
+    /**
+     * @return cinemaClass
+     */
+    public CinemaClass getCinemaClass() {
+        return cinemaClass;
+    }
+
+    /**
+     * @return numSeats
+     */
+    public int getNumSeats() {
+        return numSeats;
+    }
+
+    
 }
