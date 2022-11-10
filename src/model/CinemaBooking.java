@@ -4,7 +4,18 @@ import java.io.Serializable;
 
 import model.Cinema.CinemaClass;
 
+/**
+ * 
+ * @author Bernice
+ * The CinemaBooking class, which implements the Serializable interface
+ *
+ */
 public class CinemaBooking implements Serializable {
+    /**
+	 * Automatically generated serialVerisonUID value to verify that the sender 
+	 * and receiver of a serialized object have loaded classes for that object that
+	 * are compatible with respect to serialization during deserialization.
+	 */
     private static final long serialVersionUID = 123459L;
     private CinemaClass cinemaClass;
 
@@ -18,7 +29,10 @@ public class CinemaBooking implements Serializable {
 
     private int cinemaCode;
 
-
+    /**
+     * Constructor to create a new CinemaBooking object
+     * @param cinema
+    */
     public CinemaBooking(Cinema cinema) {
         this.cinemaClass = cinema.getCinemaClass();
         this.numRow=cinema.getNumRow();
@@ -36,30 +50,58 @@ public class CinemaBooking implements Serializable {
         System.out.println("Cinema "+cinemaCode+" ready for booking!");
     }
 
+    /**
+     * 
+     * @return seats
+     */
     public Seat[][] getSeats() {
         return this.seats;
     }
 
+    /**
+     * 
+     * @return numRow
+     */
     public int getNumRows() {
         return this.numRow;
     }
 
+    /**
+     * 
+     * @return numCol
+     */
     public int getNumCols() {
         return this.numCol;
     }
 
+    /**
+     * 
+     * @return cinemaClass
+     */
     public CinemaClass getCinemaClass() {
         return cinemaClass;
     }
 
+    /**
+     * 
+     * @return numSeats
+     */
     public int getNumSeats() {
         return numSeats;
     }
 
+    /**
+     * Assigns seat with given row and column number
+     * @param r (row number)
+     * @param c (column number)
+     */
     public void assignSeat(int r, int c){
         seats[r][c].assignSeat();
     }
 
+    /**
+     * Prints layout of seats and their availabilities
+     */
     public void printSeats(){
         System.out.println("----- Screen -----");
 
