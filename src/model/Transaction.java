@@ -12,13 +12,15 @@ public class Transaction implements Serializable{
 	private String transactionId;
 	private Booking booking;
 	private double tranAmount;
+	private String name;
 	private String emailAddress;
 	private String mobileNo;
 	
-	public Transaction(String transactionId, Booking booking, String emailAddress, String mobileNo) {
+	public Transaction(String transactionId, Booking booking, String name, String emailAddress, String mobileNo) {
 		this.transactionId = transactionId;
 		this.booking = booking;
 		this.tranAmount = booking.getTotalCost();
+		this.setName(name);
 		this.emailAddress = emailAddress;
 		this.mobileNo = mobileNo;
 	}
@@ -61,7 +63,16 @@ public class Transaction implements Serializable{
 	public void printTransaction() {
 		System.out.printf("TransactionId: %s\n", transactionId);
 		System.out.printf("BookingId: %s\n", booking.getBookingId());
+		System.out.printf("Name: %s\n", name);
 		System.out.printf("Email: %s\n", emailAddress);
 		System.out.printf("MobileNo: %s\n", mobileNo);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
