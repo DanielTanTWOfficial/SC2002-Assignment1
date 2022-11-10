@@ -141,7 +141,7 @@ public class InputController {
         boolean output = false;
         boolean valid = false;
         while (!valid){
-            input = sc.next();
+            input = sc.nextLine();
             if(input.equals("y") || input.equals("Y")) {
                 valid = true;
                 output = true;

@@ -472,18 +472,20 @@ public class CustomerController {
 			System.out.println();
 		}
 		System.out.println("Total Cost = " + booking.getTotalCost());
-		System.out.println("Continue with payment? (y/n");
+		System.out.println("Continue with payment? (y/n)");
 		boolean continueTransaction = InputController.getBoolean();
 		if (!continueTransaction) {
 			return;
 		}
-		// prompt for email and mobile phone
+		// prompt for name. email and mobile phone
+		System.out.print("Enter name: ");
+		String name = InputController.getString();
 		System.out.print("Enter email address: ");
 		String email = InputController.getEmail();
 		System.out.print("Enter mobile number: ");
 		String mobileNo = InputController.getMobileNumber();
 		String TID = chosenShowtime.getCinemaCode() + chosenShowtime.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + chosenShowtime.getStart().format(DateTimeFormatter.ofPattern("HHmm"));
-		Transaction transaction = new Transaction(TID, booking, email, mobileNo);
+		Transaction transaction = new Transaction(TID, booking, name, email, mobileNo);
 		transaction.printTransaction();
 		
 		//Serialize transaction
