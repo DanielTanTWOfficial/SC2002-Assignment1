@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import model.SerializationUtil;
 import model.Ticket;
 import model.Transaction;
-
+/**
+ * 
+ * @author WeiJie
+ * Controller class for actions related to transactions
+ */
 public class TransactionController {
 	
 	public static ArrayList<Object> readTransactionFile() {

@@ -3,7 +3,11 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
+/**
+ * 
+ * @author WeiJie
+ * The Booking class, which implements the Serializable interface
+ */
 public class Booking implements Serializable{
 
 	private static final long serialVersionUID = 2962605114036267141L;

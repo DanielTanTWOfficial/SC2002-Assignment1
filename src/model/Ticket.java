@@ -5,7 +5,11 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 import model.Movie.MovieType;
-
+/**
+ * 
+ * @author WeiJie
+ * The Ticket class, which implements the Serializable interface
+ */
 public class Ticket implements Serializable{
 	
 	private static final long serialVersionUID = 4187781382629687412L;

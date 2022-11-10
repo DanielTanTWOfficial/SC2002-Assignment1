@@ -1,7 +1,11 @@
 package model;
 
 import java.io.Serializable;
-
+/**
+ * 
+ * @author WeiJie
+ * The Transaction class, which implements the Serializable interface
+ */
 public class Transaction implements Serializable{
 
 	private static final long serialVersionUID = 1672173522020889192L;

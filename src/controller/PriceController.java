@@ -18,7 +18,11 @@ import model.Movie.MovieType;
 import model.Showtime;
 import model.Ticket;
 import model.Ticket.TicketType;
-
+/**
+ * 
+ * @author WeiJie
+ * Controller class for actions related to ticket price
+ */
 public class PriceController {
 	public static HashMap<String, Double> priceList;
 
