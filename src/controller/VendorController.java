@@ -8,7 +8,15 @@ import java.util.Objects;
 import model.Vendor;
 import model.SerializationUtil;
 
+/**
+ * @author Bernice
+ * Controller class providing methods related to the Vendor object
+ */
 public class VendorController {
+    /**
+     * Method to read Vendor objects from file
+     * @return ArrayList<Object>
+     */
     public static ArrayList<Object> readVendorsFile() {
         ArrayList<Object> vendors = new ArrayList<>();
         try {
@@ -20,6 +28,10 @@ public class VendorController {
         return new ArrayList<Object>();
     }
 
+    /**
+     * Called to add a Vendor object
+     * @param vendor
+     */
     public static void addVendor(Vendor vendor) {
         File dfile = new File("vendors.ser");
     	try {

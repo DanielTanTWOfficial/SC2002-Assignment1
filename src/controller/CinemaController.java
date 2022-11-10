@@ -11,7 +11,15 @@ import model.Cinema;
 import model.CinemaBooking;
 import model.SerializationUtil;
 
+/**
+ * @author Bernice
+ * This controller handles the Cinema object related methods
+ */
 public class CinemaController {
+    /**
+     * Reads the Cinema objects from file.
+     * @return ArrayList<Object>
+     */
     public static ArrayList<Object> readCinemasFile() {
         ArrayList<Object> cinemas = new ArrayList<>();
         try {
@@ -23,6 +31,11 @@ public class CinemaController {
         return new ArrayList<Object>();
     }
 
+    /**
+     * Called to add a new Cinema object
+     * @param cineplex
+     * @param cinemasArray
+     */
     public static void addCinemas(Cineplex cineplex, ArrayList<Cinema> cinemasArray) {
         for (int i = 0; i < cinemasArray.size(); i++) {
             cineplex.addNewCinema(cinemasArray.get(i));
@@ -37,6 +50,10 @@ public class CinemaController {
         }
     }
 
+    /**
+     * Called to list cinemas for the Cineplex
+     * @param cineplex
+     */
     public static void listCinemas(Cineplex cineplex) {
         // ArrayList<Object> cinemas = readCinemasFile();
 
@@ -48,6 +65,11 @@ public class CinemaController {
         }
     }
 
+    /**
+     * Returns a Cinema object chosen by the user
+     * @param cineplex
+     * @return Cinema
+     */
     public static Cinema chooseCinema(Cineplex cineplex) {
         // ArrayList<Object> cinemas = readCinemasFile();
 

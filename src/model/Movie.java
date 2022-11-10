@@ -5,7 +5,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 
 /**
- * @author d188878
+ * @author Daniel
  * The Movie class, which implements the Serializable interface
  */
 public class Movie implements Serializable {

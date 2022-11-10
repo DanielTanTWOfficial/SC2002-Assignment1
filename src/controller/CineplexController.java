@@ -11,6 +11,10 @@ import model.Cinema;
 import model.CinemaBooking;
 import model.SerializationUtil;
 
+/**
+ * @author Bernice
+ * This controller handles Cinplex related methods
+ */
 public class CineplexController {
     // public static void cineplexController(){
 
@@ -27,6 +31,10 @@ public class CineplexController {
 
     // }
 
+    /**
+     * Reads the Cineplex objects from file
+     * @return ArrayList<Object>
+     */
     public static ArrayList<Object> readCineplexesFile() {
         ArrayList<Object> cineplexes = new ArrayList<>();
         try {
@@ -37,10 +45,6 @@ public class CineplexController {
 		}
         return new ArrayList<Object>();
     }
-
-    /**
-     * Creates the cineplexes and cinemas
-     */
 
     /**
      * Creates the cineplexes and cinemas
@@ -73,8 +77,12 @@ public class CineplexController {
         }
     }
 
-    // returns 0 to return back to main menu
-    // else, returns the index of the cineplex chosen in "cineplexes.ser"
+    /**
+     * returns 0 to return back to main menu
+     * else, returns the cineplex chosen in "cineplexes.ser"
+     * @param vendor
+     * @return Cineplex
+     */
     public static Cineplex chooseCineplex(Vendor vendor) {
         // ArrayList<Object> cineplexesInfo = readCineplexesFile();
 

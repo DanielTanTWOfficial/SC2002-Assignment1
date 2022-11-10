@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * @author d188878
+ * @author Daniel
  * The MovieListing class, which implements the Serializable interface
  */
 public class MovieListing implements Serializable, Comparable<MovieListing> {

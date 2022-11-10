@@ -9,44 +9,84 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * @author Bernice
+ * The Cineplex class, which implements the Serializable interface
+ */
 public class Cineplex implements Serializable {
-    @Serial
+    /**
+	 * Automatically generated serialVerisonUID value to verify that the sender 
+	 * and receiver of a serialized object have loaded classes for that object that
+	 * are compatible with respect to serialization during deserialization.
+	 */
     private static final long serialVersionUID = 123458L;
     private String location;
     private ArrayList<Cinema> cinemas;
     private int numCinemas;
 
+    /**
+     * Constructor that creates new Cineplex object
+     * @param location
+     */
     public Cineplex(String location) {
         this.location = location;
         this.cinemas = new ArrayList<>();
         this.numCinemas=0;
     }
 
+    /**
+     * Returns location of cineplex
+     * @return location
+     */
     public String getLocation() {
         return this.location;
     }
 
+    /**
+     * Sets location of cineplex
+     * @param location
+     */
     public void setLocation(String location) {
         this.location = location;
     }
 
+    /**
+     * Returns number of cinemas
+     * @return numCinemas
+     */
     public int getNumCinemas() {
         return this.numCinemas;
     }
 
+    /**
+     * Returns the cinemas in cineplex
+     * @return cinemas
+     */
     public ArrayList<Cinema> getCinemas() {
         return cinemas;
     }
 
+    /**
+     * @param i
+     * @return cinema in cinema list corresponding to i
+     */
     public Cinema getCinema(int i) {
         return this.cinemas.get(i);
     }
 
+    /** 
+     * Adds new Cinema to cinema list
+     * @param newCinema
+     */
     public void addNewCinema(Cinema newCinema){
         this.cinemas.add(newCinema);
         this.numCinemas++;
     }
 
+    /**
+     * Returns the unique cinema classes at the cineplex
+     * @return presentCinemaClasses
+     */
     public ArrayList<CinemaClass> getCineplexCinemaClasses() {
         ArrayList<CinemaClass> presentCinemaClasses = new ArrayList<>();
         for (int i = 0; i < getCinemas().size(); i++) {
@@ -58,6 +98,9 @@ public class Cineplex implements Serializable {
         return presentCinemaClasses;
     }
 
+    /**
+     * Prints list of Cinemas in the Cineplex
+     */
     public void printCinemas(){
         System.out.println("Cinemas at "+ this.location +": \n");
 

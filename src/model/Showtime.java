@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 /**
- * @author d188878
+ * @author Daniel
  * The Showtime class, which implements the Serializable interface
  */
 public class Showtime implements Serializable {
