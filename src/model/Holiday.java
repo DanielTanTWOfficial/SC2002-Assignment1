@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+/**
+ * @author Daniel
+ * The Holiday object class which implements Serializable
+ */
 public class Holiday implements Serializable {
 	private static final long serialVersionUID = 1553139173673584909L;
 	private ArrayList<LocalDate> holidays;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 /**
  * @author d188878
- * The MovieListing class, which implements the IMovieListing interface and Serializable interface
+ * The MovieListing class, which implements the Serializable interface
  */
 public class MovieListing implements Serializable, Comparable<MovieListing> {
 	/**
@@ -54,7 +54,7 @@ public class MovieListing implements Serializable, Comparable<MovieListing> {
 		System.out.println("Content Rating: " + movie.getMovieRating());
 		System.out.println("Movie Type: " + movie.getMovieType());
 		System.out.println("Showing Status: " + movie.getStatus());
-		System.out.println("Ticket Sales: " + this.ticketSales);
+		System.out.println("Ticket Sales: $" + String.format("%.2f", this.ticketSales));
 		if(this.reviews.size() > 1) {
 			System.out.println("Overall Rating: " + String.format("%.1f", this.overallRating));
 		}

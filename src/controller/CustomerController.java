@@ -26,6 +26,11 @@ import model.Vendor;
 import model.Cinema.CinemaClass;
 import model.Movie.ShowingStatus;
 
+/**
+ * @author Daniel
+ * Controller class providing methods related to customer actions, including making bookings, listing all movies, ranking top movies
+ * and checking seat availability for movie showtimes.
+ */
 public class CustomerController {
     /**
      * Displays the top 5 movie listings by ticket sales or reviewer ratings

@@ -21,6 +21,10 @@ import model.Movie.ShowingStatus;
 import model.Cineplex;
 import model.Cinema;
 
+/**
+ * @author Daniel
+ * Controller class for actions related to showtimes
+ */
 public class ShowtimeController {
     /**
      * Provides admin options to choose action to take for showtime management

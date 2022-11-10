@@ -13,6 +13,10 @@ import model.Movie.MovieRating;
 import model.Movie.MovieType;
 import model.Movie.ShowingStatus;
 
+/**
+ * @author Daniel
+ * Controller class for actions related to movie listings such as creating, removing and editing movie listings
+ */
 public class MovieListingController {
     public static ArrayList<Object> readMovieListingsFile() {
 		ArrayList<Object> movieListings = new ArrayList<>();

@@ -3,11 +3,10 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import model.CinemaBooking;
 
 /**
  * @author d188878
- * The Showtime class, which implements the IShowtime interface and Serializable interface
+ * The Showtime class, which implements the Serializable interface
  */
 public class Showtime implements Serializable {
 	/**

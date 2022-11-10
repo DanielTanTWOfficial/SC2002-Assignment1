@@ -12,6 +12,10 @@ import java.util.Scanner;
 import model.Holiday;
 import model.SerializationUtil;
 
+/**
+ * @author Daniel
+ * Controller class for admin system settings configuration like holidays and toggling of movie ranking filters available to users
+ */
 public class SystemController {
 	public static ArrayList<Object> readHolidaysFile() {
 		ArrayList<Object> holidays = new ArrayList<>();
