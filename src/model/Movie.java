@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  * @author d188878
- * The Movie class, which implements the IMovie interface and Serializable interface
+ * The Movie class, which implements the Serializable interface
  */
 public class Movie implements Serializable {
 	/**

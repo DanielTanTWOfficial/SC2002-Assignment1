@@ -26,6 +26,11 @@ import model.Vendor;
 import model.Cinema.CinemaClass;
 import model.Movie.ShowingStatus;
 
+/**
+ * @author Daniel
+ * Controller class providing methods related to customer actions, including making bookings, listing all movies, ranking top movies
+ * and checking seat availability for movie showtimes.
+ */
 public class CustomerController {
     /**
      * Displays the top 5 movie listings by ticket sales or reviewer ratings
@@ -131,6 +136,7 @@ public class CustomerController {
     	for(int i = 0; i < movieListings.size(); i++) {
     		movieListing = (MovieListing) movieListings.get(i);
 			if(movieListing.getMovie().getStatus() != ShowingStatus.END_OF_SHOWING) {
+				System.out.println((i+1) + ". ");
 				movieListing.printInfo(false);
 				System.out.println();
 			}
@@ -417,7 +423,8 @@ public class CustomerController {
 		boolean seatChosen = false;
 		boolean anotherSeatChoice = true;
 		int seatsChosen = 0;
-		int row, col;
+		int row, col, chosenRow = 0;
+		ArrayList<Integer> cols = new ArrayList<>();
 		ArrayList<Ticket> holdingTickets;
 		while (!seatChosen && anotherSeatChoice) {
 			chosenShowtime.getCinemaBooking().printSeats();
@@ -427,6 +434,18 @@ public class CustomerController {
 			col = InputController.getIntRange(1, chosenShowtime.getCinemaBooking().getNumCols());
 			
 			if (!chosenShowtime.getCinemaBooking().getSeats()[row - 1][col - 1].getAssigned()) {
+				if(chosenRow == 0) {
+					chosenRow = row;
+				}
+				else if(row != chosenRow) {
+					System.out.println("Please choose a seat in the same row!");
+					continue;
+				}
+				cols.add(col);
+				if(!checkSeatGap(cols)) {
+					System.out.println("Please choose only consecutive seats!");
+					continue;
+				}
 				seatChosen = true;
 				seatsChosen++;
 				chosenShowtime.getCinemaBooking().getSeats()[row - 1][col - 1].assignSeat();
@@ -517,5 +536,26 @@ public class CustomerController {
 		if(!hasTransaction)
 			System.out.println("No Transactions found");
 		
+	}
+
+	/**
+	 * Called to check if there is a gap of at most 1 seat in the selected seats
+	 * Returns true if seat gap is ok, false if seat needs to be reselected
+	 * @param cols
+	 * @return boolean
+	 */
+	public static boolean checkSeatGap(ArrayList<Integer> cols) {
+		Collections.sort(cols);
+		
+		if(cols.size() > 1) {
+			for(int i=1;i<cols.size();i++) {
+				if((cols.get(i) - cols.get(i-1)) != 1) {
+					// remove invalid value from ArrayList
+					cols.remove(i);
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
