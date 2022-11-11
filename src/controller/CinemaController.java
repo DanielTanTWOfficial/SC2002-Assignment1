@@ -1,14 +1,10 @@
 package controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 
-import model.Vendor;
 import model.Cineplex;
 import model.Cinema;
-import model.CinemaBooking;
 import model.SerializationUtil;
 
 /**
@@ -23,7 +19,7 @@ public class CinemaController {
     public static ArrayList<Object> readCinemasFile() {
         ArrayList<Object> cinemas = new ArrayList<>();
         try {
-			cinemas = SerializationUtil.deserialize("cinemas.ser");
+			cinemas = SerializationUtil.deserialize("database/cinemas.ser");
             return cinemas;
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -41,7 +37,7 @@ public class CinemaController {
             cineplex.addNewCinema(cinemasArray.get(i));
 
             try {
-                SerializationUtil.serialize(cinemasArray.get(i),"cinemas.ser");
+                SerializationUtil.serialize(cinemasArray.get(i),"database/cinemas.ser");
                 System.out.println("Cinema of code  " + cinemasArray.get(i).getCinemaCode() + " added!");
             } catch (IOException e) {
                 e.printStackTrace();

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import model.Review;
 import model.SerializationUtil;
 import model.MovieListing;
-import java.util.Scanner;
 
 /**
  * @author zhiheng 
@@ -18,7 +17,7 @@ public class ReviewController{
      * This method is to allow the user to submit a review to the movie that the user selects. 
      */
     public static void submitReview(){ 
-        Scanner sc = new Scanner(System.in);
+
         ArrayList<Object> mListings = new ArrayList<>();
     	MovieListing mListing = null;
     	
@@ -26,7 +25,7 @@ public class ReviewController{
          * the movielisting files need to be deserialized so that the file can be read by users
          */
     	try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
+			mListings = SerializationUtil.deserialize("database/movieListings.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -43,7 +42,7 @@ public class ReviewController{
         /**
          * select the movie which the user wants to review
          */
-        int movienumber = sc.nextInt() - 1; 
+        int movienumber = InputController.getInt() - 1; 
         MovieListing movieselected = (MovieListing)mListings.get(movienumber); 
 
         /**
@@ -67,7 +66,7 @@ public class ReviewController{
         /**
          * save new movie listings with the new review to the file
          */
-    	File dfile = new File("movieListings.ser");
+    	File dfile = new File("database/movieListings.ser");
     	try {
 			SerializationUtil.deleteFile(dfile);
 		} catch (IOException e) {
@@ -81,7 +80,7 @@ public class ReviewController{
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
     		try {
-    			SerializationUtil.serialize(mListing, "movieListings.ser");
+    			SerializationUtil.serialize(mListing, "database/movieListings.ser");
     		} catch (IOException e) {
     			e.printStackTrace();
     			System.out.println("MovieListing update unsuccessful!");

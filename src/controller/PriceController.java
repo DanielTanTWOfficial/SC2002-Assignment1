@@ -6,14 +6,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
 import model.Cinema.CinemaClass;
 import model.Holiday;
 import model.Movie;
-import model.Movie.MovieRating;
 import model.Movie.MovieType;
 import model.Showtime;
 import model.Ticket;
@@ -162,11 +160,11 @@ public class PriceController {
 	 * Updates price.txt with the Hashmap priceList
 	 */
     public static void storePrices() {
-    	File f = new File("price.txt");
+    	File f = new File("database/price.txt");
 		if(f.exists())
 			f.delete();
 		
-    	try (PrintWriter out = new PrintWriter("price.txt")) {
+    	try (PrintWriter out = new PrintWriter("database/price.txt")) {
     		for (Entry<String, Double> entry : priceList.entrySet()) {
     		    String key = entry.getKey();
     		    double value = entry.getValue();
@@ -184,7 +182,7 @@ public class PriceController {
      */
     public static void readPrices() {
     	priceList = new HashMap<String, Double>();
-    	File file = new File("price.txt");
+    	File file = new File("database/price.txt");
     	Scanner scanner;
 		try {
 			scanner = new Scanner(file);

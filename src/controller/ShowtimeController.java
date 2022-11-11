@@ -2,7 +2,6 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -12,12 +11,7 @@ import java.util.Scanner;
 import model.SerializationUtil;
 import model.Showtime;
 import model.Vendor;
-import model.Movie;
 import model.MovieListing;
-import model.Review;
-import model.Movie.MovieRating;
-import model.Movie.MovieType;
-import model.Movie.ShowingStatus;
 import model.Cineplex;
 import model.Cinema;
 
@@ -79,7 +73,7 @@ public class ShowtimeController {
     	System.out.println("=============== SHOWTIME CREATION =============== ");
     	System.out.println("Available movies to add showtimes for: ");
     	try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
+			mListings = SerializationUtil.deserialize("database/movieListings.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read movie listings.");
@@ -97,7 +91,7 @@ public class ShowtimeController {
     	mListing = (MovieListing)mListings.get(selection-1);
     	
     	try {
-			cineplexesInfo = SerializationUtil.deserialize("cineplexes.ser");
+			cineplexesInfo = SerializationUtil.deserialize("database/cineplexes.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read cineplexes info.");
@@ -167,7 +161,7 @@ public class ShowtimeController {
     	mListing.addShowtime(newShowtime);
     	
     	// save new movie listings to file
-    	File dfile = new File("movieListings.ser");
+    	File dfile = new File("database/movieListings.ser");
     	try {
 			SerializationUtil.deleteFile(dfile);
 		} catch (IOException e) {
@@ -178,7 +172,7 @@ public class ShowtimeController {
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
     		try {
-    			SerializationUtil.serialize(mListing, "movieListings.ser");
+    			SerializationUtil.serialize(mListing, "database/movieListings.ser");
     		} catch (IOException e) {
     			e.printStackTrace();
     			System.out.println("MovieListing update unsuccessful!");
@@ -276,7 +270,7 @@ public class ShowtimeController {
     	System.out.println("=============== SHOWTIME UPDATE =============== ");
     	System.out.println("Available movies to edit showtimes for: ");
     	try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
+			mListings = SerializationUtil.deserialize("database/movieListings.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read movie listings.");
@@ -341,7 +335,7 @@ public class ShowtimeController {
     	}
     	
     	// re-serialise the updated movie listing object
-    	File dfile = new File("movieListings.ser");
+    	File dfile = new File("database/movieListings.ser");
     	try {
 			SerializationUtil.deleteFile(dfile);
 		} catch (IOException e) {
@@ -352,7 +346,7 @@ public class ShowtimeController {
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
     		try {
-    			SerializationUtil.serialize(mListing, "movieListings.ser");
+    			SerializationUtil.serialize(mListing, "database/movieListings.ser");
     		} catch (IOException e) {
     			e.printStackTrace();
     			System.out.println("MovieListing update unsuccessful!");
@@ -379,7 +373,7 @@ public class ShowtimeController {
 		System.out.println("=============== REMOVE SHOWTIME =============== ");
 		System.out.println("Available movies to remove the showtime for: ");
     	try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
+			mListings = SerializationUtil.deserialize("database/movieListings.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read movie listings.");
@@ -411,7 +405,7 @@ public class ShowtimeController {
     	showtime = (Showtime)showtimes.remove(selection-1);
 
 		// re-serialise the updated MovieListing object
-    	File dfile = new File("movieListings.ser");
+    	File dfile = new File("database/movieListings.ser");
     	try {
 			SerializationUtil.deleteFile(dfile);
 		} catch (IOException e) {
@@ -422,7 +416,7 @@ public class ShowtimeController {
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
     		try {
-    			SerializationUtil.serialize(mListing, "movieListings.ser");
+    			SerializationUtil.serialize(mListing, "database/movieListings.ser");
     		} catch (IOException e) {
     			e.printStackTrace();
     			System.out.println("MovieListing update unsuccessful!");

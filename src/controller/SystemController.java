@@ -20,7 +20,7 @@ public class SystemController {
 	public static ArrayList<Object> readHolidaysFile() {
 		ArrayList<Object> holidays = new ArrayList<>();
         try {
-        	holidays = SerializationUtil.deserialize("holidays.ser");
+        	holidays = SerializationUtil.deserialize("database/holidays.ser");
             return holidays;
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -40,7 +40,7 @@ public class SystemController {
     	boolean firstTime = true;
     	
     	// check if a Holiday object already exists to avoid duplicate creation
-    	File f = new File("holidays.ser");
+    	File f = new File("database/holidays.ser");
     	if(f.isFile()) {
     		firstTime = false;
     	}
@@ -50,7 +50,7 @@ public class SystemController {
     	}
     	else {
     		try {
-    			holidayObjects = SerializationUtil.deserialize("holidays.ser");
+    			holidayObjects = SerializationUtil.deserialize("database/holidays.ser");
     		} catch (IOException | ClassNotFoundException e) {
     			e.printStackTrace();
     			System.out.println("Unable to read movie listings.");
@@ -78,7 +78,7 @@ public class SystemController {
     	}
     	
     	// re-serialise the updated holiday object
-    	File dfile = new File("holidays.ser");
+    	File dfile = new File("database/holidays.ser");
     	try {
 			SerializationUtil.deleteFile(dfile);
 		} catch (IOException e) {
@@ -90,7 +90,7 @@ public class SystemController {
 	    	holiday = (Holiday)holidayObjects.get(0);
     	}
 		try {
-			SerializationUtil.serialize(holiday, "holidays.ser");
+			SerializationUtil.serialize(holiday, "database/holidays.ser");
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Holiday update unsuccessful!");
@@ -115,7 +115,7 @@ public class SystemController {
 		Scanner sc = new Scanner(System.in);
 
 		// check if a Holiday object already exists to avoid error
-    	File f = new File("holidays.ser");
+    	File f = new File("database/holidays.ser");
     	if(f.isFile()) {
     		firstTime = false;
     	}
@@ -125,7 +125,7 @@ public class SystemController {
 		}
 
 		try {
-			holidayObjects = SerializationUtil.deserialize("holidays.ser");
+			holidayObjects = SerializationUtil.deserialize("database/holidays.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read holidays.");
@@ -148,7 +148,7 @@ public class SystemController {
 		holidays.remove(selection-1);
 
 		// re-serialise the updated holiday object
-    	File dfile = new File("holidays.ser");
+    	File dfile = new File("database/holidays.ser");
     	try {
 			SerializationUtil.deleteFile(dfile);
 		} catch (IOException e) {
@@ -158,7 +158,7 @@ public class SystemController {
     	// serialize updated movies to file
     	holiday = (Holiday)holidayObjects.get(0);
 		try {
-			SerializationUtil.serialize(holiday, "holidays.ser");
+			SerializationUtil.serialize(holiday, "database/holidays.ser");
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Holiday update unsuccessful!");
@@ -177,7 +177,7 @@ public class SystemController {
 		boolean firstTime = true;
 
 		// check if a Holiday object already exists to avoid error
-    	File f = new File("holidays.ser");
+    	File f = new File("database/holidays.ser");
     	if(f.isFile()) {
     		firstTime = false;
     	}
@@ -187,7 +187,7 @@ public class SystemController {
 		}
 
 		try {
-			holidayObjects = SerializationUtil.deserialize("holidays.ser");
+			holidayObjects = SerializationUtil.deserialize("database/holidays.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read holidays.");
@@ -235,7 +235,7 @@ public class SystemController {
 		}
 
 		// write the filter value to a text file for reference
-		try (PrintWriter out = new PrintWriter("filter.txt")) {
+		try (PrintWriter out = new PrintWriter("database/filter.txt")) {
 		    out.println(filterVal);
 		}
 		catch (FileNotFoundException e) {

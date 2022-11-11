@@ -1,3 +1,4 @@
+package boundary;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,7 +17,7 @@ import model.Cinema;
 
 public class MainMenu {
     public void main() {
-    	File f = new File("vendors.ser");
+    	File f = new File("database/vendors.ser");
         if (f.exists() == false) {
         	initialiseInfra();
         }

@@ -3,7 +3,6 @@ package controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import model.Vendor;
 import model.SerializationUtil;
@@ -20,7 +19,7 @@ public class VendorController {
     public static ArrayList<Object> readVendorsFile() {
         ArrayList<Object> vendors = new ArrayList<>();
         try {
-			vendors = SerializationUtil.deserialize("vendors.ser");
+			vendors = SerializationUtil.deserialize("database/vendors.ser");
             return vendors;
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -33,7 +32,7 @@ public class VendorController {
      * @param vendor
      */
     public static void addVendor(Vendor vendor) {
-        File dfile = new File("vendors.ser");
+        File dfile = new File("database/vendors.ser");
     	try {
 			SerializationUtil.deleteFile(dfile);
 		} catch (IOException e) {
@@ -41,7 +40,7 @@ public class VendorController {
 		}
 
         try {
-            SerializationUtil.serialize(vendor, "vendors.ser");
+            SerializationUtil.serialize(vendor, "database/vendors.ser");
             System.out.println("Vendor" + vendor.getVendorName() + " added successfully!");
         } catch (IOException e) {
             e.printStackTrace();

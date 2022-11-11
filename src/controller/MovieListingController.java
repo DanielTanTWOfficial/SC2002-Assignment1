@@ -21,7 +21,7 @@ public class MovieListingController {
     public static ArrayList<Object> readMovieListingsFile() {
 		ArrayList<Object> movieListings = new ArrayList<>();
 		try {
-			movieListings = SerializationUtil.deserialize("movieListings.ser");
+			movieListings = SerializationUtil.deserialize("database/movieListings.ser");
 			return movieListings;
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -172,7 +172,7 @@ public class MovieListingController {
     	
     	// serialize to file
 		try {
-			SerializationUtil.serialize(newMovieListing, "movieListings.ser");
+			SerializationUtil.serialize(newMovieListing, "database/movieListings.ser");
 			System.out.println("Movie listing created successfully!");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -196,7 +196,7 @@ public class MovieListingController {
     	System.out.println("Available movies: ");
     	
     	try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
+			mListings = SerializationUtil.deserialize("database/movieListings.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -215,7 +215,7 @@ public class MovieListingController {
     	mListing.getMovie().deleteMovie();
     	
     	// delete movie file to be overwritten
-    	File dfile = new File("movieListings.ser");
+    	File dfile = new File("database/movieListings.ser");
     	try {
 			SerializationUtil.deleteFile(dfile);
 		} catch (IOException e) {
@@ -227,7 +227,7 @@ public class MovieListingController {
 			mListing = (MovieListing)mListings.get(i);
     		// serialize to file
     		try {
-    			SerializationUtil.serialize(mListing, "movieListings.ser");
+    			SerializationUtil.serialize(mListing, "database/movieListings.ser");
     		} catch (IOException e) {
     			e.printStackTrace();
     			System.out.println("Movie listing update unsuccessful!");
@@ -252,7 +252,7 @@ public class MovieListingController {
     	System.out.println("Available movies: ");
     	
     	try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
+			mListings = SerializationUtil.deserialize("database/movieListings.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read movie listings.");
@@ -285,7 +285,7 @@ public class MovieListingController {
     	// call to edit movie showing status
     	mListing.getMovie().editStatus(showingStatus);
     	
-    	File dfile = new File("movieListings.ser");
+    	File dfile = new File("database/movieListings.ser");
     	try {
 			SerializationUtil.deleteFile(dfile);
 		} catch (IOException e) {
@@ -296,7 +296,7 @@ public class MovieListingController {
     	for(int i=0;i<mListings.size();i++) {
     		mListing = (MovieListing)mListings.get(i);
     		try {
-    			SerializationUtil.serialize(mListing, "movieListings.ser");
+    			SerializationUtil.serialize(mListing, "database/movieListings.ser");
     		} catch (IOException e) {
     			e.printStackTrace();
     			System.out.println("Movie update unsuccessful!");
