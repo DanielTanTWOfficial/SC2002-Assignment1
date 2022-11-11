@@ -91,7 +91,7 @@ public class MainMenu {
         3b. Register new admin accounts
     */
     public void adminModule() {
-        boolean loggedIn = true;
+        boolean loggedIn = AdminController.login();
 
         while (loggedIn) {
             System.out.println("=============== MOBLIMA ADMIN =============== ");
