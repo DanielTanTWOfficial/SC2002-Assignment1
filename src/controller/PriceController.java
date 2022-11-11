@@ -79,36 +79,32 @@ public class PriceController {
 		boolean isHoliday = false;
 		// Check if date of showtime is a holiday
 		for (int i = 0; i < holidays.size(); i++) {
-			if (holidays.get(i) == showtime.getDate())
+			if (holidays.get(i).equals(showtime.getDate())) {
 				isHoliday = true;
 				break;
+			}
 		}
 
-
-		
-		// Check if purchasing Child ticket for a movie M18 || R21
-		if (ticket.getTicketType() == TicketType.CHILD && (movie.getMovieRating() == MovieRating.M18 || movie.getMovieRating() == MovieRating.R21)) {
-			System.out.println("Cannot purchase child ticket for M18 and R21 movies");
-			return 0;
-		}
-		
 		// Check if holiday. Don't care ticket type
 		if (isHoliday) {
 			ticket.setTicketType(TicketType.ADULT);
 			ticket.setPrice(PriceController.priceList.get("adult") + PriceController.priceList.get("holiday"));
 		}
-
 		// Compute price for the respective ticket types
 		else {
+			if (showtime.getDate().getDayOfWeek().getValue() > 5) {
+				ticket.setPrice(PriceController.priceList.get("weekend"));
+			}
+				
 			switch (ticket.getTicketType()) {
 				case CHILD:
-					ticket.setPrice(PriceController.priceList.get("children"));
+					ticket.setPrice(ticket.getPrice() +  PriceController.priceList.get("children"));
 					break;
 				case SENIOR:
-					ticket.setPrice(PriceController.priceList.get("senior"));
+					ticket.setPrice(ticket.getPrice() +  PriceController.priceList.get("senior"));
 					break;
 				case ADULT:
-					ticket.setPrice(PriceController.priceList.get("adult"));
+					ticket.setPrice(ticket.getPrice() +  PriceController.priceList.get("adult"));
 					break;
 				default:
 					break;
