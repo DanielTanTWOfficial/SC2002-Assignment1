@@ -2,14 +2,6 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import model.SerializationUtil;
@@ -28,7 +20,7 @@ public class AdminController {
     public static ArrayList<Object> readAdminAccountsFile() {
         ArrayList<Object> adminAccounts = new ArrayList<>();
         try {
-			adminAccounts = SerializationUtil.deserialize("adminAccounts.ser");
+			adminAccounts = SerializationUtil.deserialize("database/adminAccounts.ser");
             return adminAccounts;
 		} catch (IOException | ClassNotFoundException e) {
 			// e.printStackTrace();
@@ -110,7 +102,7 @@ public class AdminController {
         System.out.println("=== Logging In ===");
 
         ArrayList<Object> adminAccounts = readAdminAccountsFile();
-        File f = new File("adminAccounts.ser");
+        File f = new File("database/adminAccounts.ser");
         if (f.exists()) {
             adminAccounts = readAdminAccountsFile();
         }
@@ -165,7 +157,7 @@ public class AdminController {
         else {
             AdminUser newUser = new AdminUser(email, password);
             try {
-                SerializationUtil.serialize(newUser, "adminAccounts.ser");
+                SerializationUtil.serialize(newUser, "database/adminAccounts.ser");
                 System.out.println("New admin account registered!");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -175,11 +167,54 @@ public class AdminController {
     }
 
     /**
+     * Admin account deletetion sequence
+     */
+    public static void deleteAdminAccount() {
+        System.out.println("=== Deleting admin account ===");
+
+        System.out.println("Please enter the email of admin account to delete.");
+        String email = InputController.getEmail();
+
+        if (!isAdminAccountByEmail(email)) {
+            System.out.println("Admin account does not exist!");
+        }
+        else {
+            ArrayList<Object> adminAccounts = readAdminAccountsFile();
+            for(int i = 0; i < adminAccounts.size(); i++) {
+                AdminUser verifiedUser = (AdminUser) adminAccounts.get(i);
+                if (verifiedUser.getEmail().equals(email)) {
+                    System.out.println("Admin account " + email + " successfully deleted.");
+                    adminAccounts.remove(i);
+                    break;
+                }
+            }
+
+            File dfile = new File("database/adminAccounts.ser");
+            try {
+                SerializationUtil.deleteFile(dfile);
+            } catch (IOException e) {
+                // e.printStackTrace();
+            }
+            
+            for(int i = 0; i < adminAccounts.size(); i++) {
+                AdminUser verifiedUser = (AdminUser) adminAccounts.get(i);
+                try {
+                    SerializationUtil.serialize(verifiedUser, "database/adminAccounts.ser");
+                } catch (IOException e) {
+                    // e.printStackTrace();
+                }
+    	    }
+        }  
+    }
+
+    /**
      * Change password sequence
      */
     public static void changePassword() {
         ArrayList<Object> adminAccounts = readAdminAccountsFile();
         System.out.println("=== Changing account password ===");
+
+        
 
         boolean exit = false;
         while (!exit) {
@@ -212,7 +247,7 @@ public class AdminController {
                     }
                 }
     
-                File dfile = new File("adminAccounts.ser");
+                File dfile = new File("database/adminAccounts.ser");
                 try {
                     SerializationUtil.deleteFile(dfile);
                 } catch (IOException e) {
@@ -222,7 +257,7 @@ public class AdminController {
                 for(int i = 0; i < adminAccounts.size(); i++) {
                     AdminUser verifiedUser = (AdminUser) adminAccounts.get(i);
                     try {
-                        SerializationUtil.serialize(verifiedUser, "adminAccounts.ser");
+                        SerializationUtil.serialize(verifiedUser, "database/adminAccounts.ser");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

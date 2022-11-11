@@ -45,10 +45,10 @@ public class CustomerController {
 		boolean invalid = true;
 		boolean bySales = true;
 
-		File f = new File("filter.txt");
+		File f = new File("database/filter.txt");
 		if(f.exists()) {
 			// read set filter value from file
-			Path path = Paths.get("filter.txt");
+			Path path = Paths.get("database/filter.txt");
 			try {
 				filterVal = Files.readString(path, StandardCharsets.UTF_8);
 				filterVal = filterVal.replace("\n", "").replace("\r", "");
@@ -88,7 +88,7 @@ public class CustomerController {
 		}
     	
     	try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
+			mListings = SerializationUtil.deserialize("database/movieListings.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -174,7 +174,7 @@ public class CustomerController {
 		int selection = 0;
 
 		try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
+			mListings = SerializationUtil.deserialize("database/movieListings.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -228,7 +228,7 @@ public class CustomerController {
 		System.out.println("=============== SEAT AVAILABILITY =============== ");
 		System.out.println("Available cineplexes: ");
     	try {
-			cineplexesInfo = SerializationUtil.deserialize("cineplexes.ser");
+			cineplexesInfo = SerializationUtil.deserialize("database/cineplexes.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read cineplexes info.");
@@ -260,7 +260,7 @@ public class CustomerController {
 
     	System.out.println("Available movies to check showtimes for: ");
     	try {
-			mListings = SerializationUtil.deserialize("movieListings.ser");
+			mListings = SerializationUtil.deserialize("database/movieListings.ser");
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to read movie listings.");
@@ -520,7 +520,7 @@ public class CustomerController {
 		chosenMovieListing.setTicketSales(transaction.getTranAmount());
 		
 		// update changes to MovieListing object to file
-		File dfile = new File("movieListings.ser");
+		File dfile = new File("database/movieListings.ser");
     	try {
 			SerializationUtil.deleteFile(dfile);
 		} catch (IOException e) {
@@ -531,7 +531,7 @@ public class CustomerController {
     	for(int i=0;i<movieListings.size();i++) {
     		MovieListing movieListing = (MovieListing)movieListings.get(i);
     		try {
-    			SerializationUtil.serialize(movieListing, "movieListings.ser");
+    			SerializationUtil.serialize(movieListing, "database/movieListings.ser");
     		} catch (IOException e) {
     			e.printStackTrace();
     			System.out.println("Movie update unsuccessful!");

@@ -1,14 +1,10 @@
 package controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import model.Vendor;
 import model.Cineplex;
-import model.Cinema;
-import model.CinemaBooking;
 import model.SerializationUtil;
 
 /**
@@ -16,21 +12,6 @@ import model.SerializationUtil;
  * This controller handles Cinplex related methods
  */
 public class CineplexController {
-    // public static void cineplexController(){
-
-    //     printCineplexes();
-    //     addCineplex();
-
-    //     //delete serialization file
-    //     File dfile = new File("VendorCineplexesInfo.ser");
-    //     try {
-    //         SerializationUtil.deleteFile(dfile);
-    //     }catch(IOException e){
-    //         e.printStackTrace();
-    //     }
-
-    // }
-
     /**
      * Reads the Cineplex objects from file
      * @return ArrayList<Object>
@@ -38,7 +19,7 @@ public class CineplexController {
     public static ArrayList<Object> readCineplexesFile() {
         ArrayList<Object> cineplexes = new ArrayList<>();
         try {
-			cineplexes = SerializationUtil.deserialize("cineplexes.ser");
+			cineplexes = SerializationUtil.deserialize("database/cineplexes.ser");
             return cineplexes;
 		} catch (IOException | ClassNotFoundException e) {
 			// e.printStackTrace();
@@ -54,7 +35,7 @@ public class CineplexController {
             vendor.addNewCineplex(cineplexesArray.get(i));
 
             try {
-                SerializationUtil.serialize(cineplexesArray.get(i),"cineplexes.ser");
+                SerializationUtil.serialize(cineplexesArray.get(i),"database/cineplexes.ser");
                 System.out.println("Cineplex @ " + cineplexesArray.get(i).getLocation() + " added!");
             } catch (IOException e) {
                 e.printStackTrace();
