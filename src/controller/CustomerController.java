@@ -144,6 +144,9 @@ public class CustomerController {
     	}
     }
 
+    /**
+     * Called to print movie listing information with movie status as NOW_SHOWING or PREVIEW
+     */
 	public static void displayShowingMovieListings() {
 		System.out.println("Current Movies Available for Booking: ");
 
@@ -326,6 +329,9 @@ public class CustomerController {
 	 * 10. Perform Transaction
 	 * 		10a. Prompt for email and mobile number
 	 * 11. Save booking
+	 */
+	/**
+	 * Called to make a booking and transaction
 	 */
 	public static void makeBooking() {
 		// Step 1 - List all movie listings that are available for booking
@@ -534,6 +540,9 @@ public class CustomerController {
     	}
 	}
 	
+	/**
+	 * Called to display booking history of a specific email address
+	 */
 	public static void viewBookingHistory() {
 		// request email, read transaction file, print bookings
 		System.out.print("Enter email address: ");
