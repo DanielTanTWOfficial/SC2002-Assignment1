@@ -24,6 +24,7 @@ import model.Ticket.TicketType;
 import model.Transaction;
 import model.Vendor;
 import model.Cinema.CinemaClass;
+import model.Movie.MovieRating;
 import model.Movie.ShowingStatus;
 
 /**
@@ -400,9 +401,13 @@ public class CustomerController {
 			Showtime currentShowtime = chosenMovieListing.getShowtimes().get(i);
 			if (chosenCineplex.getLocation().equals(currentShowtime.getLocation()) && (currentShowtime.getCinemaBooking().getCinemaClass().equals(chosenCinemaClass))) {
 				showtimeChoices.add(currentShowtime);
-				System.out.print((i + 1) + ": ");
-				currentShowtime.printShowtime();
 			}
+		}
+		
+		for(int i=0;i<showtimeChoices.size();i++) {
+			Showtime currentShowtime = showtimeChoices.get(i);
+			System.out.print((i + 1) + ": ");
+			currentShowtime.printShowtime();
 		}
 
 		System.out.print("Choose the showtime: ");
@@ -410,13 +415,7 @@ public class CustomerController {
 		Showtime chosenShowtime = showtimeChoices.get(showtimeChoice - 1);
 		System.out.println();
 		
-		// Step 6 - List and Choose Ticket Types
-		for (int i = 0; i < TicketType.values().length; i++) {
-			System.out.println((i + 1) + ": " + TicketType.values()[i]);
-		}
-		System.out.print("Select Ticket Type: ");
-		int chosenType = InputController.getIntRange(1, TicketType.values().length) - 1;
-		System.out.println();
+		
 
 		// Step 7 - List and Choose Seat(s)
 		// Step 8 - Generate Ticket for each seat chosen
@@ -427,6 +426,22 @@ public class CustomerController {
 		ArrayList<Integer> cols = new ArrayList<>();
 		ArrayList<Ticket> holdingTickets;
 		while (!seatChosen && anotherSeatChoice) {
+			
+			// Step 6 - List and Choose Ticket Types
+			for (int i = 0; i < TicketType.values().length; i++) {
+				System.out.println((i + 1) + ": " + TicketType.values()[i]);
+			}
+			System.out.print("Select Ticket Type: ");
+			int chosenType = InputController.getIntRange(1, TicketType.values().length) - 1;
+			System.out.println();
+			
+			// Check if purchasing Child ticket for a movie M18 || R21
+			if (TicketType.values()[chosenType] == TicketType.CHILD && (chosenMovieListing.getMovie().getMovieRating() == MovieRating.M18 || chosenMovieListing.getMovie().getMovieRating() == MovieRating.R21)) {
+				System.out.println("Cannot purchase child ticket for M18 and R21 movies");
+				continue;
+			}
+			
+			
 			chosenShowtime.getCinemaBooking().printSeats();
 			System.out.print("Please enter the row number: ");
 			row = InputController.getIntRange(1, chosenShowtime.getCinemaBooking().getNumRows());
@@ -449,7 +464,7 @@ public class CustomerController {
 				seatChosen = true;
 				seatsChosen++;
 				chosenShowtime.getCinemaBooking().getSeats()[row - 1][col - 1].assignSeat();
-				Ticket t = new Ticket("T"+chosenShowtime.getCinemaCode()+"R"+row+"C"+col, chosenShowtime.getStart(), chosenShowtime.getCinemaCode(), chosenMovieListing.getMovie().getTitle(), TicketType.values()[chosenType], "R"+row+"C"+col);
+				Ticket t = new Ticket("T"+chosenShowtime.getCinemaCode()+"R"+row+"C"+col, chosenShowtime.getDate(),chosenShowtime.getStart(), chosenShowtime.getCinemaCode(), chosenMovieListing.getMovie().getTitle(), TicketType.values()[chosenType], "R"+row+"C"+col);
 				PriceController.computePrice(t, chosenShowtime, chosenCinemaClass, chosenMovieListing.getMovie());
 				booking.getTickets().add(t);
 				System.out.println("Would you like to choose another seat? (y/n)");
