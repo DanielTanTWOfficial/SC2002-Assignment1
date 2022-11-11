@@ -24,6 +24,10 @@ import model.Ticket.TicketType;
  * Controller class for actions related to ticket price
  */
 public class PriceController {
+	
+	/**
+	 * HashMap read from the price.txt file
+	 */
 	public static HashMap<String, Double> priceList;
 
 	/*
@@ -33,6 +37,9 @@ public class PriceController {
         - Age: Adult, Senior Citizen, Children
         - Date: Holiday, Weekend
      */
+	/**
+	 * This method allows admin user to update the fields that affect ticket price in price.txt
+	 */
     public static void updatePrices() {
         boolean exit = false;
         while (!exit) {
@@ -69,6 +76,15 @@ public class PriceController {
         }
     }
 
+    /**
+     * This method takes in a ticket object along with our objects needed to compute the price and sets that ticket object's price.
+     * returns 1 for success
+     * @param ticket
+     * @param showtime
+     * @param cinemaClass
+     * @param movie
+     * @return
+     */
 	public static int computePrice(Ticket ticket, Showtime showtime, CinemaClass cinemaClass, Movie movie) {
     	readPrices();
     	
@@ -142,6 +158,9 @@ public class PriceController {
     }
 	
 	// stores the current HashMap to txt file
+	/**
+	 * Updates price.txt with the Hashmap priceList
+	 */
     public static void storePrices() {
     	File f = new File("price.txt");
 		if(f.exists())
@@ -160,6 +179,9 @@ public class PriceController {
     }
 	
 	// Reads price.txt file and updates the HashMap
+    /**
+     * Reads the price.txt file and updates it to the Hashmap priceList
+     */
     public static void readPrices() {
     	priceList = new HashMap<String, Double>();
     	File file = new File("price.txt");
@@ -175,6 +197,9 @@ public class PriceController {
 		}
     }
     
+    /**
+     * This method updates the CinemaClass keys in the Hashmap and calls storePrices()
+     */
     public static void updateCinemaClassPrice() {
 		readPrices();
 		System.out.println("---Cinema Classes---");
@@ -226,6 +251,10 @@ public class PriceController {
 		storePrices();
 	}
 
+    
+    /**
+     * This method updates the MovieType keys in the Hashmap and calls storePrices()
+     */
 	public static void updateMovieTypePrice() {
 		readPrices();
 		System.out.println("---Movie Types---");
@@ -292,6 +321,9 @@ public class PriceController {
 		storePrices();
 	}
 
+	/**
+	 * This method updates the TicketType keys in the Hashmap and calls storePrices()
+	 */
 	public static void updateTicketTypePrice() {
 		readPrices();
 		System.out.println("---Ticket Types---");
@@ -358,6 +390,9 @@ public class PriceController {
 		storePrices();
 	}
 
+	/**
+	 * This method updates the Weekend keys in the Hashmap and calls storePrices()
+	 */
 	public static void updateWeekendPrice() {
 		readPrices();
 
@@ -380,6 +415,9 @@ public class PriceController {
 		storePrices();
 	}
 
+	/**
+	 * This method updates the Holiday keys in the Hashmap and calls storePrices()
+	 */
 	public static void updateHolidayPrice() {
 		readPrices();
 

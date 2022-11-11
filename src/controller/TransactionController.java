@@ -14,6 +14,10 @@ import model.Transaction;
  */
 public class TransactionController {
 	
+	/**
+	 * This method reads transaction.ser file and returns an arrayList of Transaction object
+	 * @return 
+	 */
 	public static ArrayList<Object> readTransactionFile() {
 		ArrayList<Object> transactionList = new ArrayList<>();
         try {
@@ -25,6 +29,10 @@ public class TransactionController {
         return new ArrayList<Object>();
 	}
 	
+	/**
+	 * This method takes in a Transaction object, calls SerializationUtil to serialize and store the object into transactions.ser
+	 * @param transaction
+	 */
 	public static void saveTransactionFile(Transaction transaction) {
 		try {
 			SerializationUtil.serialize(transaction, "transactions.ser");
