@@ -103,15 +103,20 @@ public class CinemaBooking implements Serializable {
      * Prints layout of seats and their availabilities
      */
     public void printSeats(){
-        System.out.println("----- Screen -----");
+        System.out.println("\t\t----- Screen -----");
 
+        int midCol=numCol/2;
         for (int i=0;i<numRow;i++){
             System.out.print(String.format("%-5d",i+1));
             for (int j=0;j<numCol;j++){
                 String symbol="o"; //unassigned seats
                 if (seats[i][j].getAssigned()==true) symbol="x"; //assigned seats
                 System.out.print(symbol+" ");
+                
+                if (j==midCol-1)
+                	System.out.print(" ");
             }
+            System.out.print(" ");
             System.out.println();
         }
     }
