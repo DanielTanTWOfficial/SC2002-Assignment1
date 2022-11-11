@@ -86,6 +86,7 @@ public class AdminController {
         else {
             System.out.println("No admin accounts registered! Please create an admin account!");
             createAdminAccount();
+            return true;
         }
 
         boolean result = false;
@@ -102,6 +103,7 @@ public class AdminController {
                 System.out.println("Wrong email or password.");
                 System.out.println("1. Enter again");
                 System.out.println("2. Exit");
+                System.out.print("Choice: ");
                 if (InputController.getIntRange(1, 2) == 2) {
                     exit = true;
                 }
