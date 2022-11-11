@@ -14,8 +14,17 @@ public class Review implements Serializable {
 	 * compatible with respect to serialization during deserialization. 
 	 */
 	private static final long serialVersionUID = -705589914269932166L;
+	/**
+	 * The reviewerName stores the person who submits the review for a particular movie listing.
+	 */
 	private String reviewerName;
+	/**
+	 * The review stores the review written for a particular movie listing. 
+	 */
 	private String review;
+	/**
+	 * The rating stores the given rating from 1 to 5 for the movie listing after the reviewer watch the movie listing. 
+	 */
 	private double rating;
 
 	/**
