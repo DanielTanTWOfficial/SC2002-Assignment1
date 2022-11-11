@@ -396,19 +396,22 @@ public class CustomerController {
 		// Step 5 - List and Choose Showtime
 		// If chosen movie has showtimes in chosenCineplex, then list them 
 		ArrayList<Showtime> showtimeChoices = new ArrayList<>();
+		int printedShowtimes = 0;
 		System.out.println("Showtimes: ");
 		for (int i = 0; i < chosenMovieListing.getShowtimes().size(); i++) {
 			Showtime currentShowtime = chosenMovieListing.getShowtimes().get(i);
 			if (chosenCineplex.getLocation().equals(currentShowtime.getLocation()) && (currentShowtime.getCinemaBooking().getCinemaClass().equals(chosenCinemaClass))) {
 				showtimeChoices.add(currentShowtime);
+				System.out.print((i + 1) + ": ");
+				currentShowtime.printShowtime();
+				printedShowtimes++;
 			}
 		}
-		
-		for(int i=0;i<showtimeChoices.size();i++) {
-			Showtime currentShowtime = showtimeChoices.get(i);
-			System.out.print((i + 1) + ": ");
-			currentShowtime.printShowtime();
+		if (printedShowtimes == 0) {
+			System.out.println("No showtimes for this movie in this cineplex!");
+			return;
 		}
+		
 
 		System.out.print("Choose the showtime: ");
 		int showtimeChoice = InputController.getInt();
@@ -544,8 +547,10 @@ public class CustomerController {
 			if (transaction.getEmailAddress().equalsIgnoreCase(email)) {
 				hasTransaction = true;
 				System.out.println("TransactionId: " + transaction.getTransactionId());
-				for (Ticket t : transaction.getBooking().getTickets())
+				for (Ticket t : transaction.getBooking().getTickets()) {
 					t.printTicket();
+					System.out.println();
+				}
 				System.out.println("Transaction Amount: " + transaction.getTranAmount());
 				System.out.println();
 			}
