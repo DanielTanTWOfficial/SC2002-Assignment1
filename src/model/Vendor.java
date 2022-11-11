@@ -18,8 +18,17 @@ public class Vendor implements Serializable {
 	 */
     @Serial
     private static final long serialVersionUID = 123456L;
+    /**
+     * The vendorName attribute stores the name of the main company owning the Cineplexes
+     */
     public String vendorName;
+    /**
+     * The cineplexes attribute is an ArrayList of Cineplex objects managed by the Vendor
+     */
     private ArrayList<Cineplex> cineplexes;
+    /**
+     * The numCineplexes attribute tracks the number of Cineplexes operated by the vendor
+     */
     private int numCineplexes;
 
     /**

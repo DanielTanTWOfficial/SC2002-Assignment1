@@ -8,6 +8,7 @@ import model.Cinema.CinemaClass;
  * 
  * @author Bernice
  * The CinemaBooking class, which implements the Serializable interface
+ * Used as a "seating chart" that is contained in each Showtime object to track available seats to book
  *
  */
 public class CinemaBooking implements Serializable {
@@ -17,16 +18,30 @@ public class CinemaBooking implements Serializable {
 	 * are compatible with respect to serialization during deserialization.
 	 */
     private static final long serialVersionUID = 123459L;
+    /**
+     * The cinemaClass attribute tracks the cinema class
+     */
     private CinemaClass cinemaClass;
-
+    /**
+     * The seats array is a 2D array of Seat objects representing the available seats in the cinema
+     * Updated whenever a seat is assigned during booking
+     */
     private Seat[][] seats;
-
+    /**
+     * The numRow attribute stores the number of rows in the cinema
+     */
     private int numRow;
-
+    /**
+     * The numCol attribute stores the number of columns in the cinema
+     */
     private int numCol;
-
+    /**
+     * The numSeats attribute stores the number of seats in the cinema
+     */
     private int numSeats;
-
+    /**
+     * The cinemaCode attribute stores the unique code of the cinema the CinemaBooking is tagged to
+     */
     private int cinemaCode;
 
     /**

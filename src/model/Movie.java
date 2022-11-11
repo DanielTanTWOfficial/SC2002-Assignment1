@@ -15,16 +15,49 @@ public class Movie implements Serializable {
 	 * are compatible with respect to serialization during deserialization.
 	 */
 	private static final long serialVersionUID = 3502145753890835117L;
+	/**
+	 * The ShowingStatus enum defines the available showing statuses of the movies
+	 */
 	public enum ShowingStatus { COMING_SOON, PREVIEW, NOW_SHOWING, END_OF_SHOWING };
+	/**
+	 * The MovieRating enum defines the available age ratings of the movies
+	 */
 	public enum MovieRating { PG, NC16, M18, R21 };
+	/**
+	 * The MovieType enum defines the available types of the movies
+	 */
 	public enum MovieType { BLOCKBUSTER, INDIE, IMAX };
+	/**
+	 * The title attribute stores the movie title
+	 */
 	private String title;
+	/**
+	 * The director attribute stores the director of the movie
+	 */
 	private String director;
+	/**
+	 * The cast attribute is an ArrayList of the cast member's names
+	 */
 	private ArrayList<String> cast;
+	/**
+	 * The synopsis attribute stores the movie synopsis
+	 */
 	private String synopsis;
+	/**
+	 * The duration attribute stores the duration in minutes of the movie
+	 */
 	private Duration duration;
+	/**
+	 * The status attribute stores the showing staus of the movie
+	 */
 	private ShowingStatus status;
+	/**
+	 * The movieRating attribute stores the age rating of the movie
+	 */
 	private MovieRating movieRating;
+	/**
+	 * The movieType attribute stores the movie type
+	 */
 	private MovieType movieType;
 	
 	/**

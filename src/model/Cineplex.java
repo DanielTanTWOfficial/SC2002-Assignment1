@@ -20,8 +20,17 @@ public class Cineplex implements Serializable {
 	 * are compatible with respect to serialization during deserialization.
 	 */
     private static final long serialVersionUID = 123458L;
+    /**
+     * The location attribute stores the cineplex location
+     */
     private String location;
+    /**
+     * The cinemas attribute is an ArrayList of Cinema objects within the Cineplex
+     */
     private ArrayList<Cinema> cinemas;
+    /**
+     * The numCinemas attribute tracks the number of cinemas within a cineplex
+     */
     private int numCinemas;
 
     /**

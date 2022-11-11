@@ -14,11 +14,30 @@ public class MovieListing implements Serializable, Comparable<MovieListing> {
 	 * are compatible with respect to serialization during deserialization.
 	 */
 	private static final long serialVersionUID = 896429368504325337L;
+	/**
+	 * The movie attribute stores the Movie object the MovieListing is for
+	 */
 	private Movie movie;
+	/**
+	 * The overallRating attribute stores the overall rating of the movie
+	 */
 	private double overallRating;
+	/**
+	 * The ticketSales attribute stores the total ticket sales of the movie
+	 */
 	private double ticketSales;
+	/**
+	 * The reviews attribute is an ArrayList of Review objects
+	 */
 	private ArrayList<Review> reviews;
+	/**
+	 * The showtimes attribute is an ArrayList of Showtime objects
+	 */
 	private ArrayList<Showtime> showtimes;
+	/**
+	 * The bySales attribute is checked by the compareTo() method to either compare MovieListing objects by 
+	 * either sales or overall rating
+	 */
 	private boolean bySales;
 	
 	/**
