@@ -15,10 +15,16 @@ import java.util.ArrayList;
 import model.SerializationUtil;
 import model.AdminUser;
 
+/**
+ * @author Daniel
+ * This controller handles the User object related methods
+ * Admins can create other admin accounts
+ */
+
 public class AdminController {
-    
-    // admins can create and delete its own and other admin accounts
-    
+    /**
+     * @return ArrayList<Object>
+     */
     public static ArrayList<Object> readAdminAccountsFile() {
         ArrayList<Object> adminAccounts = new ArrayList<>();
         try {
@@ -30,6 +36,10 @@ public class AdminController {
         return new ArrayList<Object>();
     }
 
+    /**
+     * Print all admin account details - email and password
+     * For test cases
+     */
     public static void readAdminAccountsFileAndPrint() {
         ArrayList<Object> adminAccounts = readAdminAccountsFile();
         for (int i = 0; i < adminAccounts.size(); i++) {
@@ -38,6 +48,12 @@ public class AdminController {
         }
     }
 
+    /**
+     * Helper function to verify if admin account is registered through email
+     * We assume each email is tied to one admin account only - no duplicates
+     * @param email
+     * @return boolean
+     */
     public static boolean isAdminAccountByEmail(String email) {
         ArrayList<Object> adminAccounts = readAdminAccountsFile();
         for (int i = 0; i < adminAccounts.size(); i++) {
@@ -49,6 +65,12 @@ public class AdminController {
         return false;
     }
 
+    /**
+     * Helper function to verify if admin account is registered through password
+     * We assume each password is tied to one admin account only - no duplicates
+     * @param password
+     * @return boolean
+     */
     public static boolean isAdminAccountByPassword(String password) {
         ArrayList<Object> adminAccounts = readAdminAccountsFile();
         for (int i = 0; i < adminAccounts.size(); i++) {
@@ -60,6 +82,12 @@ public class AdminController {
         return false;
     }
 
+    /**
+     * Uses AdminUser validatePassword to check if email and password inputted is registered as an admin account
+     * @param email
+     * @param password
+     * @return boolean
+     */
     public static boolean verify(String email, String password) {
         ArrayList<Object> adminAccounts = readAdminAccountsFile();
         for (int i = 0; i < adminAccounts.size(); i++) {
@@ -73,8 +101,11 @@ public class AdminController {
 
     // only for admin to login
     // allow the user to exit if they quit trying to login
-    // optional features:
-        // allow only 5 tries
+
+     /**
+      * Login sequence
+      * @return boolean
+      */
     public static boolean login() {
         System.out.println("=== Logging In ===");
 
@@ -117,6 +148,9 @@ public class AdminController {
         return false;
     }
 
+    /**
+     * Admin account creation sequence
+     */
     public static void createAdminAccount() {
         System.out.println("=== Creating new admin account ===");
 
@@ -140,49 +174,12 @@ public class AdminController {
         }  
     }
 
-    public static void deleteAdminAccount() {
-        System.out.println("=== Deleting admin account ===");
-
-        System.out.println("Please enter the email of admin account to delete.");
-        String email = InputController.getEmail();
-
-        if (!isAdminAccountByEmail(email)) {
-            System.out.println("Admin account does not exist!");
-        }
-        else {
-            ArrayList<Object> adminAccounts = readAdminAccountsFile();
-            for(int i = 0; i < adminAccounts.size(); i++) {
-                AdminUser verifiedUser = (AdminUser) adminAccounts.get(i);
-                if (verifiedUser.getEmail().equals(email)) {
-                    System.out.println("Admin account " + email + " successfully deleted.");
-                    adminAccounts.remove(i);
-                    break;
-                }
-            }
-
-            File dfile = new File("adminAccounts.ser");
-            try {
-                SerializationUtil.deleteFile(dfile);
-            } catch (IOException e) {
-                // e.printStackTrace();
-            }
-            
-            for(int i = 0; i < adminAccounts.size(); i++) {
-                AdminUser verifiedUser = (AdminUser) adminAccounts.get(i);
-                try {
-                    SerializationUtil.serialize(verifiedUser, "adminAccounts.ser");
-                } catch (IOException e) {
-                    // e.printStackTrace();
-                }
-    	    }
-        }  
-    }
-
+    /**
+     * Change password sequence
+     */
     public static void changePassword() {
         ArrayList<Object> adminAccounts = readAdminAccountsFile();
         System.out.println("=== Changing account password ===");
-
-        
 
         boolean exit = false;
         while (!exit) {
