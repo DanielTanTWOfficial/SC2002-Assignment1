@@ -15,12 +15,33 @@ public class Showtime implements Serializable {
 	 * are compatible with respect to serialization during deserialization.
 	 */
 	private static final long serialVersionUID = -3528685110408677269L;
+	/**
+	 * The showtimeId attribute stores the unique ID for the showtime
+	 */
 	private String showtimeId;
+	/**
+	 * The date attribute stores the date of the Showtime
+	 */
 	private LocalDate date;
+	/**
+	 * The start attribute stores the start time of the showtime
+	 */
 	private LocalTime start;
+	/**
+	 * The end attribute stores the start time of the showtime
+	 */
 	private LocalTime end;
+	/**
+	 * The location attribute stores the location of the Showtime (Cineplex)
+	 */
 	private String location;
+	/**
+	 * The cinemaCode stores the identifier of the cinema showtime is at
+	 */
 	private int cinemaCode;
+	/**
+	 * The cinemaBooking attribute stores the seatng chart associated with the cinema the showtime is for
+	 */
 	private CinemaBooking cinemaBooking;
 	
 	/**

@@ -9,6 +9,10 @@ public class Seat implements Serializable {
 	 * are compatible with respect to serialization during deserialization.
 	 */
     private static final long serialVersionUID = 123450L;
+    /**
+     * The assigned attribute tracks if seat has been assigned
+     * true = taken, false = vacant
+     */
     private boolean assigned; // true - taken, false - vacant
     // optional feature: seatType for couple seats, XL seats, etc...
 
